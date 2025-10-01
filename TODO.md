@@ -1,4 +1,10 @@
-# TODO - Aplikacja do Śledzenia Finansów
+# TODO - Aplikacja do Śl### 1.3 Frontend - Next.js
+- [x] Inicjalizacja projektu Next.js 14+ z TypeScript
+- [x] Konfiguracja Tailwind CSS
+- [x] Instalacja zależności: Zustand, React Hook Form, Recharts
+- [x] Utworzenie `Dockerfile` dla frontendu
+- [x] Konfiguracja zmiennych środowiskowych (`.env.example`)
+- [x] Utworzenie podstawowej struktury folderów (`app/`, `components/`, `lib/`, `types/`) Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
 **Status:** W trakcie realizacji
