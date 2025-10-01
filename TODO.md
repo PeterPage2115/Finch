@@ -14,13 +14,13 @@
 - [x] Inicjalizacja repozytorium Git i pierwszy commit
 
 ### 1.2 Backend - NestJS
-- [ ] Inicjalizacja projektu NestJS (`nest new backend`)
-- [ ] Konfiguracja TypeScript (`tsconfig.json`)
-- [ ] Instalacja zależności: Prisma, Passport.js, JWT, class-validator, class-transformer
-- [ ] Utworzenie `Dockerfile` dla backendu
-- [ ] Konfiguracja zmiennych środowiskowych (`.env.example`)
-- [ ] Setup Prisma i połączenie z PostgreSQL
-- [ ] Utworzenie podstawowej struktury folderów (`src/users`, `src/transactions`, `src/budgets`)
+- [x] Inicjalizacja projektu NestJS (`nest new backend`)
+- [x] Konfiguracja TypeScript (`tsconfig.json`)
+- [x] Instalacja zależności: Prisma, Passport.js, JWT, class-validator, class-transformer
+- [x] Utworzenie `Dockerfile` dla backendu
+- [x] Konfiguracja zmiennych środowiskowych (`.env.example`)
+- [x] Setup Prisma i połączenie z PostgreSQL
+- [x] Utworzenie podstawowej struktury folderów (`src/users`, `src/transactions`, `src/budgets`)
 
 ### 1.3 Frontend - Next.js
 - [ ] Inicjalizacja projektu Next.js 14+ z TypeScript
