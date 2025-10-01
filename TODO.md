@@ -8,10 +8,10 @@
 ## 🏗️ Faza 1: Inicjalizacja Projektu i Konfiguracja
 
 ### 1.1 Struktura Projektu i Dokumentacja
-- [ ] Utworzenie struktury folderów (`frontend/`, `backend/`, `docs/`)
-- [ ] Przygotowanie głównego pliku `README.md` z instrukcją uruchomienia
-- [ ] Konfiguracja `.gitignore` (node_modules, .env, build files, etc.)
-- [ ] Inicjalizacja repozytorium Git i pierwszy commit
+- [x] Utworzenie struktury folderów (`frontend/`, `backend/`, `docs/`)
+- [x] Przygotowanie głównego pliku `README.md` z instrukcją uruchomienia
+- [x] Konfiguracja `.gitignore` (node_modules, .env, build files, etc.)
+- [x] Inicjalizacja repozytorium Git i pierwszy commit
 
 ### 1.2 Backend - NestJS
 - [ ] Inicjalizacja projektu NestJS (`nest new backend`)
