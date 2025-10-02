@@ -1,7 +1,7 @@
 # TODO - Aplikacja do Śledzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
-**Status:** Faza 2.1 zakończona ✅ (31/86 zadań - 36%)
+**Status:** Faza 3.1 w trakcie ⏳ (37/86 zadań - 43%)
 
 ---
 
@@ -58,12 +58,12 @@
 ## 🔐 Faza 3: Uwierzytelnianie i Autoryzacja
 
 ### 3.1 Backend - System Auth
-- [ ] Moduł `AuthModule` w NestJS
-- [ ] Endpoint rejestracji (`POST /auth/register`) z walidacją DTO
-- [ ] Haszowanie haseł (bcrypt)
-- [ ] Endpoint logowania (`POST /auth/login`) zwracający JWT
-- [ ] Guard JWT dla chronionych endpointów
-- [ ] Decorator `@CurrentUser()` do wyciągania użytkownika z tokenu
+- [x] Moduł `AuthModule` w NestJS
+- [x] Endpoint rejestracji (`POST /auth/register`) z walidacją DTO
+- [x] Haszowanie haseł (bcrypt)
+- [x] Endpoint logowania (`POST /auth/login`) zwracający JWT
+- [x] Guard JWT dla chronionych endpointów
+- [x] Decorator `@CurrentUser()` do wyciągania użytkownika z tokenu
 - [ ] Testy jednostkowe dla AuthService
 - [ ] Testy integracyjne dla endpointów auth
 
