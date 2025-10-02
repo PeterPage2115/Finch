@@ -1,7 +1,7 @@
 # TODO - Aplikacja do Śledzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
-**Status:** Faza 1 zakończona ✅ (23/86 zadań - 27%)
+**Status:** Faza 2.1 zakończona ✅ (31/86 zadań - 36%)
 
 ---
 
@@ -45,13 +45,13 @@
 ## 🗄️ Faza 2: Baza Danych i Modele
 
 ### 2.1 Schemat Bazy Danych (Prisma)
-- [ ] Definicja modelu `User` (id, email, hasło-hash, createdAt, updatedAt)
-- [ ] Definicja modelu `Transaction` (id, userId, amount, category, description, date, type: income/expense)
-- [ ] Definicja modelu `Category` (id, name, type, userId)
-- [ ] Definicja modelu `Budget` (id, userId, categoryId, amount, period, startDate, endDate)
-- [ ] Definicja relacji między modelami
-- [ ] Pierwsza migracja: `npx prisma migrate dev --name init`
-- [ ] Seed danych testowych (opcjonalnie)
+- [x] Definicja modelu `User` (id, email, hasło-hash, createdAt, updatedAt)
+- [x] Definicja modelu `Transaction` (id, userId, amount, category, description, date, type: income/expense)
+- [x] Definicja modelu `Category` (id, name, type, userId)
+- [x] Definicja modelu `Budget` (id, userId, categoryId, amount, period, startDate, endDate)
+- [x] Definicja relacji między modelami
+- [x] Pierwsza migracja: `npx prisma migrate dev --name init`
+- [x] Seed danych testowych (opcjonalnie)
 
 ---
 
