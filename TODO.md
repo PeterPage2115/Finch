@@ -25,12 +25,12 @@
 - [x] Utworzenie podstawowej struktury folderów (`src/users`, `src/transactions`, `src/budgets`)
 
 ### 1.3 Frontend - Next.js
-- [ ] Inicjalizacja projektu Next.js 14+ z TypeScript
-- [ ] Konfiguracja Tailwind CSS
-- [ ] Instalacja zależności: Zustand, React Hook Form, Chart.js/Recharts
-- [ ] Utworzenie `Dockerfile` dla frontendu
-- [ ] Konfiguracja zmiennych środowiskowych (`.env.example`)
-- [ ] Utworzenie podstawowej struktury folderów (`app/`, `components/`, `lib/`, `types/`)
+- [x] Inicjalizacja projektu Next.js 14+ z TypeScript
+- [x] Konfiguracja Tailwind CSS
+- [x] Instalacja zależności: Zustand, React Hook Form, Chart.js/Recharts
+- [x] Utworzenie `Dockerfile` dla frontendu
+- [x] Konfiguracja zmiennych środowiskowych (`.env.example`)
+- [x] Utworzenie podstawowej struktury folderów (`app/`, `components/`, `lib/`, `types/`)
 
 ### 1.4 Docker i Orkiestracja
 - [x] Utworzenie `docker-compose.yml` (frontend, backend, PostgreSQL)
