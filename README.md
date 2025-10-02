@@ -191,6 +191,8 @@ Tracker_kasy/
 
 Szczegółowa dokumentacja dostępna w folderze [`docs/`](./docs/):
 
+- [**Schemat Bazy Danych**](./docs/DATABASE.md) - Modele, relacje, migracje, przykładowe zapytania
+- [Docker & Orkiestracja](./docs/DOCKER.md) - Szczegółowy przewodnik po konfiguracji Docker
 - [Architektura aplikacji](./docs/architecture.md) *(wkrótce)*
 - [API Reference](./docs/api.md) *(wkrótce)*
 - [Przewodnik developera](./docs/developer-guide.md) *(wkrótce)*
