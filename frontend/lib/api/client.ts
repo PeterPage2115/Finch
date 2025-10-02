@@ -64,21 +64,21 @@ export const apiClient = {
   get: <T>(endpoint: string, token?: string): Promise<T> =>
     apiFetch<T>(endpoint, { method: 'GET', token }),
 
-  post: <T>(endpoint: string, data: any, token?: string): Promise<T> =>
+  post: <T>(endpoint: string, data: unknown, token?: string): Promise<T> =>
     apiFetch<T>(endpoint, {
       method: 'POST',
       body: JSON.stringify(data),
       token,
     }),
 
-  put: <T>(endpoint: string, data: any, token?: string): Promise<T> =>
+  put: <T>(endpoint: string, data: unknown, token?: string): Promise<T> =>
     apiFetch<T>(endpoint, {
       method: 'PUT',
       body: JSON.stringify(data),
       token,
     }),
 
-  patch: <T>(endpoint: string, data: any, token?: string): Promise<T> =>
+  patch: <T>(endpoint: string, data: unknown, token?: string): Promise<T> =>
     apiFetch<T>(endpoint, {
       method: 'PATCH',
       body: JSON.stringify(data),
