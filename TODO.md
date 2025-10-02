@@ -37,11 +37,11 @@
 - [ ] Utworzenie podstawowej struktury folderów (`app/`, `components/`, `lib/`, `types/`)
 
 ### 1.4 Docker i Orkiestracja
-- [ ] Utworzenie `docker-compose.yml` (frontend, backend, PostgreSQL)
-- [ ] Konfiguracja wolumenu dla PostgreSQL (`pgdata`)
-- [ ] Konfiguracja sieci Docker dla komunikacji między serwisami
-- [ ] Test uruchomienia całego stacku: `docker-compose up`
-- [ ] Dokumentacja procesu uruchamiania w `README.md`
+- [x] Utworzenie `docker-compose.yml` (frontend, backend, PostgreSQL)
+- [x] Konfiguracja wolumenu dla PostgreSQL (`pgdata`)
+- [x] Konfiguracja sieci Docker dla komunikacji między serwisami
+- [x] Test uruchomienia całego stacku: `docker-compose up`
+- [x] Dokumentacja procesu uruchamiania w `README.md`
 
 ---
 

@@ -6,14 +6,14 @@ export default function Home() {
           Tracker Kasy
         </h1>
         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8">
-          Zarz¹dzaj swoimi finansami w prosty sposób
+          Zarzï¿½dzaj swoimi finansami w prosty sposï¿½b
         </p>
         <div className="flex gap-4 justify-center flex-wrap mt-8">
           <a href="/login" className="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-lg">
-            Zaloguj siê
+            Zaloguj siï¿½
           </a>
           <a href="/register" className="px-8 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-50 transition-colors font-medium text-lg border-2 border-blue-600">
-            Za³ó¿ konto
+            Zaï¿½ï¿½ konto
           </a>
         </div>
       </main>
