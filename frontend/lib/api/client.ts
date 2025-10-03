@@ -28,16 +28,30 @@ async function apiFetch<T>(
   }
 
   const url = `${API_BASE_URL}${endpoint}`;
+  
+  console.log('🌐 [API] Wywołanie:', {
+    method: fetchOptions.method || 'GET',
+    url,
+    hasToken: !!token,
+    hasBody: !!fetchOptions.body
+  });
 
   try {
     const response = await fetch(url, {
       ...fetchOptions,
       headers,
     });
+    
+    console.log('📡 [API] Odpowiedź otrzymana:', {
+      status: response.status,
+      statusText: response.statusText,
+      ok: response.ok
+    });
 
     // Handle non-JSON responses
     const contentType = response.headers.get('content-type');
     if (!contentType || !contentType.includes('application/json')) {
+      console.warn('⚠️ [API] Odpowiedź nie jest JSON');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -45,14 +59,16 @@ async function apiFetch<T>(
     }
 
     const data = await response.json();
+    console.log('📦 [API] Dane odpowiedzi:', data);
 
     if (!response.ok) {
+      console.error('❌ [API] Status nie OK:', response.status);
       throw new Error(data.message || `HTTP error! status: ${response.status}`);
     }
 
     return data;
   } catch (error) {
-    console.error('API Fetch Error:', error);
+    console.error('❌ [API] Błąd fetch:', error);
     throw error;
   }
 }

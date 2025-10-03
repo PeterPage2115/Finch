@@ -1,30 +1,49 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { authApi } from '@/lib/api/authClient';
 
 export default function LoginPage() {
-  const router = useRouter();
-  const setAuth = useAuthStore((state) => state.setAuth);
+  const { setAuth, isAuthenticated } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
 
+  // Obserwuj zmianę stanu autentykacji i przekieruj gdy stan się zmieni
+  useEffect(() => {
+    if (loginSuccess && isAuthenticated) {
+      console.log('✅ [LOGIN] Stan autentykacji potwierdzony, przekierowanie...');
+      // Użyj window.location.href dla pełnego przeładowania - unika race condition z middleware
+      window.location.href = '/dashboard';
+    }
+  }, [loginSuccess, isAuthenticated]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('🔵 [LOGIN] Rozpoczęcie procesu logowania');
+    console.log('📧 [LOGIN] Email:', formData.email);
+    
     setError('');
     setIsLoading(true);
+    setLoginSuccess(false);
 
     try {
+      console.log('📡 [LOGIN] Wysyłanie żądania do API...');
       const response = await authApi.login(formData);
+      console.log('✅ [LOGIN] Odpowiedź z API otrzymana:', {
+        user: response.user,
+        hasToken: !!response.accessToken,
+        tokenLength: response.accessToken?.length
+      });
       
+      console.log('💾 [LOGIN] Zapisywanie danych do store...');
       // Zapisz dane w store
       setAuth(
         {
@@ -36,19 +55,23 @@ export default function LoginPage() {
         },
         { accessToken: response.accessToken }
       );
+      console.log('✅ [LOGIN] Dane zapisane w store');
 
-      // WAŻNE: Poczekaj na zapisanie do localStorage przez Zustand persist
-      // Zustand persist jest asynchroniczny i potrzebuje czasu na zapisanie do cookie
-      await new Promise(resolve => setTimeout(resolve, 100));
-
-      // Przekieruj na dashboard
-      router.push('/dashboard');
+      // Ustaw flagę sukcesu - useEffect obsłuży przekierowanie
+      setLoginSuccess(true);
+      console.log('🎯 [LOGIN] Flaga loginSuccess ustawiona - czekam na useEffect...');
     } catch (err) {
+      console.error('❌ [LOGIN] Błąd podczas logowania:', err);
+      console.error('❌ [LOGIN] Szczegóły błędu:', {
+        message: (err as Error).message,
+        name: (err as Error).name,
+        stack: (err as Error).stack
+      });
       const error = err as Error;
       setError(error.message || 'Nieprawidłowy email lub hasło');
-    } finally {
       setIsLoading(false);
     }
+    // Note: nie ustawiamy isLoading=false w try, bo przekierowanie nastąpi
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
