@@ -29,7 +29,8 @@ export function middleware(request: NextRequest) {
   if (authCookie) {
     try {
       const authData = JSON.parse(authCookie.value);
-      isAuthenticated = authData.state?.isAuthenticated || false;
+      // Zustand persist zapisuje stan w strukturze: { state: { user, token, isAuthenticated }, version: 0 }
+      isAuthenticated = authData.state?.isAuthenticated === true;
     } catch {
       // Cookie jest niepoprawne
       isAuthenticated = false;

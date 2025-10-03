@@ -37,6 +37,10 @@ export default function LoginPage() {
         { accessToken: response.accessToken }
       );
 
+      // WAŻNE: Poczekaj na zapisanie do localStorage przez Zustand persist
+      // Zustand persist jest asynchroniczny i potrzebuje czasu na zapisanie do cookie
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       // Przekieruj na dashboard
       router.push('/dashboard');
     } catch (err) {
