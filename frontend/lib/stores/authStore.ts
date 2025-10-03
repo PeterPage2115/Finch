@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { persist, createJSONStorage } from 'zustand/middleware';
 import type { User, AuthTokens } from '@/types';
 
 interface AuthState {
@@ -14,8 +14,38 @@ interface AuthState {
 }
 
 /**
+ * Custom storage that syncs between localStorage and cookies
+ * This allows server-side middleware to read authentication state
+ */
+const cookieStorage = {
+  getItem: (name: string): string | null => {
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem(name);
+  },
+  setItem: (name: string, value: string): void => {
+    if (typeof window === 'undefined') return;
+    
+    // Save to localStorage
+    localStorage.setItem(name, value);
+    
+    // Also save to cookies for server-side access (middleware)
+    const maxAge = 60 * 60 * 24 * 7; // 7 days
+    document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=${maxAge}; SameSite=Lax`;
+  },
+  removeItem: (name: string): void => {
+    if (typeof window === 'undefined') return;
+    
+    // Remove from localStorage
+    localStorage.removeItem(name);
+    
+    // Remove from cookies
+    document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+  },
+};
+
+/**
  * Zustand store for authentication state
- * Persisted to localStorage
+ * Persisted to both localStorage AND cookies (for server-side middleware)
  */
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -45,6 +75,7 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
+      storage: createJSONStorage(() => cookieStorage),
     }
   )
 );
