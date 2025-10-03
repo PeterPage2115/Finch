@@ -15,8 +15,9 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Remove .env.local to prevent conflicts with Docker environment variables
-RUN rm -f .env.local
+# Remove .env.local and use .env.docker for Docker environment
+RUN rm -f .env.local && \
+    if [ -f .env.docker ]; then cp .env.docker .env.local; fi
 
 # Expose port
 EXPOSE 3000
