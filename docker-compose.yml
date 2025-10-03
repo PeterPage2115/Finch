@@ -52,14 +52,21 @@ services:
   frontend:
     build:
       context: ./frontend
-      dockerfile: Dockerfile
+      # Używamy Dockerfile.dev dla developmentu (hot reload)
+      dockerfile: Dockerfile.dev
     container_name: tracker_kasy_frontend
     restart: unless-stopped
     environment:
-      NEXT_PUBLIC_API_URL: "http://localhost:3001"
-      NODE_ENV: production
+      # W Dockerze używamy nazwy serwisu "backend" z Docker network
+      NEXT_PUBLIC_API_URL: "http://backend:3001"
+      NODE_ENV: development
     ports:
       - "3000:3000"
+    # Mount source code for hot reload
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
     depends_on:
       - backend
     networks:
