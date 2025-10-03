@@ -15,7 +15,7 @@ Tworzymy **otwartoźródłową (open-source)** aplikację webową do śledzenia 
 
 1.  **Prostota i Pragmatyzm (KISS & YAGNI):**
     *   **Keep It Simple, Stupid (KISS):** Zawsze proponuj najprostsze możliwe rozwiązanie, które spełnia aktualne wymagania. Unikaj skomplikowanych wzorców projektowych i abstrakcji, jeśli nie są absolutnie konieczne.
-    *   **You Ain't Gonna Need It (YAGNI):** Nie implementuj funkcjonalności "na zapas". Skupiajmy się tylko на tym, co jest potrzebne tu i teraz. Rozbudujemy aplikację, gdy pojawi się realna potrzeba.
+    *   **You Ain't Gonna Need It (YAGNI):** Nie implementuj funkcjonalności "na zapas". Skupiajmy się tylko na tym, co jest potrzebne tu i teraz. Rozbudujemy aplikację, gdy pojawi się realna potrzeba.
 
 2.  **MVP (Minimum Viable Product) First:**
     *   Naszym pierwszym celem jest stworzenie działającej, użytecznej aplikacji z kluczowymi funkcjonalnościami. Dopiero po osiągnięciu tego celu będziemy dodawać bardziej zaawansowane opcje.
@@ -56,6 +56,7 @@ Jako mój asystent AI, proszę, abyś przestrzegał poniższych zasad:
 *   **Aktywnie korzystaj z wyszukiwania w sieci.** Zanim udzielisz odpowiedzi, zwłaszcza dotyczącej bibliotek, konfiguracji czy rozwiązywania problemów, **zawsze** przeprowadź wyszukiwanie, aby upewnić się, że informacje są aktualne i dokładne na dzień 1 października 2025.
 *   Nie udawaj, że korzystasz z wyszukiwania. Oczekuję, że będziesz faktycznie weryfikować informacje.
 *   Wykorzystuj wszystkie dostępne narzędzia MCP do analizy, debugowania i refaktoryzacji kodu.
+*   Sprawdzaj dokumentację używając context7 MCP.
 
 **Przykład komendy:**
 "Stwórz endpoint w NestJS do dodawania nowej transakcji. Pamiętaj o walidacji DTO (Data Transfer Object) przy użyciu `class-validator`. Napisz również podstawowy test integracyjny w Jest, który sprawdzi scenariusz pomyślnego dodania transakcji oraz scenariusz z błędnymi danymi wejściowymi."

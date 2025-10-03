@@ -1,7 +1,7 @@
 # TODO - Aplikacja do Śledzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
-**Status:** Faza 3.1 w trakcie ⏳ (37/86 zadań - 43%)
+**Status:** Faza 3.2 zakończona ✅ (46/86 zadań - 53%)
 
 ---
 
@@ -64,17 +64,17 @@
 - [x] Endpoint logowania (`POST /auth/login`) zwracający JWT
 - [x] Guard JWT dla chronionych endpointów
 - [x] Decorator `@CurrentUser()` do wyciągania użytkownika z tokenu
-- [ ] Testy jednostkowe dla AuthService
-- [ ] Testy integracyjne dla endpointów auth
+- [x] Testy jednostkowe dla AuthService (11 testów)
+- [x] Testy integracyjne dla endpointów auth (22 testy e2e)
 
 ### 3.2 Frontend - UI Auth
-- [ ] Strona rejestracji (`/register`) z formularzem (React Hook Form)
-- [ ] Strona logowania (`/login`) z formularzem
-- [ ] Zarządzanie stanem autentykacji (Zustand store)
-- [ ] Zapisywanie JWT w localStorage/cookies
-- [ ] Middleware Next.js do ochrony tras wymagających logowania
-- [ ] Komponent ProtectedRoute/Layout
-- [ ] Strona wylogowania
+- [x] Strona rejestracji (`/register`) z formularzem (React Hook Form)
+- [x] Strona logowania (`/login`) z formularzem
+- [x] Zarządzanie stanem autentykacji (Zustand store)
+- [x] Zapisywanie JWT w localStorage (via Zustand persist)
+- [x] Middleware Next.js do ochrony tras wymagających logowania
+- [x] Komponent Dashboard (placeholder)
+- [x] Strona główna z przekierowaniem dla zalogowanych
 
 ---
 

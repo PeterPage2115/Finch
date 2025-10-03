@@ -27,6 +27,7 @@ out/
 *.swo
 *~
 .DS_Store
+.github
 
 # Docker volumes
 pgdata/
