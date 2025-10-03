@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useAuthStore } from '../../../lib/stores/authStore';
-import { authApi } from '../../lib/api/client';
+import { useAuthStore } from '@/lib/stores/authStore';
+import { authApi } from '@/lib/api/authClient';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
   const setAuth = useAuthStore((state) => state.setAuth);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,6 +15,7 @@ export default function LoginPage() {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
+    name: '',
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,7 +24,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await authApi.login(formData);
+      const response = await authApi.register(formData);
       
       // Zapisz dane w store
       setAuth(
@@ -41,7 +42,7 @@ export default function LoginPage() {
       router.push('/dashboard');
     } catch (err) {
       const error = err as Error;
-      setError(error.message || 'Nieprawidłowy email lub hasło');
+      setError(error.message || 'Wystąpił błąd podczas rejestracji');
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +65,7 @@ export default function LoginPage() {
               💰 Tracker Kasy
             </h2>
             <p className="mt-2 text-sm text-gray-600">
-              Zaloguj się do swojego konta
+              Utwórz konto i zacznij zarządzać swoimi finansami
             </p>
           </div>
 
@@ -77,6 +78,27 @@ export default function LoginPage() {
 
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Input */}
+            <div>
+              <label
+                htmlFor="name"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Imię i nazwisko
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+                placeholder="Jan Kowalski"
+                disabled={isLoading}
+              />
+            </div>
+
             {/* Email Input */}
             <div>
               <label
@@ -111,14 +133,18 @@ export default function LoginPage() {
                 id="password"
                 name="password"
                 type="password"
-                autoComplete="current-password"
+                autoComplete="new-password"
                 required
                 value={formData.password}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 rounded-lg placeholder-gray-400 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                placeholder="••••••••"
+                placeholder="Minimum 8 znaków"
+                minLength={8}
                 disabled={isLoading}
               />
+              <p className="mt-1 text-xs text-gray-500">
+                Minimum 8 znaków
+              </p>
             </div>
 
             {/* Submit Button */}
@@ -149,23 +175,23 @@ export default function LoginPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Logowanie...
+                  Tworzenie konta...
                 </>
               ) : (
-                'Zaloguj się'
+                'Załóż konto'
               )}
             </button>
           </form>
 
-          {/* Footer - Link to Register */}
+          {/* Footer - Link to Login */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Nie masz jeszcze konta?{' '}
+              Masz już konto?{' '}
               <Link
-                href="/register"
+                href="/login"
                 className="font-medium text-indigo-600 hover:text-indigo-500 transition"
               >
-                Załóż konto
+                Zaloguj się
               </Link>
             </p>
           </div>
@@ -173,7 +199,7 @@ export default function LoginPage() {
 
         {/* Additional Info */}
         <p className="text-center text-xs text-gray-500">
-          Twoje dane są bezpieczne i chronione
+          Rejestrując się, akceptujesz nasze warunki korzystania z usługi
         </p>
       </div>
     </div>

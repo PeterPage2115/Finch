@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuthStore } from '../../../lib/stores/authStore';
+import { useAuthStore } from '@/lib/stores/authStore';
 
 export default function DashboardPage() {
   const router = useRouter();

@@ -4,7 +4,7 @@
  * Wrapper dla endpointów autentykacji używający istniejącego apiClient
  */
 
-import { apiClient } from '../../../lib/api/client';
+import { apiClient } from './client';
 
 /**
  * Typy odpowiedzi z API
