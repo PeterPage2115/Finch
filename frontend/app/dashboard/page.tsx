@@ -3,11 +3,39 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
+import { useTransactionsStore } from '@/lib/stores/transactionsStore';
+import { transactionsApi } from '@/lib/api/transactionsClient';
+import TransactionList from '@/components/transactions/TransactionList';
+import TransactionForm from '@/components/transactions/TransactionForm';
+import type { Transaction, CreateTransactionDto, TransactionType } from '@/types/transaction';
+
+// Mock categories (temporary - will be replaced with API)
+const MOCK_CATEGORIES = [
+  { id: '5e72ea07-a66c-4194-aa82-da4b9b58c7c6', name: 'Jedzenie', icon: '🍔', type: 'EXPENSE' as TransactionType },
+  { id: 'transport-id', name: 'Transport', icon: '🚗', type: 'EXPENSE' as TransactionType },
+  { id: 'income-id', name: 'Wynagrodzenie', icon: '💰', type: 'INCOME' as TransactionType },
+];
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, logout, isAuthenticated } = useAuthStore();
+  const { user, logout, isAuthenticated, token } = useAuthStore();
+  const {
+    transactions,
+    meta,
+    isLoading: transactionsLoading,
+    error,
+    setTransactions,
+    addTransaction,
+    updateTransaction: updateTransactionInStore,
+    removeTransaction,
+    setLoading,
+    setError,
+  } = useTransactionsStore();
+  
   const [isLoading, setIsLoading] = useState(true);
+  const [showForm, setShowForm] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Sprawdź czy użytkownik jest zalogowany
@@ -18,10 +46,90 @@ export default function DashboardPage() {
     }
   }, [isAuthenticated, router]);
 
+  // Fetch transactions
+  useEffect(() => {
+    if (!isAuthenticated || !token) return;
+
+    const fetchTransactions = async () => {
+      try {
+        setLoading(true);
+        const response = await transactionsApi.getAll(token, { page: 1, limit: 50 });
+        setTransactions(response);
+      } catch (err) {
+        console.error('Error fetching transactions:', err);
+        setError('Nie udało się pobrać transakcji');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTransactions();
+  }, [isAuthenticated, token, setTransactions, setLoading, setError]);
+
   const handleLogout = () => {
     logout();
     router.push('/login');
   };
+
+  const handleAddNew = () => {
+    setEditingTransaction(null);
+    setShowForm(true);
+  };
+
+  const handleEdit = (transaction: Transaction) => {
+    setEditingTransaction(transaction);
+    setShowForm(true);
+  };
+
+  const handleCancel = () => {
+    setShowForm(false);
+    setEditingTransaction(null);
+  };
+
+  const handleSubmit = async (data: CreateTransactionDto) => {
+    if (!token) return;
+
+    try {
+      setIsSubmitting(true);
+
+      if (editingTransaction) {
+        const updated = await transactionsApi.update(token, editingTransaction.id, data);
+        updateTransactionInStore(editingTransaction.id, updated);
+      } else {
+        const created = await transactionsApi.create(token, data);
+        addTransaction(created);
+      }
+
+      setShowForm(false);
+      setEditingTransaction(null);
+    } catch (err) {
+      console.error('Error submitting transaction:', err);
+      alert('Nie udało się zapisać transakcji');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!token) return;
+    if (!confirm('Czy na pewno chcesz usunąć tę transakcję?')) return;
+
+    try {
+      await transactionsApi.delete(token, id);
+      removeTransaction(id);
+    } catch (err) {
+      console.error('Error deleting transaction:', err);
+      alert('Nie udało się usunąć transakcji');
+    }
+  };
+
+  // Calculate stats
+  const stats = {
+    income: transactions.filter(t => t.type === 'INCOME').reduce((sum, t) => sum + t.amount, 0),
+    expenses: transactions.filter(t => t.type === 'EXPENSE').reduce((sum, t) => sum + t.amount, 0),
+    balance: 0,
+  };
+  stats.balance = stats.income - stats.expenses;
 
   if (isLoading) {
     return (
@@ -83,7 +191,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Przychody</p>
-                <p className="text-2xl font-bold text-green-600">0,00 zł</p>
+                <p className="text-2xl font-bold text-green-600">{stats.income.toFixed(2)} zł</p>
               </div>
               <div className="p-3 bg-green-100 rounded-full">
                 <svg
@@ -109,7 +217,7 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Wydatki</p>
-                <p className="text-2xl font-bold text-red-600">0,00 zł</p>
+                <p className="text-2xl font-bold text-red-600">{stats.expenses.toFixed(2)} zł</p>
               </div>
               <div className="p-3 bg-red-100 rounded-full">
                 <svg
@@ -135,7 +243,9 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm font-medium text-gray-600">Bilans</p>
-                <p className="text-2xl font-bold text-indigo-600">0,00 zł</p>
+                <p className={`text-2xl font-bold ${stats.balance >= 0 ? 'text-indigo-600' : 'text-red-600'}`}>
+                  {stats.balance.toFixed(2)} zł
+                </p>
               </div>
               <div className="p-3 bg-indigo-100 rounded-full">
                 <svg
@@ -157,17 +267,51 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {/* Coming Soon Info */}
-        <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-indigo-900 mb-2">
-            🚀 W przygotowaniu
-          </h3>
-          <p className="text-indigo-700">
-            Wkrótce będziesz mógł dodawać transakcje, zarządzać kategoriami i budżetami.
-            <br />
-            Obecnie możesz przetestować system logowania i rejestracji!
-          </p>
+        {/* Error message */}
+        {error && (
+          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <p className="text-red-700">{error}</p>
+          </div>
+        )}
+
+        {/* Add New Button */}
+        <div className="mb-6">
+          <button
+            onClick={handleAddNew}
+            className="px-6 py-3 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-md transition"
+          >
+            + Dodaj transakcję
+          </button>
         </div>
+
+        {/* Transaction Form */}
+        {showForm && (
+          <div className="mb-6">
+            <TransactionForm
+              transaction={editingTransaction}
+              categories={MOCK_CATEGORIES}
+              onSubmit={handleSubmit}
+              onCancel={handleCancel}
+              isLoading={isSubmitting}
+            />
+          </div>
+        )}
+
+        {/* Transactions List */}
+        <TransactionList
+          transactions={transactions}
+          isLoading={transactionsLoading}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+
+        {/* Pagination info */}
+        {meta && meta.total > 0 && (
+          <div className="mt-4 text-center text-sm text-gray-600">
+            Pokazuję {transactions.length} z {meta.total} transakcji
+            {meta.totalPages > 1 && ` (strona ${meta.page} z ${meta.totalPages})`}
+          </div>
+        )}
       </main>
     </div>
   );
