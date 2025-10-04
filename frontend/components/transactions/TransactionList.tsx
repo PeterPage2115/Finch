@@ -70,7 +70,9 @@ export default function TransactionList({
   };
 
   const formatAmount = (amount: number, type: TransactionType) => {
-    const formatted = amount.toFixed(2);
+    // Prisma zwraca Decimal jako string, więc konwertujemy na number
+    const numAmount = Number(amount) || 0;
+    const formatted = numAmount.toFixed(2);
     const colorClass = type === TransactionType.INCOME 
       ? 'text-green-600 dark:text-green-400' 
       : 'text-red-600 dark:text-red-400';

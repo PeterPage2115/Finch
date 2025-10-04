@@ -44,6 +44,9 @@ export class AuthService {
         },
       });
 
+      // Utwórz domyślne kategorie dla nowego użytkownika
+      await this.createDefaultCategories(user.id);
+
       // Zwróć tokeny
       return this.generateTokens(user.id, user.email);
     } catch (error) {
@@ -134,5 +137,29 @@ export class AuthService {
         email,
       },
     };
+  }
+
+  /**
+   * Utworzenie domyślnych kategorii dla nowego użytkownika
+   */
+  private async createDefaultCategories(userId: string) {
+    const defaultCategories = [
+      // Kategorie wydatków
+      { name: 'Jedzenie', type: 'EXPENSE' as const, icon: '🍔', color: '#10B981' },
+      { name: 'Transport', type: 'EXPENSE' as const, icon: '🚗', color: '#3B82F6' },
+      { name: 'Rozrywka', type: 'EXPENSE' as const, icon: '🎮', color: '#8B5CF6' },
+      { name: 'Zdrowie', type: 'EXPENSE' as const, icon: '⚕️', color: '#EF4444' },
+      { name: 'Rachunki', type: 'EXPENSE' as const, icon: '📄', color: '#F59E0B' },
+      // Kategorie przychodów
+      { name: 'Wynagrodzenie', type: 'INCOME' as const, icon: '💰', color: '#10B981' },
+      { name: 'Inne przychody', type: 'INCOME' as const, icon: '💵', color: '#06B6D4' },
+    ];
+
+    await this.prisma.category.createMany({
+      data: defaultCategories.map((cat) => ({
+        ...cat,
+        userId,
+      })),
+    });
   }
 }
