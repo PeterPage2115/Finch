@@ -56,9 +56,15 @@ FRONTEND_URL: http://localhost:3000
 
 #### Frontend
 ```yaml
-NEXT_PUBLIC_API_URL: http://localhost:3001
-NODE_ENV: production
+# Backend URL używane przez Next.js API Routes (server-side only)
+BACKEND_API_URL: http://backend:3001
+NODE_ENV: development  # lub production
 ```
+
+**Uwaga:** Frontend używa Next.js API Routes jako proxy do backendu.
+- Browser łączy się z `/api/*` (same origin, brak CORS)
+- Next.js API Routes wykonują requesty do `BACKEND_API_URL`
+- Nie używamy `NEXT_PUBLIC_*` dla backend URL (embedowane w browser bundle)
 
 ### Bezpieczeństwo
 
@@ -241,14 +247,29 @@ docker-compose exec db psql -U tracker_user -d tracker_kasy -c "SELECT 1;"
 
 ### Problem: Frontend nie może połączyć się z backendem
 
+**Objawy:**
+- NetworkError w przeglądarce
+- 500/502 błędy w API calls
+
 **Sprawdź:**
 1. Czy backend jest `healthy`: `docker-compose ps`
-2. Czy `NEXT_PUBLIC_API_URL` wskazuje na `http://localhost:3001`
+2. Czy Next.js API Routes działają: `curl http://localhost:3000/api/auth/me` (powinno zwrócić 401)
+3. Czy `BACKEND_API_URL` jest poprawnie ustawione w `.env.local` (Docker: `http://backend:3001`)
+
+**Architektura (od października 2025):**
+```
+Browser → /api/* (Next.js API Route, localhost:3000)
+         ↓
+Next.js Server → http://backend:3001 (Docker internal)
+```
 
 **Rozwiązanie:**
 ```bash
-# Sprawdź czy backend odpowiada
-curl http://localhost:3001/
+# Sprawdź czy backend odpowiada z wewnątrz kontenera frontend
+docker exec tracker_kasy_frontend wget -O- http://backend:3001/
+
+# Sprawdź logi API Routes
+docker logs tracker_kasy_frontend --tail 50
 
 # Zrestartuj frontend
 docker-compose restart frontend

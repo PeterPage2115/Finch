@@ -8,26 +8,46 @@ System uwierzytelniania po stronie frontendu zbudowany z **Next.js 14+ App Route
 
 ## Architektura
 
+### Aktualna architektura (od października 2025)
+
+**Frontend komunikuje się z backendem poprzez Next.js API Routes:**
+
+```
+Browser (client-side)
+  ↓ fetch('/api/auth/login')
+Next.js API Route (/app/api/auth/login/route.ts, server-side)
+  ↓ fetch('http://backend:3001/auth/login')
+Backend NestJS API
+```
+
+**Zalety:**
+- ✅ Same origin - brak CORS issues
+- ✅ Backend URL niewidoczny w przeglądarce (bezpieczeństwo)
+- ✅ Działa lokalnie i w Docker bez zmian
+- ✅ Server-side proxy - możliwość cache, rate limiting, transformacji
+
 ### Struktura folderów
 
 ```
 frontend/
-├── src/
-│   ├── app/
-│   │   ├── login/page.tsx          # Strona logowania
-│   │   ├── register/page.tsx       # Strona rejestracji
-│   │   └── dashboard/page.tsx      # Dashboard (chroniony)
-│   ├── lib/
-│   │   └── api/
-│   │       └── client.ts            # Auth API client
-│   └── middleware.ts                # Next.js middleware (ochrona tras)
+├── app/
+│   ├── api/                        # Next.js API Routes (proxy)
+│   │   └── auth/
+│   │       ├── login/route.ts      # POST /api/auth/login
+│   │       ├── register/route.ts   # POST /api/auth/register
+│   │       └── me/route.ts         # GET /api/auth/me
+│   ├── login/page.tsx              # Strona logowania
+│   ├── register/page.tsx           # Strona rejestracji
+│   ├── dashboard/page.tsx          # Dashboard (chroniony)
+│   └── middleware.ts               # Next.js middleware (ochrona tras)
 ├── lib/
+│   ├── api/
+│   │   ├── client.ts               # Generic API client
+│   │   └── authClient.ts           # Auth API wrapper
 │   └── stores/
-│       └── authStore.ts             # Zustand store
-├── types/
-│   └── index.ts                     # TypeScript types
-└── app/
-    └── page.tsx                     # Strona główna
+│       └── authStore.ts            # Zustand store
+└── types/
+    └── index.ts                    # TypeScript types
 ```
 
 ---
@@ -72,28 +92,70 @@ function MyComponent() {
 
 ---
 
-### 2. API Client (`src/lib/api/client.ts`)
+### 2. API Client (`lib/api/client.ts` i `lib/api/authClient.ts`)
 
-Wrapper dla endpointów autentykacji:
+**Kluczowa zmiana:** API Client używa **relative URLs** (`/api/*`) zamiast bezpośredniego URL backendu.
 
+**Generic API Client (`lib/api/client.ts`):**
 ```typescript
-import { authApi } from '@/lib/api/client';
+// Relative URL - Next.js API Routes są na tym samym origin
+const API_BASE_URL = '/api';
 
-// Rejestracja
-const response = await authApi.register({
-  email: 'user@example.com',
-  password: 'password123',
-  name: 'Jan Kowalski',
-});
+async function apiFetch<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
+  const url = `${API_BASE_URL}${endpoint}`; // np. /api/auth/login
+  const response = await fetch(url, { ...options });
+  return response.json();
+}
+```
 
-// Logowanie
-const response = await authApi.login({
-  email: 'user@example.com',
-  password: 'password123',
-});
+**Auth API Wrapper (`lib/api/authClient.ts`):**
+```typescript
+import { apiClient } from './client';
 
-// Pobranie profilu (wymaga tokenu)
-const profile = await authApi.getProfile(token);
+export const authApi = {
+  // Browser wykonuje: fetch('/api/auth/register')
+  register: (data: RegisterDto) => 
+    apiClient.post<AuthResponse>('/auth/register', data),
+  
+  // Browser wykonuje: fetch('/api/auth/login')
+  login: (data: LoginDto) => 
+    apiClient.post<AuthResponse>('/auth/login', data),
+  
+  // Browser wykonuje: fetch('/api/auth/me')
+  getProfile: (token: string) => 
+    apiClient.get<UserProfile>('/auth/me', token),
+};
+```
+
+**Next.js API Routes (server-side proxy):**
+
+Przykład `app/api/auth/login/route.ts`:
+```typescript
+import { NextRequest, NextResponse } from 'next/server';
+
+const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    
+    // Server-side request do backendu
+    const response = await fetch(`${BACKEND_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    
+    const data = await response.json();
+    return NextResponse.json(data, { status: response.status });
+    
+  } catch (error) {
+    return NextResponse.json(
+      { message: 'Błąd połączenia z serwerem' },
+      { status: 500 }
+    );
+  }
+}
 ```
 
 **Obsługa błędów:**
@@ -345,6 +407,49 @@ Przekierowanie → /login
 - ❌ Logowanie z błędnym hasłem → 401 Unauthorized
 - ❌ Hasło krótsze niż 8 znaków → 400 Bad Request
 - ❌ Niepoprawny format email → 400 Bad Request
+
+---
+
+## 🔧 Zmienne Środowiskowe
+
+### Lokalne (development bez Docker)
+
+**`.env.local`:**
+```bash
+# Backend URL używane przez Next.js API Routes (server-side only)
+BACKEND_API_URL="http://localhost:3001"
+
+NEXT_PUBLIC_APP_NAME="Tracker Kasy"
+NEXT_PUBLIC_APP_VERSION="1.0.0"
+```
+
+### Docker
+
+**`.env.local` (tworzony przez docker-entrypoint.sh):**
+```bash
+# Backend URL - Docker internal hostname
+BACKEND_API_URL="http://backend:3001"
+
+NEXT_PUBLIC_APP_NAME="Tracker Kasy"
+NEXT_PUBLIC_APP_VERSION="1.0.0"
+```
+
+**Ważne:**
+- ❌ NIE używamy `NEXT_PUBLIC_API_URL` dla backend URL
+- ✅ `BACKEND_API_URL` jest używane tylko przez Next.js API Routes (server-side)
+- ✅ Browser łączy się z `/api/*` (relative URLs, same origin)
+
+---
+
+## 📚 Dokumentacja Powiązana
+
+- [API Documentation](./API.md) - Szczegóły endpointów backendu
+- [Network Error Fix Report](./NETWORK_ERROR_FIX_REPORT.md) - Historia migracji na API Routes
+- [Auth Race Condition Report](./AUTH_RACE_CONDITION_REPORT.md) - Rozwiązanie problemu z loginSuccess
+
+---
+
+**Ostatnia aktualizacja:** 4 października 2025 (aktualizacja architektury - Next.js API Routes)
 
 ---
 
