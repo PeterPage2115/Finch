@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useTransactionsStore } from '@/lib/stores/transactionsStore';
+import { useTheme } from '@/lib/hooks/useTheme';
 import { transactionsApi } from '@/lib/api/transactionsClient';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionForm from '@/components/transactions/TransactionForm';
@@ -12,13 +13,14 @@ import type { Transaction, CreateTransactionDto, TransactionType } from '@/types
 // Mock categories (temporary - will be replaced with API)
 const MOCK_CATEGORIES = [
   { id: '5e72ea07-a66c-4194-aa82-da4b9b58c7c6', name: 'Jedzenie', icon: '🍔', type: 'EXPENSE' as TransactionType },
-  { id: 'transport-id', name: 'Transport', icon: '🚗', type: 'EXPENSE' as TransactionType },
-  { id: 'income-id', name: 'Wynagrodzenie', icon: '💰', type: 'INCOME' as TransactionType },
+  { id: '521654d7-cf7f-43ca-96aa-9ef4d1d21af1', name: 'Transport', icon: '🚗', type: 'EXPENSE' as TransactionType },
+  { id: 'f9fcdf43-dc03-46f1-8ca8-05de740133b0', name: 'Wynagrodzenie', icon: '💰', type: 'INCOME' as TransactionType },
 ];
 
 export default function DashboardPage() {
   const router = useRouter();
   const { user, logout, isAuthenticated, token } = useAuthStore();
+  const { theme, toggleTheme, mounted } = useTheme();
   const {
     transactions,
     meta,
@@ -53,11 +55,15 @@ export default function DashboardPage() {
     const fetchTransactions = async () => {
       try {
         setLoading(true);
+        setError(null); // Clear previous errors
         const response = await transactionsApi.getAll(token, { page: 1, limit: 50 });
         setTransactions(response);
-      } catch (err) {
+      } catch (err: any) {
         console.error('Error fetching transactions:', err);
-        setError('Nie udało się pobrać transakcji');
+        const errorMessage = err?.message || 'Nie udało się pobrać transakcji';
+        setError(errorMessage);
+        // Set empty transactions to prevent undefined errors
+        setTransactions({ data: [], meta: { total: 0, page: 1, limit: 50, totalPages: 0 } });
       } finally {
         setLoading(false);
       }
@@ -123,10 +129,11 @@ export default function DashboardPage() {
     }
   };
 
-  // Calculate stats
+  // Calculate stats (defensive programming - handle undefined/empty transactions)
+  const safeTransactions = transactions || [];
   const stats = {
-    income: transactions.filter(t => t.type === 'INCOME').reduce((sum, t) => sum + t.amount, 0),
-    expenses: transactions.filter(t => t.type === 'EXPENSE').reduce((sum, t) => sum + t.amount, 0),
+    income: safeTransactions.filter(t => t.type === 'INCOME').reduce((sum, t) => sum + (t.amount || 0), 0),
+    expenses: safeTransactions.filter(t => t.type === 'EXPENSE').reduce((sum, t) => sum + (t.amount || 0), 0),
     balance: 0,
   };
   stats.balance = stats.income - stats.expenses;
@@ -143,23 +150,33 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Navigation Bar */}
-      <nav className="bg-white shadow-sm border-b border-gray-200">
+      <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
             <div className="flex items-center">
-              <h1 className="text-2xl font-bold text-indigo-600">
+              <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
                 💰 Tracker Kasy
               </h1>
             </div>
 
             {/* User Menu */}
             <div className="flex items-center space-x-4">
+              {/* Dark Mode Toggle */}
+              {mounted && (
+                <button
+                  onClick={toggleTheme}
+                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
+                  title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
+                >
+                  {theme === 'dark' ? '☀️' : '🌙'}
+                </button>
+              )}
               <div className="text-sm">
-                <p className="text-gray-700 font-medium">{user?.name || 'Użytkownik'}</p>
-                <p className="text-gray-500 text-xs">{user?.email}</p>
+                <p className="text-gray-700 dark:text-gray-200 font-medium">{user?.name || 'Użytkownik'}</p>
+                <p className="text-gray-500 dark:text-gray-400 text-xs">{user?.email}</p>
               </div>
               <button
                 onClick={handleLogout}
@@ -175,11 +192,11 @@ export default function DashboardPage() {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Welcome Card */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             Witaj, {user?.name || 'Użytkowniku'}! 👋
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             To jest Twój dashboard. Tutaj będziesz mógł zarządzać swoimi finansami.
           </p>
         </div>
@@ -187,15 +204,15 @@ export default function DashboardPage() {
         {/* Quick Stats - Placeholder */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
           {/* Income Card */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Przychody</p>
-                <p className="text-2xl font-bold text-green-600">{stats.income.toFixed(2)} zł</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Przychody</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.income.toFixed(2)} zł</p>
               </div>
-              <div className="p-3 bg-green-100 rounded-full">
+              <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
                 <svg
-                  className="w-8 h-8 text-green-600"
+                  className="w-8 h-8 text-green-600 dark:text-green-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -209,19 +226,19 @@ export default function DashboardPage() {
                 </svg>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">Ten miesiąc</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Ten miesiąc</p>
           </div>
 
           {/* Expenses Card */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Wydatki</p>
-                <p className="text-2xl font-bold text-red-600">{stats.expenses.toFixed(2)} zł</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Wydatki</p>
+                <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.expenses.toFixed(2)} zł</p>
               </div>
-              <div className="p-3 bg-red-100 rounded-full">
+              <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full">
                 <svg
-                  className="w-8 h-8 text-red-600"
+                  className="w-8 h-8 text-red-600 dark:text-red-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -235,21 +252,21 @@ export default function DashboardPage() {
                 </svg>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">Ten miesiąc</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Ten miesiąc</p>
           </div>
 
           {/* Balance Card */}
-          <div className="bg-white rounded-lg shadow-md p-6">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600">Bilans</p>
-                <p className={`text-2xl font-bold ${stats.balance >= 0 ? 'text-indigo-600' : 'text-red-600'}`}>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bilans</p>
+                <p className={`text-2xl font-bold ${stats.balance >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-red-600 dark:text-red-400'}`}>
                   {stats.balance.toFixed(2)} zł
                 </p>
               </div>
-              <div className="p-3 bg-indigo-100 rounded-full">
+              <div className="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-full">
                 <svg
-                  className="w-8 h-8 text-indigo-600"
+                  className="w-8 h-8 text-indigo-600 dark:text-indigo-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -263,14 +280,14 @@ export default function DashboardPage() {
                 </svg>
               </div>
             </div>
-            <p className="text-xs text-gray-500 mt-2">Ten miesiąc</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Ten miesiąc</p>
           </div>
         </div>
 
         {/* Error message */}
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
-            <p className="text-red-700">{error}</p>
+          <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
+            <p className="text-red-700 dark:text-red-400">{error}</p>
           </div>
         )}
 
@@ -278,7 +295,7 @@ export default function DashboardPage() {
         <div className="mb-6">
           <button
             onClick={handleAddNew}
-            className="px-6 py-3 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg shadow-md transition"
+            className="px-6 py-3 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg shadow-md transition"
           >
             + Dodaj transakcję
           </button>
@@ -307,7 +324,7 @@ export default function DashboardPage() {
 
         {/* Pagination info */}
         {meta && meta.total > 0 && (
-          <div className="mt-4 text-center text-sm text-gray-600">
+          <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
             Pokazuję {transactions.length} z {meta.total} transakcji
             {meta.totalPages > 1 && ` (strona ${meta.page} z ${meta.totalPages})`}
           </div>

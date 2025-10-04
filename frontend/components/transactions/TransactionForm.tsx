@@ -86,15 +86,15 @@ export default function TransactionForm({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <h3 className="text-lg font-semibold text-gray-900 mb-4">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
         {transaction ? 'Edytuj transakcję' : 'Nowa transakcja'}
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Typ transakcji */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
             Typ transakcji
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -103,8 +103,8 @@ export default function TransactionForm({
               onClick={() => setFormData({ ...formData, type: TransactionType.INCOME })}
               className={`px-4 py-2 rounded-lg border-2 transition ${
                 formData.type === TransactionType.INCOME
-                  ? 'border-green-500 bg-green-50 text-green-700'
-                  : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                  ? 'border-green-500 dark:border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
+                  : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
               }`}
             >
               💰 Przychód
@@ -114,8 +114,8 @@ export default function TransactionForm({
               onClick={() => setFormData({ ...formData, type: TransactionType.EXPENSE })}
               className={`px-4 py-2 rounded-lg border-2 transition ${
                 formData.type === TransactionType.EXPENSE
-                  ? 'border-red-500 bg-red-50 text-red-700'
-                  : 'border-gray-300 bg-white text-gray-700 hover:border-gray-400'
+                  ? 'border-red-500 dark:border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
+                  : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
               }`}
             >
               💸 Wydatek
@@ -125,7 +125,7 @@ export default function TransactionForm({
 
         {/* Kwota */}
         <div>
-          <label htmlFor="amount" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Kwota (zł)
           </label>
           <input
@@ -135,45 +135,45 @@ export default function TransactionForm({
             min="0.01"
             value={formData.amount}
             onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
-              errors.amount ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
+              errors.amount ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
             }`}
             required
           />
           {errors.amount && (
-            <p className="mt-1 text-sm text-red-600">{errors.amount}</p>
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.amount}</p>
           )}
         </div>
 
         {/* Kategoria */}
         <div>
-          <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Kategoria
           </label>
           <select
             id="categoryId"
             value={formData.categoryId}
             onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
-              errors.categoryId ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
+              errors.categoryId ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
             }`}
             required
           >
             <option value="">Wybierz kategorię</option>
             {filteredCategories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
+              <option key={cat.id} value={cat.id} className="bg-white dark:bg-gray-700">
                 {cat.icon} {cat.name}
               </option>
             ))}
           </select>
           {errors.categoryId && (
-            <p className="mt-1 text-sm text-red-600">{errors.categoryId}</p>
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.categoryId}</p>
           )}
         </div>
 
         {/* Data */}
         <div>
-          <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Data
           </label>
           <input
@@ -181,19 +181,19 @@ export default function TransactionForm({
             id="date"
             value={formData.date}
             onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-            className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
-              errors.date ? 'border-red-500' : 'border-gray-300'
+            className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
+              errors.date ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
             }`}
             required
           />
           {errors.date && (
-            <p className="mt-1 text-sm text-red-600">{errors.date}</p>
+            <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.date}</p>
           )}
         </div>
 
         {/* Opis */}
         <div>
-          <label htmlFor="description" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
             Opis (opcjonalny)
           </label>
           <textarea
@@ -201,7 +201,7 @@ export default function TransactionForm({
             rows={3}
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-gray-400 dark:placeholder:text-gray-500"
             placeholder="Dodatkowe informacje o transakcji..."
           />
         </div>
@@ -211,14 +211,14 @@ export default function TransactionForm({
           <button
             type="button"
             onClick={onCancel}
-            className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition"
+            className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition"
             disabled={isLoading}
           >
             Anuluj
           </button>
           <button
             type="submit"
-            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 dark:bg-indigo-500 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
             {isLoading ? 'Zapisywanie...' : transaction ? 'Zaktualizuj' : 'Dodaj'}
