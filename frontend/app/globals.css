@@ -5,9 +5,9 @@
   --foreground: #171717;
 }
 
-/* Dark mode colors */
+/* Dark mode colors - Pure black for better contrast */
 :root.dark {
-  --background: #0a0a0a;
+  --background: #000000;
   --foreground: #ededed;
 }
 

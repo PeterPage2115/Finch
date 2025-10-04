@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useTransactionsStore } from '@/lib/stores/transactionsStore';
-import { useTheme } from '@/lib/hooks/useTheme';
+import { useTheme } from '@/lib/providers/ThemeProvider';
 import { transactionsApi } from '@/lib/api/transactionsClient';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionForm from '@/components/transactions/TransactionForm';
@@ -20,7 +20,7 @@ const MOCK_CATEGORIES = [
 export default function DashboardPage() {
   const router = useRouter();
   const { user, logout, isAuthenticated, token } = useAuthStore();
-  const { theme, toggleTheme, mounted } = useTheme();
+  const { theme, toggleTheme } = useTheme();
   const {
     transactions,
     meta,
@@ -150,9 +150,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors">
       {/* Navigation Bar */}
-      <nav className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <nav className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo */}
@@ -165,15 +165,14 @@ export default function DashboardPage() {
             {/* User Menu */}
             <div className="flex items-center space-x-4">
               {/* Dark Mode Toggle */}
-              {mounted && (
-                <button
-                  onClick={toggleTheme}
-                  className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition"
-                  title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
-                >
-                  {theme === 'dark' ? '☀️' : '🌙'}
-                </button>
-              )}
+              <button
+                onClick={toggleTheme}
+                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+                title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
+                aria-label="Toggle dark mode"
+              >
+                {theme === 'dark' ? '☀️' : '🌙'}
+              </button>
               <div className="text-sm">
                 <p className="text-gray-700 dark:text-gray-200 font-medium">{user?.name || 'Użytkownik'}</p>
                 <p className="text-gray-500 dark:text-gray-400 text-xs">{user?.email}</p>
