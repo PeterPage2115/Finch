@@ -6,16 +6,10 @@ import { useAuthStore } from '@/lib/stores/authStore';
 import { useTransactionsStore } from '@/lib/stores/transactionsStore';
 import { useTheme } from '@/lib/providers/ThemeProvider';
 import { transactionsApi } from '@/lib/api/transactionsClient';
+import { categoriesApi, type Category } from '@/lib/api/categoriesClient';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionForm from '@/components/transactions/TransactionForm';
 import type { Transaction, CreateTransactionDto, TransactionType } from '@/types/transaction';
-
-// Mock categories (temporary - will be replaced with API)
-const MOCK_CATEGORIES = [
-  { id: '5e72ea07-a66c-4194-aa82-da4b9b58c7c6', name: 'Jedzenie', icon: '🍔', type: 'EXPENSE' as TransactionType },
-  { id: '521654d7-cf7f-43ca-96aa-9ef4d1d21af1', name: 'Transport', icon: '🚗', type: 'EXPENSE' as TransactionType },
-  { id: 'f9fcdf43-dc03-46f1-8ca8-05de740133b0', name: 'Wynagrodzenie', icon: '💰', type: 'INCOME' as TransactionType },
-];
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -38,6 +32,7 @@ export default function DashboardPage() {
   const [showForm, setShowForm] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
     // Sprawdź czy użytkownik jest zalogowany
@@ -52,24 +47,32 @@ export default function DashboardPage() {
   useEffect(() => {
     if (!isAuthenticated || !token) return;
 
-    const fetchTransactions = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
-        setError(null); // Clear previous errors
-        const response = await transactionsApi.getAll(token, { page: 1, limit: 50 });
-        setTransactions(response);
+        setError(null);
+        
+        // Fetch transactions and categories in parallel
+        const [transactionsResponse, categoriesResponse] = await Promise.all([
+          transactionsApi.getAll(token, { page: 1, limit: 50 }),
+          categoriesApi.getAll(token),
+        ]);
+        
+        setTransactions(transactionsResponse);
+        setCategories(categoriesResponse);
       } catch (err: any) {
-        console.error('Error fetching transactions:', err);
-        const errorMessage = err?.message || 'Nie udało się pobrać transakcji';
+        console.error('Error fetching data:', err);
+        const errorMessage = err?.message || 'Nie udało się pobrać danych';
         setError(errorMessage);
-        // Set empty transactions to prevent undefined errors
+        // Set empty data to prevent undefined errors
         setTransactions({ data: [], meta: { total: 0, page: 1, limit: 50, totalPages: 0 } });
+        setCategories([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTransactions();
+    fetchData();
   }, [isAuthenticated, token, setTransactions, setLoading, setError]);
 
   const handleLogout = () => {
@@ -130,10 +133,14 @@ export default function DashboardPage() {
   };
 
   // Calculate stats (defensive programming - handle undefined/empty transactions)
-  const safeTransactions = transactions || [];
+  const safeTransactions = Array.isArray(transactions) ? transactions : [];
   const stats = {
-    income: safeTransactions.filter(t => t.type === 'INCOME').reduce((sum, t) => sum + (t.amount || 0), 0),
-    expenses: safeTransactions.filter(t => t.type === 'EXPENSE').reduce((sum, t) => sum + (t.amount || 0), 0),
+    income: safeTransactions
+      .filter(t => t && t.type === 'INCOME')
+      .reduce((sum, t) => sum + (Number(t.amount) || 0), 0),
+    expenses: safeTransactions
+      .filter(t => t && t.type === 'EXPENSE')
+      .reduce((sum, t) => sum + (Number(t.amount) || 0), 0),
     balance: 0,
   };
   stats.balance = stats.income - stats.expenses;
@@ -305,7 +312,7 @@ export default function DashboardPage() {
           <div className="mb-6">
             <TransactionForm
               transaction={editingTransaction}
-              categories={MOCK_CATEGORIES}
+              categories={categories}
               onSubmit={handleSubmit}
               onCancel={handleCancel}
               isLoading={isSubmitting}
