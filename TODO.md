@@ -1,18 +1,24 @@
 # TODO - Aplikacja do Śledzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
-**Status:** Faza 3 zakończona ✅ - Cleanup dokumentacji zakończony ✅ (46/86 zadań - 53%)
+**Status:** Faza 4 zakończona ✅ - Categories API + Bug fixes ✅ (70/86 zadań - 81%)
 
 ---
 
-**Ostatnie zmiany (4 października 2025):**
-- ✅ Naprawa NetworkError: Migracja na Next.js API Routes jako proxy
-- ✅ Cleanup projektu: Usunięto 9 niepotrzebnych plików/folderów  
-- ✅ Konsolidacja README: Usunięto duplikaty
-- ✅ Aktualizacja dokumentacji: BACKEND_API_URL + architektura API Routes
-- 📊 Statystyki: 141 plików (po cleanup: -8 plików)
+**Ostatnie zmiany (4 października 2025 - Sesja 2):**
+- ✅ Faza 4.1: Backend Transactions CRUD (100%)
+- ✅ Faza 4.2: Frontend Transactions UI (100%)
+- ✅ Categories API (Backend + Frontend)
+- ✅ ThemeProvider + Pure Black Dark Mode (#000)
+- ✅ Professional Icons (lucide-react)
+- ✅ **CRITICAL FIXES:**
+  - amount.toFixed error (Prisma Decimal = string!)
+  - Auto-create default categories przy rejestracji
+  - ThemeProvider context error
+- ✅ CHANGELOG.md utworzony
+- 📊 Statystyki: 6 commitów, wszystkie testy przechodzą
 
-**Następny krok:** Faza 4 - Moduł Transakcji (MVP) 💰
+**Następny krok:** Faza 5 - Moduł Kategorii (5.1 Backend API Kategorii) 🏷️
 
 ---
 
@@ -89,74 +95,100 @@
 
 ---
 
-## 💰 Faza 4: Moduł Transakcji (MVP)
+## 💰 Faza 4: Moduł Transakcji (MVP) ✅ UKOŃCZONA
 
-### 4.1 Backend - API Transakcji
-- [ ] Moduł `TransactionsModule` w NestJS
-- [ ] DTO dla transakcji (CreateTransactionDto, UpdateTransactionDto)
-- [ ] Endpoint: `POST /transactions` (tworzenie transakcji)
-- [ ] Endpoint: `GET /transactions` (lista transakcji użytkownika z filtrowaniem)
-- [ ] Endpoint: `GET /transactions/:id` (szczegóły transakcji)
-- [ ] Endpoint: `PUT /transactions/:id` (edycja transakcji)
-- [ ] Endpoint: `DELETE /transactions/:id` (usunięcie transakcji)
-- [ ] Walidacja danych wejściowych (class-validator)
-- [ ] Testy jednostkowe dla TransactionsService
-- [ ] Testy integracyjne dla wszystkich endpointów
+### 4.1 Backend - API Transakcji ✅
+- [x] Moduł `TransactionsModule` w NestJS
+- [x] DTO dla transakcji (CreateTransactionDto, UpdateTransactionDto)
+- [x] Endpoint: `POST /transactions` (tworzenie transakcji)
+- [x] Endpoint: `GET /transactions` (lista transakcji użytkownika z filtrowaniem)
+- [x] Endpoint: `GET /transactions/:id` (szczegóły transakcji)
+- [x] Endpoint: `PATCH /transactions/:id` (edycja transakcji)
+- [x] Endpoint: `DELETE /transactions/:id` (usunięcie transakcji)
+- [x] Walidacja danych wejściowych (class-validator)
+- [x] **Bonus:** Paginacja (page, limit, meta)
+- [x] **Bonus:** Filtrowanie (type, categoryId, dateRange)
+- [x] Testy jednostkowe dla TransactionsService
+- [x] Testy integracyjne dla wszystkich endpointów
 
-### 4.2 Frontend - UI Transakcji
-- [ ] Strona główna z listą transakcji (`/dashboard`)
-- [ ] Formularz dodawania transakcji (modal lub osobna strona)
-- [ ] Wyświetlanie listy transakcji (tabela/karty)
-- [ ] Filtrowanie transakcji (po dacie, kategorii, typie)
-- [ ] Edycja transakcji
-- [ ] Usuwanie transakcji (z potwierdzeniem)
-- [ ] Obsługa błędów i komunikatów (toast notifications)
-- [ ] Loading states podczas zapytań API
+### 4.2 Frontend - UI Transakcji ✅
+- [x] Strona główna z listą transakcji (`/dashboard`)
+- [x] Formularz dodawania transakcji (modal)
+- [x] Wyświetlanie listy transakcji (tabela)
+- [x] Filtrowanie transakcji (po dacie, kategorii, typie)
+- [x] Edycja transakcji
+- [x] Usuwanie transakcji (z potwierdzeniem)
+- [x] Obsługa błędów i komunikatów (toast notifications)
+- [x] Loading states podczas zapytań API
+- [x] **Bonus:** Zustand store z localStorage persist
+- [x] **Bonus:** Next.js API Routes jako proxy
+- [x] **Bonus:** Categories API (GET /categories)
+- [x] **Bonus:** ThemeProvider + Pure Black Dark Mode
+- [x] **Bonus:** Professional Icons (lucide-react)
+- [x] **Bonus:** Stats calculation z defensywnym programowaniem
+- [x] **CRITICAL FIX:** amount.toFixed error (Prisma Decimal → string)
+- [x] **CRITICAL FIX:** Auto-create default categories przy rejestracji
+
+**Wnioski z Fazy 4:**
+- ⚠️ Prisma Decimal zwraca string w runtime - zawsze używaj Number() conversion
+- ✅ Sequential thinking skuteczny dla złożonych problemów
+- ✅ User-scoped dane wymagają automatycznego seed przy rejestracji
+- ✅ Krótkie commity + CHANGELOG.md dla szczegółów
 
 ---
 
-## 📊 Faza 5: Kategorie
+## 📊 Faza 5: Kategorie 🎯 W TRAKCIE
 
-### 5.1 Backend - API Kategorii
-- [ ] Moduł `CategoriesModule` w NestJS
-- [ ] Endpoint: `POST /categories` (tworzenie kategorii)
-- [ ] Endpoint: `GET /categories` (lista kategorii użytkownika)
+### 5.1 Backend - API Kategorii ✅ CZĘŚCIOWO
+- [x] Moduł `CategoriesModule` w NestJS
+- [x] Endpoint: `GET /categories` (lista kategorii użytkownika)
+- [x] Auto-create domyślnych kategorii przy rejestracji (AuthService)
+- [ ] Endpoint: `POST /categories` (tworzenie niestandardowej kategorii)
 - [ ] Endpoint: `PUT /categories/:id` (edycja kategorii)
 - [ ] Endpoint: `DELETE /categories/:id` (usunięcie kategorii)
-- [ ] Domyślne kategorie dla nowych użytkowników
-- [ ] Testy
+- [ ] Testy jednostkowe dla CategoriesService
+- [ ] Testy integracyjne dla endpointów
 
 ### 5.2 Frontend - UI Kategorii
+- [x] Select/dropdown kategorii w formularzu transakcji (z API)
 - [ ] Strona zarządzania kategoriami (`/categories`)
-- [ ] Formularz dodawania/edycji kategorii
-- [ ] Lista kategorii z możliwością usunięcia
-- [ ] Select/dropdown kategorii w formularzu transakcji
+- [ ] Formularz dodawania/edycji niestandardowej kategorii
+- [ ] Lista kategorii z możliwością edycji/usunięcia
+- [ ] Ikony kategorii (emoji lub lucide-react)
+- [ ] Kolory kategorii (picker)
 
 ---
 
-## 📈 Faza 6: Budżety i Raporty (MVP)
+## 📈 Faza 6: Budżety i Raporty (MVP) ⏭️ NASTĘPNA
 
 ### 6.1 Backend - API Budżetów
 - [ ] Moduł `BudgetsModule` w NestJS
+- [ ] DTO (CreateBudgetDto, UpdateBudgetDto)
 - [ ] Endpoint: `POST /budgets` (tworzenie budżetu)
-- [ ] Endpoint: `GET /budgets` (lista budżetów)
+- [ ] Endpoint: `GET /budgets` (lista budżetów z filtrowaniem)
 - [ ] Endpoint: `GET /budgets/:id` (szczegóły + postęp)
-- [ ] Endpoint: `PUT /budgets/:id` (edycja)
+- [ ] Endpoint: `PATCH /budgets/:id` (edycja)
 - [ ] Endpoint: `DELETE /budgets/:id` (usunięcie)
-- [ ] Logika obliczania postępu budżetu
-- [ ] Testy
+- [ ] Logika obliczania postępu budżetu (wydane/limit)
+- [ ] Walidacja: amount > 0, period (MONTHLY/WEEKLY/YEARLY)
+- [ ] Testy jednostkowe
+- [ ] Testy integracyjne
 
 ### 6.2 Frontend - UI Budżetów
 - [ ] Strona budżetów (`/budgets`)
-- [ ] Formularz tworzenia budżetu
-- [ ] Wyświetlanie listy budżetów z progress barami
-- [ ] Alerty przy przekroczeniu budżetu
+- [ ] Formularz tworzenia budżetu (kategoria, kwota, okres)
+- [ ] Lista budżetów z progress barami
+- [ ] Progress colors: green (<80%), yellow (80-99%), red (≥100%)
+- [ ] Alerty przy przekroczeniu budżetu (80%, 100%)
+- [ ] Dashboard widget "Budżety" z overview
+- [ ] Loading states i error handling
 
 ### 6.3 Podstawowe Raporty
 - [ ] Endpoint: `GET /reports/summary` (podsumowanie: suma przychodów/wydatków za okres)
 - [ ] Endpoint: `GET /reports/by-category` (wydatki/przychody po kategorii)
 - [ ] Strona raportów (`/reports`) z wykresami (Chart.js/Recharts)
 - [ ] Wybór okresu dla raportów (miesiąc, kwartał, rok)
+- [ ] Export danych do CSV (opcjonalnie)
 
 ---
 
