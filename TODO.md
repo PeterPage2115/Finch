@@ -1,7 +1,18 @@
 # TODO - Aplikacja do Śledzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
-**Status:** Faza 3.2 zakończona ✅ (46/86 zadań - 53%)
+**Status:** Faza 3 zakończona ✅ - Cleanup dokumentacji zakończony ✅ (46/86 zadań - 53%)
+
+---
+
+**Ostatnie zmiany (4 października 2025):**
+- ✅ Naprawa NetworkError: Migracja na Next.js API Routes jako proxy
+- ✅ Cleanup projektu: Usunięto 9 niepotrzebnych plików/folderów  
+- ✅ Konsolidacja README: Usunięto duplikaty
+- ✅ Aktualizacja dokumentacji: BACKEND_API_URL + architektura API Routes
+- 📊 Statystyki: 141 plików (po cleanup: -8 plików)
+
+**Następny krok:** Faza 4 - Moduł Transakcji (MVP) 💰
 
 ---
 
