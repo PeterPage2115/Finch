@@ -57,8 +57,9 @@ services:
     container_name: tracker_kasy_frontend
     restart: unless-stopped
     environment:
-      # W Dockerze używamy nazwy serwisu "backend" z Docker network
-      NEXT_PUBLIC_API_URL: "http://backend:3001"
+      # Backend URL używane przez Next.js API Routes (server-side only)
+      # Browser łączy się z /api/* które są proxy do tego URL
+      BACKEND_API_URL: "http://backend:3001"
       NODE_ENV: development
     ports:
       - "3000:3000"

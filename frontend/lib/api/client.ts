@@ -1,8 +1,15 @@
 /**
  * API Client for communicating with the backend
+ * 
+ * Używa RELATIVE URLs do Next.js API Routes (/api/*),
+ * które działają jako proxy do backendu.
+ * 
+ * Architektura:
+ * Browser → /api/auth/* (Next.js Route Handler) → http://backend:3001/auth/* (Backend)
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+// Używamy RELATIVE URL - Next.js API Routes są na tym samym origin
+const API_BASE_URL = '/api';
 
 interface FetchOptions extends RequestInit {
   token?: string;
