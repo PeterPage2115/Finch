@@ -13,7 +13,7 @@ import type { Transaction, CreateTransactionDto, TransactionType } from '@/types
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, logout, isAuthenticated, token } = useAuthStore();
+  const { user, logout, isAuthenticated, token, _hasHydrated } = useAuthStore();
   const { theme, toggleTheme } = useTheme();
   const {
     transactions,
@@ -35,13 +35,16 @@ export default function DashboardPage() {
   const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
+    // Wait for hydration before checking auth
+    if (!_hasHydrated) return;
+    
     // Sprawdź czy użytkownik jest zalogowany
     if (!isAuthenticated) {
       router.push('/login');
     } else {
       setIsLoading(false);
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, _hasHydrated, router]);
 
   // Fetch transactions
   useEffect(() => {

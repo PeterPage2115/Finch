@@ -17,6 +17,7 @@ import { Plus, ArrowLeft } from 'lucide-react';
 export default function CategoriesPage() {
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
+  const hasHydrated = useAuthStore((state) => state._hasHydrated);
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,14 +27,16 @@ export default function CategoriesPage() {
   const [editingCategory, setEditingCategory] = useState<Category | undefined>(undefined);
   const [deleteConfirm, setDeleteConfirm] = useState<Category | null>(null);
 
-  // Fetch categories on mount
+  // Wait for hydration before checking auth
   useEffect(() => {
+    if (!hasHydrated) return;
+    
     if (!token) {
       router.push('/login');
       return;
     }
     fetchCategories();
-  }, [token, router]);
+  }, [token, hasHydrated, router]);
 
   const fetchCategories = async () => {
     try {
