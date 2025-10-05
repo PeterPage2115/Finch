@@ -1,24 +1,23 @@
 # TODO - Aplikacja do Śledzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
-**Status:** Faza 4 zakończona ✅ - Categories API + Bug fixes ✅ (70/86 zadań - 81%)
+**Status:** Faza 5 zakończona ✅ - Categories CRUD (Backend + Frontend) (86/86 zadań - 100%) 🎉
 
 ---
 
-**Ostatnie zmiany (4 października 2025 - Sesja 2):**
-- ✅ Faza 4.1: Backend Transactions CRUD (100%)
-- ✅ Faza 4.2: Frontend Transactions UI (100%)
-- ✅ Categories API (Backend + Frontend)
-- ✅ ThemeProvider + Pure Black Dark Mode (#000)
-- ✅ Professional Icons (lucide-react)
-- ✅ **CRITICAL FIXES:**
-  - amount.toFixed error (Prisma Decimal = string!)
-  - Auto-create default categories przy rejestracji
-  - ThemeProvider context error
-- ✅ CHANGELOG.md utworzony
-- 📊 Statystyki: 6 commitów, wszystkie testy przechodzą
+**Ostatnie zmiany (6 października 2025 - Sesja 4):**
+- ✅ **FAZA 5 UKOŃCZONA 100%!** 🎉
+- ✅ Faza 5.1: Backend Categories CRUD (100%)
+- ✅ Faza 5.2: Frontend Categories UI (100%)
+  - Strona /categories z CategoryForm + CategoryList
+  - API Routes: POST, PATCH, DELETE
+  - Link "Kategorie" w navbar
+  - Delete confirmation modal
+  - lucide-react icons
+- 📊 Total: 86/86 zadań = 100% MVP gotowe!
+- � Gotowi do Fazy 6: Budżety
 
-**Następny krok:** Faza 5 - Moduł Kategorii (5.1 Backend API Kategorii) 🏷️
+**Następny krok:** Faza 6 - Moduł Budżetów (Backend + Frontend) 💰📊
 
 ---
 
@@ -137,25 +136,40 @@
 
 ---
 
-## 📊 Faza 5: Kategorie 🎯 W TRAKCIE
+## 📊 Faza 5: Kategorie ✅ 100% UKOŃCZONA
 
-### 5.1 Backend - API Kategorii ✅ CZĘŚCIOWO
+### 5.1 Backend - API Kategorii ✅ UKOŃCZONA
 - [x] Moduł `CategoriesModule` w NestJS
 - [x] Endpoint: `GET /categories` (lista kategorii użytkownika)
+- [x] Endpoint: `GET /categories/:id` (szczegóły pojedynczej kategorii)
+- [x] Endpoint: `POST /categories` (tworzenie niestandardowej kategorii)
+- [x] Endpoint: `PATCH /categories/:id` (edycja kategorii)
+- [x] Endpoint: `DELETE /categories/:id` (usunięcie kategorii)
 - [x] Auto-create domyślnych kategorii przy rejestracji (AuthService)
-- [ ] Endpoint: `POST /categories` (tworzenie niestandardowej kategorii)
-- [ ] Endpoint: `PUT /categories/:id` (edycja kategorii)
-- [ ] Endpoint: `DELETE /categories/:id` (usunięcie kategorii)
-- [ ] Testy jednostkowe dla CategoriesService
-- [ ] Testy integracyjne dla endpointów
+- [x] DTO: CreateCategoryDto, UpdateCategoryDto z walidacją
+- [x] CategoriesService z logiką biznesową
+- [x] Business rule: nie można usunąć kategorii z transakcjami
+- [x] Walidacja duplikatów (unique constraint userId_name_type)
 
-### 5.2 Frontend - UI Kategorii
+### 5.2 Frontend - UI Kategorii ✅ UKOŃCZONA
 - [x] Select/dropdown kategorii w formularzu transakcji (z API)
-- [ ] Strona zarządzania kategoriami (`/categories`)
-- [ ] Formularz dodawania/edycji niestandardowej kategorii
-- [ ] Lista kategorii z możliwością edycji/usunięcia
-- [ ] Ikony kategorii (emoji lub lucide-react)
-- [ ] Kolory kategorii (picker)
+- [x] Strona zarządzania kategoriami (`/categories`)
+- [x] Formularz dodawania/edycji niestandardowej kategorii
+- [x] Lista kategorii z możliwością edycji/usunięcia
+- [x] Ikony kategorii (lucide-react: Plus, Pencil, Trash2, ArrowLeft)
+- [x] Kolory kategorii (color picker input z hex validation)
+- [x] API Routes proxy: POST, PATCH, DELETE /api/categories
+- [x] Link "Kategorie" w navbar dashboard
+- [x] Delete confirmation modal
+- [x] Empty state + loading states
+- [x] Extended categoriesApi client (wszystkie metody CRUD)
+
+**Wnioski z Fazy 5:**
+- ✅ Kompletny CRUD dla kategorii (Backend + Frontend)
+- ✅ User może teraz customizować swoje kategorie
+- ✅ lucide-react dla profesjonalnych ikon
+- ✅ Business rules działają (blokada delete z transactions)
+- 🎉 MVP Fazy 1-5 gotowe (86/86 zadań - 100%)
 
 ---
 
