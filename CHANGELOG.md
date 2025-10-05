@@ -7,10 +7,33 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 ## [Unreleased]
 
 ### W planach
-- **FAZA 5**: Moduł Budżetów (Backend + Frontend)
+- **FAZA 6**: Moduł Budżetów (Backend + Frontend)
 - Wykresy wydatków (Chart.js integration)
 - Export danych do CSV/PDF
 - Usprawnienia kolorystyki dla dark mode
+
+## [0.4.0] - 2025-10-06
+
+### Dodane
+- **Categories Frontend UI (FAZA 5 UKOŃCZONA 100%)** ✅
+  * Strona /categories - kompletne zarządzanie kategoriami
+  * CategoryForm component (create/edit z full walidacją)
+  * CategoryList component (grid view z grupowaniem INCOME/EXPENSE)
+  * API Routes: POST, PATCH, DELETE /api/categories
+  * Link "Kategorie" w navbar dashboard
+  * Delete confirmation modal
+  * Empty state dla pustej listy
+  * Loading states + error handling
+- lucide-react icons (Plus, ArrowLeft, Pencil, Trash2)
+- Extended categoriesApi: create, update, delete, getById methods
+
+### Zmienione
+- categoriesApi rozbudowany o wszystkie metody CRUD
+- Dashboard navbar: dodano nawigację (Dashboard, Kategorie)
+- Color picker + icon input w CategoryForm
+
+### Zakończone fazy
+- ✅ **FAZA 5: Kategorie** (Backend + Frontend - 100%)
 
 ## [0.3.0] - 2025-10-04
 
