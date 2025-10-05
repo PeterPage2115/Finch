@@ -78,6 +78,26 @@
 
 ## 📝 ZASADY PRACY (DO ZAPAMIĘTANIA!)
 
+### 0. MCP Tools - ZAWSZE UŻYWAĆ! 🔧
+**Obowiązkowe narzędzia dla każdego złożonego zadania:**
+
+1. **#mcp_sequentialthi_sequentialthinking** - analiza krok po kroku
+   - Używaj do debugowania
+   - Rozbijaj problemy na małe kroki
+   - Weryfikuj hipotezy systematycznie
+
+2. **#memory** (create_entities, add_observations, search_nodes)
+   - Zapisuj wzorce błędów
+   - Przechowuj rozwiązania
+   - Buduj bazę wiedzy projektu
+
+3. **#mcp_upstash_conte_get-library-docs** - aktualna dokumentacja
+   - Sprawdzaj dokumentację przed zmianami
+   - Weryfikuj API i best practices
+   - Używaj zamiast starych danych z cache
+
+**⚠️ Bez MCP Tools = słaba jakość pracy!**
+
 ### 1. Git Commits - CONVENTIONAL COMMITS
 **Format:** `<typ>: <krótki opis (max 50 znaków)>`
 
