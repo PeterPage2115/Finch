@@ -1,29 +1,16 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Patch,
-  Delete,
-  Body,
-  Param,
-  UseGuards,
-  Request,
-  HttpCode,
-  HttpStatus,
-} from '@nestjs/common';
+import { Controller, Get, UseGuards, Request } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CategoriesService } from './categories.service';
-import { CreateCategoryDto, UpdateCategoryDto } from './dto';
+import { PrismaService } from '../prisma.service';
 
 /**
  * Categories Controller
  * 
- * CRUD endpoints dla kategorii użytkownika
+ * Endpoint do pobierania kategorii użytkownika
  */
 @Controller('categories')
 @UseGuards(JwtAuthGuard)
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   /**
    * GET /categories
@@ -31,48 +18,26 @@ export class CategoriesController {
    */
   @Get()
   async findAll(@Request() req) {
-    return this.categoriesService.findAll(req.user.id);
-  }
+    const userId = req.user.id;
 
-  /**
-   * GET /categories/:id
-   * Zwraca szczegóły pojedynczej kategorii
-   */
-  @Get(':id')
-  async findOne(@Param('id') id: string, @Request() req) {
-    return this.categoriesService.findOne(id, req.user.id);
-  }
+    const categories = await this.prisma.category.findMany({
+      where: {
+        userId: userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        color: true,
+        icon: true,
+        createdAt: true,
+      },
+      orderBy: [
+        { type: 'asc' }, // INCOME first, then EXPENSE
+        { name: 'asc' },
+      ],
+    });
 
-  /**
-   * POST /categories
-   * Tworzy nową niestandardową kategorię
-   */
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  async create(@Body() createCategoryDto: CreateCategoryDto, @Request() req) {
-    return this.categoriesService.create(req.user.id, createCategoryDto);
-  }
-
-  /**
-   * PATCH /categories/:id
-   * Aktualizuje istniejącą kategorię
-   */
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto,
-    @Request() req,
-  ) {
-    return this.categoriesService.update(id, req.user.id, updateCategoryDto);
-  }
-
-  /**
-   * DELETE /categories/:id
-   * Usuwa kategorię (tylko jeśli nie ma przypisanych transakcji)
-   */
-  @Delete(':id')
-  @HttpCode(HttpStatus.OK)
-  async remove(@Param('id') id: string, @Request() req) {
-    return this.categoriesService.remove(id, req.user.id);
+    return categories;
   }
 }

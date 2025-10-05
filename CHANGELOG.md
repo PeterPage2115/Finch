@@ -7,22 +7,10 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 ## [Unreleased]
 
 ### W planach
-- Frontend Categories UI (strona /categories, CRUD forms)
-- **FAZA 6**: Moduł Budżetów (Backend + Frontend)
+- **FAZA 5**: Moduł Budżetów (Backend + Frontend)
 - Wykresy wydatków (Chart.js integration)
 - Export danych do CSV/PDF
 - Usprawnienia kolorystyki dla dark mode
-
-### Dodane (5 października 2025)
-- **Categories CRUD API (Backend)**
-  * POST /categories - tworzenie niestandardowej kategorii
-  * PATCH /categories/:id - aktualizacja kategorii (nazwa, kolor, ikona)
-  * DELETE /categories/:id - usuwanie kategorii
-  * GET /categories/:id - szczegóły pojedynczej kategorii
-- CategoriesService z logiką biznesową
-- UpdateCategoryDto z walidacją
-- Business rule: nie można usunąć kategorii z przypisanymi transakcjami
-- Walidacja duplikatów nazw per typ (userId_name_type unique constraint)
 
 ## [0.3.0] - 2025-10-04
 

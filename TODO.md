@@ -1,22 +1,24 @@
 # TODO - Aplikacja do Śledzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
-**Status:** Faza 5.1 zakończona ✅ - Categories CRUD Backend (77/86 zadań - 90%)
+**Status:** Faza 4 zakończona ✅ - Categories API + Bug fixes ✅ (70/86 zadań - 81%)
 
 ---
 
-**Ostatnie zmiany (5 października 2025 - Sesja 3):**
-- ✅ Faza 5.1: Backend Categories CRUD (100%)
-  - POST /categories (create custom)
-  - PATCH /categories/:id (update)
-  - DELETE /categories/:id (delete with validation)
-  - GET /categories/:id (single category)
-- ✅ CategoriesService z business logic
-- ✅ UpdateCategoryDto z pełną walidacją
-- ✅ Business rule: protect categories with transactions
-- 📊 Backend endpoints: 18 routes mapped
+**Ostatnie zmiany (4 października 2025 - Sesja 2):**
+- ✅ Faza 4.1: Backend Transactions CRUD (100%)
+- ✅ Faza 4.2: Frontend Transactions UI (100%)
+- ✅ Categories API (Backend + Frontend)
+- ✅ ThemeProvider + Pure Black Dark Mode (#000)
+- ✅ Professional Icons (lucide-react)
+- ✅ **CRITICAL FIXES:**
+  - amount.toFixed error (Prisma Decimal = string!)
+  - Auto-create default categories przy rejestracji
+  - ThemeProvider context error
+- ✅ CHANGELOG.md utworzony
+- 📊 Statystyki: 6 commitów, wszystkie testy przechodzą
 
-**Następny krok:** Faza 5.2 - Frontend Categories UI (/categories page) �
+**Następny krok:** Faza 5 - Moduł Kategorii (5.1 Backend API Kategorii) 🏷️
 
 ---
 
@@ -135,24 +137,19 @@
 
 ---
 
-## 📊 Faza 5: Kategorie 🎯 50% UKOŃCZONA
+## 📊 Faza 5: Kategorie 🎯 W TRAKCIE
 
-### 5.1 Backend - API Kategorii ✅ UKOŃCZONA
+### 5.1 Backend - API Kategorii ✅ CZĘŚCIOWO
 - [x] Moduł `CategoriesModule` w NestJS
 - [x] Endpoint: `GET /categories` (lista kategorii użytkownika)
-- [x] Endpoint: `GET /categories/:id` (szczegóły pojedynczej kategorii)
-- [x] Endpoint: `POST /categories` (tworzenie niestandardowej kategorii)
-- [x] Endpoint: `PATCH /categories/:id` (edycja kategorii)
-- [x] Endpoint: `DELETE /categories/:id` (usunięcie kategorii)
 - [x] Auto-create domyślnych kategorii przy rejestracji (AuthService)
-- [x] DTO: CreateCategoryDto, UpdateCategoryDto z walidacją
-- [x] CategoriesService z logiką biznesową
-- [x] Business rule: nie można usunąć kategorii z transakcjami
-- [x] Walidacja duplikatów (unique constraint userId_name_type)
+- [ ] Endpoint: `POST /categories` (tworzenie niestandardowej kategorii)
+- [ ] Endpoint: `PUT /categories/:id` (edycja kategorii)
+- [ ] Endpoint: `DELETE /categories/:id` (usunięcie kategorii)
 - [ ] Testy jednostkowe dla CategoriesService
 - [ ] Testy integracyjne dla endpointów
 
-### 5.2 Frontend - UI Kategorii ⏭️ NASTĘPNA
+### 5.2 Frontend - UI Kategorii
 - [x] Select/dropdown kategorii w formularzu transakcji (z API)
 - [ ] Strona zarządzania kategoriami (`/categories`)
 - [ ] Formularz dodawania/edycji niestandardowej kategorii
