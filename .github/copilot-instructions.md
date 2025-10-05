@@ -52,11 +52,43 @@ Jako mój asystent AI, proszę, abyś przestrzegał poniższych zasad:
 **6. Dostępność (Accessibility, a11y):**
 *   Tworząc komponenty frontendowe, pamiętaj o podstawowych zasadach dostępności. Używaj semantycznego HTML (np. `<button>` zamiast `<div onClick={...}>`), dbaj o odpowiednie atrybuty ARIA i zapewnij możliwość nawigacji za pomocą klawiatury.
 
-**7. Wykorzystanie Narzędzi i Wyszukiwania:**
+**7. Wykorzystanie Narzędzi MCP (OBOWIĄZKOWE!):**
+
+**DO KAŻDEGO złożonego zadania używaj tych narzędzi:**
+
+**a) #mcp_sequentialthi_sequentialthinking** - Myślenie krok po kroku
+*   Używaj do analizy problemów (min 8-15 kroków)
+*   Rozpisuj hipotezy przed implementacją
+*   Weryfikuj założenia systematycznie
+*   Przykład: debugging, architektura, code review
+
+**b) #memory** (create_entities, add_observations, search_nodes)
+*   Zapisuj wzorce błędów i rozwiązania
+*   Twórz bazę wiedzy projektu
+*   Szukaj podobnych problemów z przeszłości
+*   Przykład: Po naprawie buga → zapisz w memory
+
+**c) #mcp_upstash_conte_get-library-docs**
+*   Sprawdzaj dokumentację przed zmianami
+*   Weryfikuj API i best practices
+*   Używaj zamiast cache/assumptions
+*   Przykład: Zustand persist → pobierz docs → sprawdź hydration pattern
+
+**Workflow z MCP:**
+```
+1. Problem pojawił się
+2. #mcp_sequentialthi_sequentialthinking - rozpisz 8-15 kroków analizy
+3. #memory search_nodes - czy podobny problem był wcześniej?
+4. #mcp_upstash_conte_get-library-docs - sprawdź dokumentację
+5. Implementuj rozwiązanie
+6. #memory create_entities - zapisz wzorzec + fix
+```
+
+**⚠️ Bez MCP tools = słaba jakość pracy!**
+
+**8. Aktywne Wyszukiwanie:**
 *   **Aktywnie korzystaj z wyszukiwania w sieci.** Zanim udzielisz odpowiedzi, zwłaszcza dotyczącej bibliotek, konfiguracji czy rozwiązywania problemów, **zawsze** przeprowadź wyszukiwanie, aby upewnić się, że informacje są aktualne i dokładne na dzień 1 października 2025.
 *   Nie udawaj, że korzystasz z wyszukiwania. Oczekuję, że będziesz faktycznie weryfikować informacje.
-*   Wykorzystuj wszystkie dostępne narzędzia MCP do analizy, debugowania i refaktoryzacji kodu.
-*   Sprawdzaj dokumentację używając context7 MCP.
 
 **Przykład komendy:**
 "Stwórz endpoint w NestJS do dodawania nowej transakcji. Pamiętaj o walidacji DTO (Data Transfer Object) przy użyciu `class-validator`. Napisz również podstawowy test integracyjny w Jest, który sprawdzi scenariusz pomyślnego dodania transakcji oraz scenariusz z błędnymi danymi wejściowymi."

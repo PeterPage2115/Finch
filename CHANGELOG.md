@@ -12,6 +12,31 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 - Export danych do CSV/PDF
 - Usprawnienia kolorystyki dla dark mode
 
+## [0.4.1] - 2025-10-06
+
+### Naprawione
+- **CRITICAL**: Zustand hydration w Next.js SSR
+  * Dodano `_hasHydrated` flag do authStore
+  * `onRehydrateStorage` callback ustawia flagę po hydration
+  * Categories/Dashboard sprawdzają hydration przed auth check
+  * Rozwiązano problem przekierowań do /login gdy użytkownik jest zalogowany
+- **@CurrentUser decorator** - akceptuje parametry pola (np. `@CurrentUser('id')`)
+- **Puste pliki DTO** - `index.ts` i `update-category.dto.ts` wypełnione
+- **CategoriesService** - kompletna implementacja (był pusty plik)
+  * findAll, findOne, create, update, remove
+  * Business rule: blokada usunięcia kategorii z transakcjami
+- **CategoriesController** - refaktoryzacja (używa service zamiast Prisma)
+- **Middleware** - uproszczony kod auth sprawdzania
+
+### Dodane
+- PROJECT_STATUS.md - kompletny stan projektu + zasady pracy
+- MCP tools w dokumentacji - Sequential Thinking, Memory, Context7
+
+### Wnioski techniczne
+- ✅ Zustand persist w Next.js SSR wymaga hydration handling
+- ✅ MCP tools (#mcp_sequentialthi_sequentialthinking, #memory, #mcp_upstash_conte_get-library-docs) znacząco przyspieszają debugging
+- ⚠️ Zawsze sprawdzać czy pliki nie są puste przed użyciem
+
 ## [0.4.0] - 2025-10-06
 
 ### Dodane
