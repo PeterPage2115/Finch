@@ -14,6 +14,8 @@ import { useTheme } from '@/lib/providers/ThemeProvider';
 import { Wallet, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+// TODO: Add focus trap for accessibility (v0.6.1)
+// import { FocusTrap } from 'focus-trap-react';
 
 export default function AppNavbar() {
   const router = useRouter();
@@ -137,15 +139,14 @@ export default function AppNavbar() {
           {/* User Menu */}
           <div className="flex items-center space-x-4">
             {/* Mobile Hamburger Button */}
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+            <button
               onClick={toggleMobileMenu}
-              className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+              className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition hover:scale-110 active:scale-90"
               aria-label="Open menu"
+              type="button"
             >
               <Menu size={24} className="text-gray-700 dark:text-gray-200" />
-            </motion.button>
+            </button>
 
             {/* Dark Mode Toggle */}
             <motion.button
@@ -197,9 +198,9 @@ export default function AppNavbar() {
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
               className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 shadow-xl z-50 md:hidden"
             >
-            <div className="flex flex-col h-full">
-              {/* Drawer Header */}
-              <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
+              <div className="flex flex-col h-full">{/* FocusTrap TEMP disabled for testing */}
+                  {/* Drawer Header */}
+                  <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
                 <div className="flex items-center gap-2">
                   <Wallet className="text-indigo-600 dark:text-indigo-400" size={24} />
                   <h2 className="text-lg font-bold text-indigo-600 dark:text-indigo-400">
@@ -288,11 +289,11 @@ export default function AppNavbar() {
                   Wyloguj
                 </motion.button>
               </div>
-            </div>
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }
