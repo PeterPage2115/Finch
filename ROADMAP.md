@@ -7,14 +7,17 @@
 
 ## 📍 Current State (October 2025)
 
-**Version:** v0.5.8  
-**Status:** MVP + Core Features Complete ✅
+**Version:** v0.6.0 (In Progress - Phase 3 pending)  
+**Status:** MVP + Accessibility Foundation ✅
 - ✅ Authentication (mock JWT)
 - ✅ Transactions CRUD
-- ✅ Categories management
+- ✅ Categories management (visual IconPicker, 50+ icons)
 - ✅ Budgets with progress tracking
+- ✅ Reports with charts (DateRangePicker, SummaryCards, CategoryPieChart)
 - ✅ Dashboard with widgets
-- ✅ Visual IconPicker (50+ icons)
+- ✅ Mobile Drawer Menu (hamburger working)
+- ✅ aria-live Regions (WCAG 2.1 AA partial compliance)
+- 📋 Screen reader testing pending (v0.6.0 Phase 3)
 
 **Tech Stack:**
 - Frontend: Next.js 15, React 19, TypeScript, Tailwind v4
@@ -25,13 +28,20 @@
 
 ## 🎯 Q4 2025 (October - December)
 
-### v0.6.0 - Accessibility (Oct 2025)
-**Goal:** WCAG 2.1 AA compliance
-- Focus trap w drawer
-- aria-live regions
-- Screen reader testing
-- Keyboard navigation
-**Impact:** Etyczne zobowiązanie, dostępność dla wszystkich
+### v0.6.0 - Accessibility (Oct 2025) - IN PROGRESS
+**Goal:** WCAG 2.1 AA compliance  
+**Status:** Phase 1 ✅, Phase 2 ✅, Phase 3 📋 Pending
+
+**Completed:**
+- ✅ Mobile Drawer Menu (Phase 1)
+- ✅ aria-live regions for screen reader notifications (Phase 2)
+- ✅ 10 accessible notifications (dashboard + categories)
+
+**Pending:**
+- 📋 Comprehensive screen reader testing (NVDA/VoiceOver) - 30 min
+- 📋 Focus trap alternative (v0.6.1 - deferred due to AnimatePresence conflict)
+
+**Impact:** Etyczne zobowiązanie, dostępność dla wszystkich użytkowników
 
 ### v0.7.0 - Testing Suite (Oct-Nov 2025)
 **Goal:** 70%+ code coverage przed v1.0

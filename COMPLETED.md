@@ -7,6 +7,65 @@ _Brief summary with links to detailed CHANGELOG_
 
 ## 🎉 Recent Completions (October 2025)
 
+### v0.6.0 - Accessibility Foundation (6 Oct 2025) - IN PROGRESS
+**Impact:** WCAG 2.1 AA partial compliance, etyczne zobowiązanie  
+**Status:** Phase 1 ✅, Phase 2 ✅, Phase 3 📋 Pending
+
+**Phase 1 - Mobile Drawer Menu:**
+- ✅ Fixed hamburger menu button (motion.button → plain button)
+- ✅ Drawer opens/closes correctly on mobile (< 768px)
+- ✅ Smooth animations, backdrop overlay, ESC key support
+- ✅ Body scroll lock when drawer open
+- ⚠️ Known issue: Focus trap removed (AnimatePresence conflict, deferred to v0.6.1)
+
+**Phase 2 - aria-live Regions:**
+- ✅ Notification store (Zustand, auto-remove after 3 seconds)
+- ✅ AriaLiveRegion component (role="status", aria-live="polite", aria-atomic="true")
+- ✅ Dashboard integration (5 notifications: transaction CRUD + errors)
+- ✅ Categories integration (5 notifications: category CRUD + errors)
+- ✅ Replaced all alert() calls with accessible addNotification()
+- ✅ Screen reader users receive audible feedback for all CRUD operations
+
+**Phase 3 - Comprehensive Screen Reader Testing:** 📋 Pending (30 min)
+
+_Details: [CHANGELOG v0.6.0](./CHANGELOG.md#060---2025-10-06-in-progress)_
+
+---
+
+### v0.5.10 - Project Cleanup (6 Oct 2025)
+**Impact:** Clean project structure, critical .gitignore fix  
+**Changes:**
+- ✅ Removed duplicates: docs/DOCKER.md, package-lock.json (root)
+- ✅ Removed old backups: TODO.old.md
+- ✅ Archived historical docs to docs/archive/:
+  * TODO_2025-10-06-chaos.md (961-line TODO before reorganization)
+  * Plan_projektu1_10_2025.md (initial plan, replaced by ROADMAP.md)
+  * PROJECT_STATUS_2025-10-06.md (old status, replaced by COMPLETED.md)
+  * EMOJI_FIX.md (emoji encoding fix, deprecated)
+- ✅ Added docs/archive/README.md explaining archived documents
+- ✅ **CRITICAL:** Fixed .gitignore
+  * Removed `.github/` from ignore - must track copilot-instructions.md
+  * Removed `prisma/migrations/` from ignore - CRITICAL: schema history must be in Git!
+
+_Details: [CHANGELOG v0.5.10](./CHANGELOG.md#0510---2025-10-06)_
+
+---
+
+### v0.5.9 - Complete Icon System Fix (6 Oct 2025)
+**Impact:** All components now use CategoryIcon, no more '?' icons  
+**Changes:**
+- ✅ Fixed TransactionList.tsx (desktop table + mobile card view)
+- ✅ Fixed BudgetWidget.tsx (dashboard widget icons)
+- ✅ Fixed BudgetCard.tsx (budget card header icons)
+- ✅ Updated iconMap.ts (added Receipt, MoreHorizontal)
+- ✅ Removed deprecated lib/utils/categoryIcons.ts (dynamic imports)
+- ✅ All icons now use centralized lib/iconMap.ts (single source of truth)
+- ✅ Tested: Dashboard ✅, Transactions ✅, Budgets ✅, Reports ✅, Categories ✅
+
+_Details: [CHANGELOG v0.5.9](./CHANGELOG.md#059---2025-10-06)_
+
+---
+
 ### v0.5.8 - Visual IconPicker (6 Oct 2025)
 **Impact:** UX improvement for category creation  
 **Changes:**

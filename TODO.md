@@ -1,293 +1,556 @@
-# TODO - Tracker Kasy# TODO - Tracker Kasy# TODO - Tracker Kasy# TODO **Ostatnie zmiany (6 października 2025 - Sesja 5):**
+# TODO - Tracker Kasy# TODO - Tracker Kasy
 
 
 
-**Last Updated:** 6 października 2025  
+**Last Updated:** 6 października 2025, 21:00  **Last Updated:** 6 października 2025, 21:00  
 
-**Current Version:** v0.5.8  
+**Current Version:** v0.6.0 (In Progress - Phase 3 pending)  **Current Version:** v0.6.0 (In Progress - Phase 3 pending)  
 
-**Next Sprint:** Accessibility addon (v0.6.0) lub Real Authentication (v0.8.0)**Last Updated:** 6 października 2025, 16:30  - ✅ **FAZA 6.1 + 6.2 UKOŃCZONA!** 🎉
-
-
-
----**Current Version:** v0.5.7  
+**Next Priority:** 🎯 Complete v0.6.0 Accessibility (30 min) → v0.7.0 Testing Suite (1-2 days)**Next Priority:** 🎯 Complete v0.6.0 Accessibility (30 min)
 
 
 
-## 🚨 URGENT (Critical - Do dziś)**Next Priority:** 🎯 Accessibility Addon (20-30 min)**Last Updated:** 6 października 2025, 16:00  - ✅ Faza 6.1: Backend Budgets CRUD (100%)
+------
 
 
 
-_Brak pilnych zadań_ ✅
+## 🚨 URGENT (Critical - Do dziś)## 🚨 URGENT (Critical - Do dziś)
 
 
 
-------**Current Version:** v0.5.6    - BudgetsModule, Service, Controller
+_Brak pilnych zadań_ ✅_Brak pilnych zadań_ ✅
 
 
 
-## 🎯 NEXT UP (< 1 Week)
+------
 
 
 
-### Option A: v0.6.0 - Accessibility Addon (20-30 min) - REKOMENDOWANE 🌟## 🎯 NEXT UP (Quick Wins < 1 Hour)**Next Priority:** 🚨 Fix lucide-react icons (URGENT)  - calculateProgress() z alertami (80%, 100%)
+## 🎯 NEXT UP (< 1 Hour)## 🎯 NEXT UP (< 1 Hour)
 
 
 
-**Cel:** WCAG 2.1 AA compliance, etyczne zobowiązanie
+### v0.6.0 - Phase 3: Comprehensive Screen Reader Testing (30 min) - REKOMENDOWANE 🌟
 
 
+
+**Cel:** Dokończyć v0.6.0, etyczne zobowiązanie WCAG 2.1 AA### Option A: v0.6.0 - Accessibility Addon (20-30 min) - REKOMENDOWANE 🌟## 🎯 NEXT UP (Quick Wins < 1 Hour)**Next Priority:** 🚨 Fix lucide-react icons (URGENT)  - calculateProgress() z alertami (80%, 100%)
+
+
+
+**Status:** Phase 1 ✅ (Mobile Drawer), Phase 2 ✅ (aria-live regions), Phase 3 📋 Pending
+
+
+
+**Zadania:****Cel:** WCAG 2.1 AA compliance, etyczne zobowiązanie
+
+- [ ] **Install NVDA** (Windows) lub VoiceOver (Mac)
+
+  - NVDA: https://www.nvaccess.org/download/
+
+  - Free, open-source screen reader
 
 - [ ] **Focus trap w drawer** (10 min)### v0.6.0 - Accessibility Addon (20-30 min) - REKOMENDOWANE  - Auto-obliczanie endDate dla okresów
 
-  - Instalacja `focus-trap-react`
+- [ ] **Test z zamkniętymi oczami** (keyboard only):
 
-  - Wrap drawer content w `<FocusTrap>`- [ ] **Focus trap w drawer** (10 min)
+  - Dashboard - navigation, transaction create/update/delete  - Instalacja `focus-trap-react`
 
-  - Test: Tab/Shift+Tab zamknięte w menu
+  - Categories - navigation, category create/update/delete
 
-  - Instalacja `focus-trap-react`---  - Business rule: unique userId+categoryId+startDate
+  - Budgets - navigation, budget create/update/delete  - Wrap drawer content w `<FocusTrap>`- [ ] **Focus trap w drawer** (10 min)
 
-- [ ] **aria-live regions dla toastów** (10 min)
+  - Forms - validate labels, error messages, success notifications
+
+  - Mobile drawer - keyboard navigation, focus management  - Test: Tab/Shift+Tab zamknięte w menu
+
+
+
+- [ ] **Document findings:**  - Instalacja `focus-trap-react`---  - Business rule: unique userId+categoryId+startDate
+
+  - Create test report in `docs/CODE_REVIEW_REPORT.md`
+
+  - Note: timing of announcements, clarity, announcement order- [ ] **aria-live regions dla toastów** (10 min)
+
+  - List any critical accessibility issues found
 
   - Dodanie `<div role="alert" aria-live="polite">` do root layout  - Wrap drawer content w `<FocusTrap>`
 
-  - Zustand store dla notifications
+- [ ] **Fix critical issues** (if any found)
+
+  - Adjust aria-live strategy if needed (polite vs assertive)  - Zustand store dla notifications
+
+  - Fix missing labels, improve button purposes
 
   - Przykłady: "Transakcja dodana", "Kategoria usunięta"  - Test: Tab/Shift+Tab zamknięte w menu  - ⏳ Testy pending (Faza 7)
 
+- [ ] **Mark v0.6.0 as COMPLETE** ✅
 
+  - Update CHANGELOG.md: v0.6.0 - 2025-10-06 (Complete)
+
+  - Commit: "feat: complete v0.6.0 accessibility (screen reader tested)"
 
 - [ ] **Screen reader testing** (10 min)- [ ] **aria-live regions dla toastów** (10 min)
 
+**Result:** v0.6.0 "Production Ready - WCAG 2.1 AA Compliant"
+
   - Instalacja NVDA (Windows) lub VoiceOver (Mac)
+
+---
 
   - Walkthrough z zamkniętymi oczami  - Dodanie `<div role="alert" aria-live="polite">` do root layout## 🚨 URGENT (Critical Bugs)- ✅ Faza 6.2: Frontend Budgets UI (100%)
 
+## 📅 THIS WEEK (< 7 Days)
+
   - Poprawki jeśli coś nie działa
+
+### v0.7.0 - Testing Suite (Day 1-2, ~6-8h) - STABILNOŚĆ 💪
 
   - Zustand store dla notifications
 
+**Cel:** 70%+ code coverage, confidence przed v1.0
+
 **Result:** v0.6.0 "Production Ready - WCAG 2.1 AA Compliant"
+
+**Priority:** 🔴 HIGH - Stabilność, pewność przy zmianach
 
   - Przykłady: "Transakcja dodana", "Kategoria usunięta"  - Strona /budgets z BudgetForm + BudgetList
 
+#### Day 1: Backend Tests (3-4h)
+
 ### Option B: v0.8.0 - Real Authentication Basics (Day 1-2, ~4h)
 
-- [ ] **Screen reader testing** (10 min)
+- [ ] **Unit Tests - Services** (2h):
 
-**Cel:** User profile + password reset, podstawy prawdziwej autentykacji
+  - AuthService: register, login, validateToken- [ ] **Screen reader testing** (10 min)
+
+  - TransactionsService: create, findAll, update, delete
+
+  - CategoriesService: create, findAll, update, delete**Cel:** User profile + password reset, podstawy prawdziwej autentykacji
+
+  - BudgetsService: create, findAll, calculateProgress
 
   - Instalacja NVDA (Windows) lub VoiceOver (Mac)### Fix: Lucide-react Icons Not Rendering (10-20 min)  - Progress bars (green/yellow/red)
 
-#### Day 1: User Profile Page (1-2h)
+- [ ] **Integration Tests - API Endpoints** (2h):
 
-- [ ] Frontend: Profile page z formularzem (Email, Full Name, Password Change)  - Walkthrough z zamkniętymi oczami
+  - Setup: supertest, test database#### Day 1: User Profile Page (1-2h)
+
+  - POST /auth/register, /auth/login
+
+  - CRUD endpoints: /transactions, /categories, /budgets- [ ] Frontend: Profile page z formularzem (Email, Full Name, Password Change)  - Walkthrough z zamkniętymi oczami
+
+  - Authorization headers, error cases
 
 - [ ] Backend: `/api/users/profile` endpoint (GET, PATCH)
 
+#### Day 2: Frontend Tests (3-4h)
+
 - [ ] Walidacja: email unique, password min 8 chars  - Poprawki jeśli coś nie działa- [ ] **Problem:** Ikony kategorii renderują się jako znaki zapytania (?) zamiast rzeczywistych ikon  - Delete confirmation modal
 
-- [ ] Avatar upload (opcjonalnie - Cloudinary/AWS S3)
+- [ ] **React Testing Library - Components** (2h):
 
-- **Priority:** 🟢 MEDIUM - Etyczne zobowiązanie, WCAG 2.1 AA compliance
+  - CategoryIcon (icon rendering)- [ ] Avatar upload (opcjonalnie - Cloudinary/AWS S3)
+
+  - IconPicker (selection, categories)
+
+  - TransactionForm (validation, submission)- **Priority:** 🟢 MEDIUM - Etyczne zobowiązanie, WCAG 2.1 AA compliance
+
+  - BudgetCard (progress bars, colors)
 
 #### Day 2: Password Reset Flow (1-2h)
 
-- [ ] Frontend: "Forgot password" link + formularz reset- **Impact:** Accessibility - pełna dostępność dla użytkowników z niepełnosprawnościami- [ ] **Diagnoza:** CategoryIcon.tsx używa dynamicznego importu `(LucideIcons as any)[iconName]`, który nie działa poprawnie w Next.js 15 SSR  - API Routes proxy
+- [ ] **Playwright E2E Tests** (2h):
 
-- [ ] Backend: Email token generation (crypto.randomBytes)
+  - User flow: Register → Login → Dashboard- [ ] Frontend: "Forgot password" link + formularz reset- **Impact:** Accessibility - pełna dostępność dla użytkowników z niepełnosprawnościami- [ ] **Diagnoza:** CategoryIcon.tsx używa dynamicznego importu `(LucideIcons as any)[iconName]`, który nie działa poprawnie w Next.js 15 SSR  - API Routes proxy
+
+  - Create transaction → Verify in list
+
+  - Create budget → Verify progress- [ ] Backend: Email token generation (crypto.randomBytes)
+
+  - Happy paths + error scenarios
 
 - [ ] Email service: Nodemailer integration (SMTP config)- **Result:** v0.6.0 "Production Ready - WCAG 2.1 AA Compliant"
 
-- [ ] Token verification: `/api/auth/reset-password/:token`
+- [ ] **CI/CD Setup** (optional):
+
+  - GitHub Actions workflow- [ ] Token verification: `/api/auth/reset-password/:token`
+
+  - Run tests on PR
 
 - **Estimated Time:** 20-30 minut- [ ] **Rozwiązanie:**   - Link "Budżety" w navbar
 
+**Result:** v0.7.0 "Tested & Stable"
+
+---
+
 ---
 
 
+
+### v0.8.0 - Real Authentication (Day 1-2, ~6-8h) - PRODUKCJA 🚀
 
 ## 📅 THIS MONTH (October 2025)
 
+**Cel:** Production-ready auth, prawdziwi użytkownicy
+
 ---  - Dodać `'use client'` directive do CategoryIcon.tsx  - **Dashboard widget ✅** (top 3 budżety, compact design)
+
+**Priority:** 🟡 MEDIUM - Functionality, prawdziwi użytkownicy
 
 ### v0.6.3 - Reports Page - Phase 3 (1-2h)
 
+#### Day 1: User Profile Page (2-3h)
 
 
-**Status:** Backend ready (Faza 6 done), frontend pending
 
-## 📅 SHORT-TERM (1-5 Days)  - Sprawdzić czy to rozwiązuje problem- 🐛 Bug fixes: Dark mode, emoji removal, unified navbar
+- [ ] **Backend - Profile Endpoint**:
+
+  - GET /api/users/profile (current user info)**Status:** Backend ready (Faza 6 done), frontend pending
+
+  - PATCH /api/users/profile (update email, name, password)
+
+  - Validation: email unique, password min 8 chars## 📅 SHORT-TERM (1-5 Days)  - Sprawdzić czy to rozwiązuje problem- 🐛 Bug fixes: Dark mode, emoji removal, unified navbar
+
+  - Password hashing on change (bcrypt)
 
 - [ ] Wykres wydatków per kategoria (Bar Chart - recharts)
 
-- [ ] Tabela top 10 kategorii
+- [ ] **Frontend - Profile Page**:
 
-- [ ] Date range picker (start/end month)
+  - New page: `/app/profile/page.tsx`- [ ] Tabela top 10 kategorii
+
+  - Form: Email, Name, Current Password, New Password
+
+  - Validation, error handling- [ ] Date range picker (start/end month)
+
+  - Success notifications
 
 - [ ] Export CSV button (frontend + backend endpoint)### v0.8.0 - Real Authentication System (3-5 dni)  - Jeśli nie: stworzyć mapping object z wszystkimi używanymi ikonami- 💡 **Decyzja architektoniczna**: Budgets = kontrola wydatków (reactive), Savings Goals = cele oszczędnościowe (proactive) → osobne moduły!
 
+- [ ] **Avatar Upload** (optional):
+
+  - Cloudinary/AWS S3 integration
+
+  - Image preview, upload button
+
+  - Backend: store avatar URL in User model### v0.7.0 - Testing Suite (2-3h)
 
 
-### v0.7.0 - Testing Suite (2-3h)
+
+#### Day 2: Password Reset Flow (2-3h)
 
 
 
-**Priorytet:** MEDIUM - Jakość kodu przed v1.0#### Day 1: User Profile Page (1-2h)- [ ] **Test:** Sprawdzić Playwright czy ikony renderują się poprawnie- 📈 **Postęp**: Dashboard widget done, pozostają Raporty (Faza 6.3) + Testy (Faza 7)
+- [ ] **Backend - Reset Endpoints**:**Priorytet:** MEDIUM - Jakość kodu przed v1.0#### Day 1: User Profile Page (1-2h)- [ ] **Test:** Sprawdzić Playwright czy ikony renderują się poprawnie- 📈 **Postęp**: Dashboard widget done, pozostają Raporty (Faza 6.3) + Testy (Faza 7)
+
+  - POST /api/auth/forgot-password (generate token, send email)
+
+  - POST /api/auth/reset-password/:token (verify token, update password)
+
+  - Token: crypto.randomBytes, expires in 1 hour
+
+  - Email service: Nodemailer (SMTP config)- [ ] **Backend Tests** (1.5h)- [ ] Frontend: Profile page z formularzem (Email, Full Name, Password Change)
 
 
 
-- [ ] **Backend Tests** (1.5h)- [ ] Frontend: Profile page z formularzem (Email, Full Name, Password Change)
+- [ ] **Frontend - Reset Pages**:  - Unit: TransactionsService, BudgetsService
 
-  - Unit: TransactionsService, BudgetsService
+  - "Forgot password?" link on login page
 
-  - Integration: POST /api/transactions, GET /api/budgets- [ ] Backend: `/api/users/profile` endpoint (GET, PATCH)- **Priority:** 🔴 HIGH - Wizualny bug widoczny na wszystkich stronach z kategoriami
+  - `/app/forgot-password/page.tsx` (email input)  - Integration: POST /api/transactions, GET /api/budgets- [ ] Backend: `/api/users/profile` endpoint (GET, PATCH)- **Priority:** 🔴 HIGH - Wizualny bug widoczny na wszystkich stronach z kategoriami
 
-  - Jest config + test database setup
+  - `/app/reset-password/[token]/page.tsx` (new password input)
 
-- [ ] Walidacja: email unique, password min 8 chars
+  - Success/error states  - Jest config + test database setup
 
-- [ ] **Frontend Tests** (1.5h)
+
+
+- [ ] **Email Verification** (optional):- [ ] Walidacja: email unique, password min 8 chars
+
+  - Send verification email on register
+
+  - User must verify before login- [ ] **Frontend Tests** (1.5h)
+
+  - Resend verification link
 
   - Unit: useAuth hook, TransactionForm validation- [ ] Avatar upload (opcjonalnie - Cloudinary/AWS S3)- **Impact:** UX - aplikacja wygląda nieprofesjonalnie bez ikon**Następny krok:** Faza 6.3 - Podstawowe Raporty 📊 lub Faza 7 - Testyzenia Finansów
 
+**Result:** v0.8.0 "Production-Ready Authentication"
+
   - Integration: Playwright tests (login → add transaction → verify)
+
+---
 
   - React Testing Library setup
 
+## 📅 THIS MONTH (October 2025)
 
+
+
+### v0.6.1 - Focus Trap Alternative (1-2h)
 
 ### Bug Fixes & Improvements#### Day 2: Password Reset Flow (1-2h)- **Estimated Time:** 10-20 minut
 
+**Cel:** Alternative focus trap solution for drawer (without AnimatePresence conflict)
 
+
+
+**Status:** Deferred from v0.6.0 (minor accessibility issue)
 
 - [ ] **Dark mode** - niektóre komponenty nieczytelne- [ ] Frontend: "Forgot password" link + formularz reset
 
-- [ ] **Emoji removal** - usunąć emotikony z UI (zamienić na lucide-react icons)
+**Known Issue:**
 
-- [ ] **Unified navbar** - spójny design między stronami- [ ] Backend: Email token generation (crypto.randomBytes)**Data rozpoczęcia:** 1 października 2025  
+- focus-trap-react conflicts with Framer Motion AnimatePresence- [ ] **Emoji removal** - usunąć emotikony z UI (zamienić na lucide-react icons)
 
-- [ ] **Dashboard widget polish** - responsive design dla mobile
+- Drawer works but keyboard focus can escape to background elements
 
-- [ ] Email service: Nodemailer integration (SMTP config)
-
----
-
-- [ ] Token verification: `/api/auth/reset-password/:token`---**Status:** Faza 6 w trakcie 🚀 - Budgets Backend+Frontend ✅ (Raporty + Dashboard widget pending)
-
-## 📝 NOTES & DECISIONS
+- Impact: Minor - keyboard users can Tab outside drawer- [ ] **Unified navbar** - spójny design między stronami- [ ] Backend: Email token generation (crypto.randomBytes)**Data rozpoczęcia:** 1 października 2025  
 
 
 
-### Architectural Decisions
+**Possible Solutions:**- [ ] **Dashboard widget polish** - responsive design dla mobile
 
-- **Budgets vs Savings Goals:** Budgets = kontrola wydatków (reactive), Savings Goals = cele oszczędnościowe (proactive) → osobne moduły w przyszłości#### Day 3: Email Verification (1-2h - opcjonalnie)
+- [ ] Custom focus trap with useEffect (manual focus management)
 
-- **Icon System:** Centralized lib/iconMap.ts, visual IconPicker component, 50+ icons in 9 categories
+- [ ] Replace AnimatePresence with CSS transitions- [ ] Email service: Nodemailer integration (SMTP config)
 
-- **Docker First:** Wszystko przez `docker-compose up`, zero manual setup- [ ] Rejestracja wysyła email z linkiem weryfikacyjnym
+- [ ] Use Radix UI Dialog (has built-in focus trap)
+
+- [ ] Research: React Aria, Headless UI alternatives---
 
 
 
-### Recent Completions (v0.5.x)- [ ] Backend: `/api/auth/verify-email/:token`## 🎯 NEXT UP (Quick Wins < 1 Hour)---
+---- [ ] Token verification: `/api/auth/reset-password/:token`---**Status:** Faza 6 w trakcie 🚀 - Budgets Backend+Frontend ✅ (Raporty + Dashboard widget pending)
 
-- ✅ v0.5.8 - Visual IconPicker (CategoryForm UX improvement)
+
+
+### v0.9.0 - Advanced Reports (Day 2-3, ~8-10h)## 📝 NOTES & DECISIONS
+
+
+
+**Cel:** Głębsza analityka finansowa
+
+
+
+**Priority:** 🟢 LOW - Nice to have, reports już działają### Architectural Decisions
+
+
+
+**Current State:** Reports Page exists (DateRangePicker, SummaryCards, CategoryPieChart)- **Budgets vs Savings Goals:** Budgets = kontrola wydatków (reactive), Savings Goals = cele oszczędnościowe (proactive) → osobne moduły w przyszłości#### Day 3: Email Verification (1-2h - opcjonalnie)
+
+
+
+**Enhancements:**- **Icon System:** Centralized lib/iconMap.ts, visual IconPicker component, 50+ icons in 9 categories
+
+- [ ] **Timeline Charts** (3h):
+
+  - Line chart: wydatki month-to-month- **Docker First:** Wszystko przez `docker-compose up`, zero manual setup- [ ] Rejestracja wysyła email z linkiem weryfikacyjnym
+
+  - Bar chart: income vs expenses trend
+
+  - Library: recharts lub visx
+
+
+
+- [ ] **Export Functionality** (2h):### Recent Completions (v0.5.x)- [ ] Backend: `/api/auth/verify-email/:token`## 🎯 NEXT UP (Quick Wins < 1 Hour)---
+
+  - Backend: Generate CSV (transactions export)
+
+  - Frontend: Download button- ✅ v0.5.8 - Visual IconPicker (CategoryForm UX improvement)
+
+  - Optional: PDF export (pdfmake)
 
 - ✅ v0.5.7 - Lucide-react icons bugfix (? → proper icons)- [ ] User model: `emailVerified` boolean field
 
-- ✅ v0.5.6 - Backend Budgets CRUD
+- [ ] **Custom Date Ranges** (2h):
+
+  - Extend DateRangePicker: presets (Last 7 days, Last 30 days, This year)- ✅ v0.5.6 - Backend Budgets CRUD
+
+  - Custom range selector (calendar)
 
 - ✅ v0.5.5 - Frontend Budgets UI (BudgetForm, BudgetList, progress bars)- [ ] Ograniczenia: nieweryfikowani użytkownicy nie mogą dodawać transakcji
 
-- ✅ v0.5.4 - Dashboard BudgetWidget (top 3 budżety)
+- [ ] **Category Breakdown** (2h):
+
+  - Top 10 categories by spending- ✅ v0.5.4 - Dashboard BudgetWidget (top 3 budżety)
+
+  - Table with percentages
+
+  - Drill-down: click category → see transactions
 
 
 
-_Więcej w [COMPLETED.md](./COMPLETED.md) i [CHANGELOG.md](./CHANGELOG.md)_
+**Result:** v0.9.0 "Advanced Analytics"_Więcej w [COMPLETED.md](./COMPLETED.md) i [CHANGELOG.md](./CHANGELOG.md)_
 
-#### Day 4: JWT Refresh Tokens (1-2h)### v0.6.0 - Accessibility Addon (20-30 min)**Ostatnie zmiany (6 października 2025 - Sesja 5):**
+
+
+---#### Day 4: JWT Refresh Tokens (1-2h)### v0.6.0 - Accessibility Addon (20-30 min)**Ostatnie zmiany (6 października 2025 - Sesja 5):**
+
+
+
+## 🎯 BACKLOG (Future Versions)---
+
+
+
+### v1.0.0 - Production Release (January 2026)- [ ] Dual token system: access token (15 min), refresh token (7 days)
+
+
+
+**Milestone:** First stable release, ready for self-hosting## 🔗 See Also
+
+
+
+**Requirements:**- [ ] Backend: `/api/auth/refresh` endpoint- [ ] **Focus trap w drawer** (10 min)- ✅ **FAZA 6.1 + 6.2 UKOŃCZONA!** 🎉
+
+- ✅ All core features (Transactions, Categories, Budgets, Reports)
+
+- ✅ Real Authentication (v0.8.0)- **[ROADMAP.md](./ROADMAP.md)** - Long-term strategic plan (v1.0, v2.0, Q1 2026+)
+
+- ✅ WCAG 2.1 AA compliance (v0.6.0)
+
+- ✅ 70%+ test coverage (v0.7.0)- **[COMPLETED.md](./COMPLETED.md)** - Sprint history with CHANGELOG links- [ ] Frontend: Axios interceptor automatycznie odświeża tokeny
+
+- ✅ Docker Compose one-command setup
+
+- [ ] Production optimizations:- **[CHANGELOG.md](./CHANGELOG.md)** - Detailed version history
+
+  - Caching strategy (Redis optional)
+
+  - Performance monitoring- [ ] Secure HTTP-only cookies dla refresh tokens  - Instalacja `focus-trap-react`- ✅ Faza 6.1: Backend Budgets CRUD (100%)
+
+  - Security hardening (rate limiting, helmet.js)
+
+  - SEO optimization---
+
+- [ ] Documentation complete:
+
+  - User guide (screenshots, tutorials)
+
+  - API documentation (Swagger/OpenAPI)
+
+  - Deployment guide (VPS, Kubernetes)**Zasady pracy:**
+
+
+
+---1. KISS & YAGNI - prostota nad abstrakcją#### Day 5: User Settings (1-2h)  - Wrap drawer content w `<FocusTrap>`  - BudgetsModule, Service, Controller
+
+
+
+### Future Features (Post v1.0)2. MVP First - kluczowe funkcje przed zaawansowanymi
+
+
+
+**Nice to Have:**3. "Zrobione = przetestowane" - zawsze pisz testy- [ ] Theme preference: light/dark/system (Zustand store)
+
+- Multi-currency support (exchange rates API)
+
+- Recurring transactions (monthly bills, subscriptions)4. Docker First - wszystko przez docker-compose
+
+- Tags for transactions (multiple tags per transaction)
+
+- Shared budgets (family accounts)5. Git workflow - małe commity, detale w CHANGELOG- [ ] Language: pl/en (przygotowanie do i18n)  - Test: Tab/Shift+Tab zamknięte w menu  - calculateProgress() z alertami (80%, 100%)
+
+- Mobile app (React Native)
+
+- Bank integrations (Plaid API)
+
+- Budget templates (import/export)- [ ] Currency format: zł/$/€
+
+- Dark mode improvements (all components)
+
+- i18n (internationalization - English, Polish, others)- [ ] localStorage persistence dla preferencji- [ ] **aria-live regions dla toastów** (10 min)  - Auto-obliczanie endDate dla okresów
+
+
 
 ---
 
-- [ ] Dual token system: access token (15 min), refresh token (7 days)
 
-## 🔗 See Also
 
-- [ ] Backend: `/api/auth/refresh` endpoint- [ ] **Focus trap w drawer** (10 min)- ✅ **FAZA 6.1 + 6.2 UKOŃCZONA!** 🎉
-
-- **[ROADMAP.md](./ROADMAP.md)** - Long-term strategic plan (v1.0, v2.0, Q1 2026+)
-
-- **[COMPLETED.md](./COMPLETED.md)** - Sprint history with CHANGELOG links- [ ] Frontend: Axios interceptor automatycznie odświeża tokeny
-
-- **[CHANGELOG.md](./CHANGELOG.md)** - Detailed version history
-
-- [ ] Secure HTTP-only cookies dla refresh tokens  - Instalacja `focus-trap-react`- ✅ Faza 6.1: Backend Budgets CRUD (100%)
-
----
+## 📝 Notes- **Priority:** 🟡 HIGH - Fundament dla multi-tenant aplikacji  - Dodanie `<div role="alert" aria-live="polite">` do root layout  - Business rule: unique userId+categoryId+startDate
 
 
 
-**Zasady pracy:**
-
-1. KISS & YAGNI - prostota nad abstrakcją#### Day 5: User Settings (1-2h)  - Wrap drawer content w `<FocusTrap>`  - BudgetsModule, Service, Controller
-
-2. MVP First - kluczowe funkcje przed zaawansowanymi
-
-3. "Zrobione = przetestowane" - zawsze pisz testy- [ ] Theme preference: light/dark/system (Zustand store)
-
-4. Docker First - wszystko przez docker-compose
-
-5. Git workflow - małe commity, detale w CHANGELOG- [ ] Language: pl/en (przygotowanie do i18n)  - Test: Tab/Shift+Tab zamknięte w menu  - calculateProgress() z alertami (80%, 100%)
-
-
-- [ ] Currency format: zł/$/€
-
-- [ ] localStorage persistence dla preferencji- [ ] **aria-live regions dla toastów** (10 min)  - Auto-obliczanie endDate dla okresów
+### Known Issues (Technical Debt)- **Impact:** Production readiness - prawdziwa autentykacja, security, user experience
 
 
 
-- **Priority:** 🟡 HIGH - Fundament dla multi-tenant aplikacji  - Dodanie `<div role="alert" aria-live="polite">` do root layout  - Business rule: unique userId+categoryId+startDate
+1. **Focus Trap in Drawer (v0.6.1)**- **Result:** v0.8.0 "Multi-tenant Ready"  - Zustand store dla notifications  - ⏳ Testy pending (Faza 7)
 
-- **Impact:** Production readiness - prawdziwa autentykacja, security, user experience
+   - AnimatePresence conflicts with focus-trap-react
 
-- **Result:** v0.8.0 "Multi-tenant Ready"  - Zustand store dla notifications  - ⏳ Testy pending (Faza 7)
+   - Minor accessibility issue- **Estimated Time:** 3-5 dni (5-10 godzin total)
 
-- **Estimated Time:** 3-5 dni (5-10 godzin total)
+   - Planned fix: Custom focus trap or Radix UI Dialog
 
   - Przykłady: "Transakcja dodana", "Kategoria usunięta"- ✅ Faza 6.2: Frontend Budgets UI (100%)
 
----
+2. **Mock Authentication**
 
-- [ ] **Screen reader testing** (10 min)  - Strona /budgets z BudgetForm + BudgetList
+   - Currently using simple JWT mock---
 
-## 🚀 LONG-TERM (2-4 Weeks)
+   - No password reset, email verification
 
-  - Instalacja NVDA (Windows) lub VoiceOver (Mac)  - Progress bars (green/yellow/red)
+   - Planned fix: v0.8.0 Real Authentication- [ ] **Screen reader testing** (10 min)  - Strona /budgets z BudgetForm + BudgetList
+
+
+
+3. **No Test Coverage**## 🚀 LONG-TERM (2-4 Weeks)
+
+   - Backend: 0% coverage
+
+   - Frontend: 0% coverage  - Instalacja NVDA (Windows) lub VoiceOver (Mac)  - Progress bars (green/yellow/red)
+
+   - Planned fix: v0.7.0 Testing Suite
 
 ### v0.9.x → v1.0.0 - Advanced Features
 
+### Recent Completions (October 2025)
+
   - Walkthrough z zamkniętymi oczami  - Delete confirmation modal
 
-#### Week 1: Advanced Charts (5-7 dni)
+✅ v0.5.8 - Visual IconPicker (50+ icons, 9 categories)  
 
-- [ ] **Trend charts** (2 dni)  - Poprawki jeśli coś nie działa  - API Routes proxy
+✅ v0.5.9 - Complete Icon System Fix (all components use CategoryIcon)  #### Week 1: Advanced Charts (5-7 dni)
+
+✅ v0.5.10 - Project Cleanup (.gitignore fix, docs archive)  
+
+✅ v0.6.0 Phase 1 - Mobile Drawer Menu (hamburger working)  - [ ] **Trend charts** (2 dni)  - Poprawki jeśli coś nie działa  - API Routes proxy
+
+✅ v0.6.0 Phase 2 - aria-live Regions (WCAG 2.1 AA, 10 notifications)
 
   - Recharts LineChart: Income/Expenses over 6 months
 
+_For detailed history, see [CHANGELOG.md](./CHANGELOG.md) and [COMPLETED.md](./COMPLETED.md)_
+
   - Month-over-month comparison- **Priority:** 🟢 MEDIUM - Etyczne zobowiązanie, WCAG 2.1 AA compliance  - Link "Budżety" w navbar
+
+---
 
   - Year-over-year comparison
 
+## 🤝 Contributing
+
 - [ ] **Budget vs Actual chart** (2 dni)- **Impact:** Accessibility - pełna dostępność dla użytkowników z niepełnosprawnościami  - ⏳ Dashboard widget pending (Faza 6.3)
 
-  - Bar chart overlayed: Planned vs Actual spending
+Przed rozpoczęciem pracy:
 
-  - Color coding: Green (under budget), Yellow (80-100%), Red (over budget)- **Result:** v0.6.0 "Production Ready - WCAG 2.1 AA Compliant"- 🐛 Bug fixes: Dark mode, emoji removal, unified navbar
+1. Sprawdź [CONTRIBUTING.md](./CONTRIBUTING.md) - guidelines  - Bar chart overlayed: Planned vs Actual spending
 
-- [ ] **Category spending over time** (1 dzień)
+2. Wybierz zadanie z sekcji **NEXT UP** lub **THIS WEEK**
+
+3. Utwórz branch: `feat/task-name` lub `fix/bug-name`  - Color coding: Green (under budget), Yellow (80-100%), Red (over budget)- **Result:** v0.6.0 "Production Ready - WCAG 2.1 AA Compliant"- 🐛 Bug fixes: Dark mode, emoji removal, unified navbar
+
+4. Commit zgodnie z Conventional Commits
+
+5. Testuj lokalnie (Docker Compose)- [ ] **Category spending over time** (1 dzień)
+
+6. Otwórz Pull Request
 
   - Stacked area chart: All categories over 12 months- **Estimated Time:** 20-30 minut- � **Decyzja architektoniczna**: Budgets = kontrola wydatków (reactive), Savings Goals = cele oszczędnościowe (proactive) → osobne moduły!
+
+**Kontakt:** [GitHub Issues](https://github.com/[username]/Tracker_kasy/issues)
 
   - Interactive legend: toggle categories on/off
 
