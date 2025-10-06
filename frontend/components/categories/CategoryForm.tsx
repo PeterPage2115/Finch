@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { Category } from '@/lib/api/categoriesClient';
 import { TransactionType } from '@/types/transaction';
 import { motion } from 'framer-motion';
+import { IconPicker } from '@/components/ui/IconPicker';
 
 interface CategoryFormProps {
   category?: Category; // undefined = create mode, defined = edit mode
@@ -35,7 +36,7 @@ export default function CategoryForm({
     name: category?.name || '',
     type: category?.type || TransactionType.EXPENSE,
     color: category?.color || '#3B82F6',
-    icon: category?.icon || '📦',
+    icon: category?.icon || 'Tag', // Default to 'Tag' icon instead of emoji
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -161,27 +162,14 @@ export default function CategoryForm({
 
       {/* Ikona */}
       <div>
-        <label
-          htmlFor="icon"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
-        >
-          Ikona (emoji)
+        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+          Ikona <span className="text-red-500">*</span>
         </label>
-        <input
-          type="text"
-          id="icon"
-          maxLength={10}
+        <IconPicker
           value={formData.icon}
-          onChange={(e) => setFormData({ ...formData, icon: e.target.value })}
-          className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md
-                     bg-white dark:bg-gray-800 text-gray-900 dark:text-white
-                     focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
-          placeholder="🏷️"
-          disabled={isSubmitting}
+          onChange={(iconName) => setFormData({ ...formData, icon: iconName })}
+          transactionType={formData.type}
         />
-        <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-          Emoji lub maksymalnie 10 znaków
-        </p>
       </div>
 
       {/* Przyciski */}

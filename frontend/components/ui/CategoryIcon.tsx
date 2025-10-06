@@ -1,73 +1,7 @@
 'use client';
 
-import {
-  HelpCircle,
-  // Income icons
-  DollarSign,
-  TrendingUp,
-  Wallet,
-  PiggyBank,
-  Coins,
-  // Expense icons
-  UtensilsCrossed,
-  ShoppingBag,
-  Home,
-  Zap,
-  Car,
-  Bus,
-  Train,
-  Plane,
-  Heart,
-  Pill,
-  Film,
-  Gamepad2,
-  Coffee,
-  ShoppingCart,
-  MoreHorizontal,
-  CreditCard,
-  // Generic icons
-  Tag,
-  Star,
-  Gift,
-  Book,
-  Briefcase,
-  type LucideIcon,
-} from 'lucide-react';
-
-// Icon mapping object - maps icon names to lucide-react components
-const iconMap: Record<string, LucideIcon> = {
-  // Income
-  DollarSign,
-  TrendingUp,
-  Wallet,
-  PiggyBank,
-  Coins,
-  // Expense
-  UtensilsCrossed,
-  ShoppingBag,
-  Home,
-  Zap,
-  Car,
-  Bus,
-  Train,
-  Plane,
-  Heart,
-  Pill,
-  Film,
-  Gamepad2,
-  Coffee,
-  ShoppingCart,
-  MoreHorizontal,
-  CreditCard,
-  // Generic
-  Tag,
-  Star,
-  Gift,
-  Book,
-  Briefcase,
-  // Fallback
-  HelpCircle,
-};
+import { iconMap } from '@/lib/iconMap';
+import { HelpCircle } from 'lucide-react';
 
 interface CategoryIconProps {
   iconName: string;

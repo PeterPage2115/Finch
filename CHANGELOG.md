@@ -13,6 +13,46 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 - Focus trap w drawer (focus-trap-react)
 - aria-live regions dla toastów/messages
 
+## [0.5.8] - 2025-10-06
+
+### Dodane
+- **Visual IconPicker Component** 🎨
+  * Komponent wizualnej selekcji ikon dla kategorii
+  * Grid layout: 6-8 ikon per wiersz (responsive)
+  * Kategoryzowane sekcje: Jedzenie, Zakupy, Dom, Transport, Zdrowie, Rozrywka, Edukacja, Ogólne
+  * Framer-motion animations: hover scale 1.1, tap 0.95
+  * Selected state: blue border, checkmark badge
+  * Preview section: pokazuje wybraną ikonę + nazwę kodu
+  * Filtracja: automatycznie pokazuje ikony Przychody/Wydatki według typu transakcji
+
+- **Centralized Icon Configuration** (lib/iconMap.ts)
+  * Single source of truth dla wszystkich ikon aplikacji
+  * 50+ lucide-react icons w 9 kategoriach
+  * Type-safe mapping: `Record<string, LucideIcon>`
+  * Categorized arrays: INCOME_ICONS, EXPENSE_FOOD_ICONS, EXPENSE_SHOPPING_ICONS, etc.
+  * ICON_CATEGORIES_BY_TYPE: organizacja według typu transakcji
+  * Utility functions: getAllIconNames(), isValidIconName()
+
+### Zmienione
+- **CategoryForm.tsx** - Icon selection UX improved
+  * Usunięto emoji text input field (było: `<input type="text" maxLength={10}>`)
+  * Dodano IconPicker component (visual grid selection)
+  * Default icon: '📦' → 'Tag' (valid lucide-react icon)
+  * Props: IconPicker receives transactionType to filter relevant icons
+
+- **CategoryIcon.tsx** - Simplified (115 → 35 lines)
+  * Usunięto duplicate icon imports (80 lines removed)
+  * Uses central lib/iconMap: `import { iconMap } from '@/lib/iconMap'`
+  * Cleaner code: `const IconComponent = iconMap[iconName] || HelpCircle`
+
+### Techniczne
+- IconPicker.tsx: 106 lines, self-contained component
+- lib/iconMap.ts: 213 lines, centralized icon configuration
+- Performance: Explicit imports + iconMap = better tree-shaking
+- UX improvement: Click to select icons vs typing "Car" or "Heart" manually
+- Accessibility ready: Keyboard navigation support (focus:ring-2)
+- Integration: CategoryForm automatically filters icons by transaction type
+
 ## [0.5.7] - 2025-10-06
 
 ### Naprawione
