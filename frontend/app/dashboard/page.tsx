@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useTransactionsStore } from '@/lib/stores/transactionsStore';
+import { useNotificationStore } from '@/lib/stores/notificationStore';
 import { transactionsApi } from '@/lib/api/transactionsClient';
 import { categoriesApi, type Category } from '@/lib/api/categoriesClient';
 import { fetchBudgets, fetchBudgetById } from '@/lib/api/budgetsClient';
@@ -18,6 +19,7 @@ import { motion } from 'framer-motion';
 export default function DashboardPage() {
   const router = useRouter();
   const { user, logout, isAuthenticated, token, _hasHydrated } = useAuthStore();
+  const { addNotification } = useNotificationStore();
   const {
     transactions,
     meta,
@@ -182,9 +184,11 @@ export default function DashboardPage() {
       if (editingTransaction) {
         const updated = await transactionsApi.update(token, editingTransaction.id, data);
         updateTransactionInStore(editingTransaction.id, updated);
+        addNotification('Transakcja zaktualizowana pomyślnie', 'success');
       } else {
         const created = await transactionsApi.create(token, data);
         addTransaction(created);
+        addNotification('Transakcja dodana pomyślnie', 'success');
       }
 
       setShowForm(false);
@@ -194,7 +198,7 @@ export default function DashboardPage() {
       await refetchBudgets();
     } catch (err) {
       console.error('Error submitting transaction:', err);
-      alert('Nie udało się zapisać transakcji');
+      addNotification('Nie udało się zapisać transakcji', 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -207,14 +211,15 @@ export default function DashboardPage() {
     try {
       await transactionsApi.delete(token, id);
       removeTransaction(id);
+      addNotification('Transakcja usunięta pomyślnie', 'success');
       
       // Refetch budgets to update widget after transaction deletion
       await refetchBudgets();
     } catch (err) {
       console.error('Error deleting transaction:', err);
-      alert('Nie udało się usunąć transakcji');
+      addNotification('Nie udało się usunąć transakcji', 'error');
     }
-  }, [token, removeTransaction, refetchBudgets]);
+  }, [token, removeTransaction, refetchBudgets, addNotification]);
 
   // Calculate stats (defensive programming - handle undefined/empty transactions)
   const safeTransactions = Array.isArray(transactions) ? transactions : [];

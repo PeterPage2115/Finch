@@ -9,6 +9,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
+import { useNotificationStore } from '@/lib/stores/notificationStore';
 import { Category, categoriesApi } from '@/lib/api/categoriesClient';
 import CategoryForm, { CategoryFormData } from '@/components/categories/CategoryForm';
 import CategoryList from '@/components/categories/CategoryList';
@@ -20,6 +21,7 @@ export default function CategoriesPage() {
   const router = useRouter();
   const token = useAuthStore((state) => state.token);
   const hasHydrated = useAuthStore((state) => state._hasHydrated);
+  const { addNotification } = useNotificationStore();
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -59,6 +61,7 @@ export default function CategoriesPage() {
       const newCategory = await categoriesApi.create(token!, formData);
       setCategories([...categories, newCategory]);
       setShowForm(false);
+      addNotification('Kategoria utworzona pomyślnie', 'success');
     } catch (err: any) {
       throw new Error(err.message || 'Błąd podczas tworzenia kategorii');
     }
@@ -74,6 +77,7 @@ export default function CategoriesPage() {
       ));
       setEditingCategory(undefined);
       setShowForm(false);
+      addNotification('Kategoria zaktualizowana pomyślnie', 'success');
     } catch (err: any) {
       throw new Error(err.message || 'Błąd podczas aktualizacji kategorii');
     }
@@ -95,8 +99,9 @@ export default function CategoriesPage() {
       await categoriesApi.delete(token!, deleteConfirm.id);
       setCategories(categories.filter((cat) => cat.id !== deleteConfirm.id));
       setDeleteConfirm(null);
+      addNotification('Kategoria usunięta pomyślnie', 'success');
     } catch (err: any) {
-      alert(err.message || 'Błąd podczas usuwania kategorii');
+      addNotification(err.message || 'Błąd podczas usuwania kategorii', 'error');
     }
   };
 
