@@ -7,12 +7,27 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 ## [Unreleased]
 
 ### W planach
-- Page transitions (fadeIn on route change)
 - Performance optimization (React.memo, useMemo, code splitting)
 - Accessibility improvements (ARIA, focus management, keyboard navigation)
 - Wykresy wydatków - zaawansowana analityka
 - Export danych do CSV/PDF
 - Powiadomienia o przekroczeniu budżetu
+
+## [0.5.4] - 2025-10-06
+
+### Dodane
+- **Page Transition Animations** 🎬
+  * app/template.tsx: Next.js 15 pattern dla route animations
+  * template.tsx rerenders na każdej nawigacji = perfect for AnimatePresence
+  * Smooth fadeIn: initial={{ opacity: 0, y: 20 }} → animate={{ opacity: 1, y: 0 }}
+  * Duration: 0.5s, easing: easeOut
+  * Impact: Wszystkie route changes (Dashboard → Categories → Budgets → Reports)
+  * GPU-accelerated: opacity + transform only (no layout thrashing)
+
+### Techniczne
+- 'use client' directive: framer-motion requires client-side rendering
+- template.tsx vs layout.tsx: template creates new instance per navigation
+- Motion wrapper: Minimal overhead, smooth transitions between pages
 
 ## [0.5.3] - 2025-10-06
 
