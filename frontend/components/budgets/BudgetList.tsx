@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { BudgetWithProgress } from '@/types';
 import BudgetCard from './BudgetCard';
 
@@ -9,8 +10,9 @@ interface BudgetListProps {
 
 /**
  * List component displaying all budgets.
+ * Optimized with React.memo to prevent unnecessary re-renders.
  */
-export default function BudgetList({ budgets, onEdit, onDelete }: BudgetListProps) {
+function BudgetList({ budgets, onEdit, onDelete }: BudgetListProps) {
   if (budgets.length === 0) {
     return (
       <div className="text-center py-12 bg-white border border-gray-200 rounded-lg">
@@ -33,3 +35,5 @@ export default function BudgetList({ budgets, onEdit, onDelete }: BudgetListProp
     </div>
   );
 }
+
+export default memo(BudgetList);

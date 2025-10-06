@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useTransactionsStore } from '@/lib/stores/transactionsStore';
@@ -163,15 +163,15 @@ export default function DashboardPage() {
     setShowForm(true);
   };
 
-  const handleEdit = (transaction: Transaction) => {
+  const handleEdit = useCallback((transaction: Transaction) => {
     setEditingTransaction(transaction);
     setShowForm(true);
-  };
+  }, []);
 
-  const handleCancel = () => {
+  const handleCancel = useCallback(() => {
     setShowForm(false);
     setEditingTransaction(null);
-  };
+  }, []);
 
   const handleSubmit = async (data: CreateTransactionDto) => {
     if (!token) return;
@@ -200,7 +200,7 @@ export default function DashboardPage() {
     }
   };
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = useCallback(async (id: string) => {
     if (!token) return;
     if (!confirm('Czy na pewno chcesz usunąć tę transakcję?')) return;
 
@@ -214,7 +214,7 @@ export default function DashboardPage() {
       console.error('Error deleting transaction:', err);
       alert('Nie udało się usunąć transakcji');
     }
-  };
+  }, [token, removeTransaction, refetchBudgets]);
 
   // Calculate stats (defensive programming - handle undefined/empty transactions)
   const safeTransactions = Array.isArray(transactions) ? transactions : [];

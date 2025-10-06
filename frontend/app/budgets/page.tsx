@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { BudgetWithProgress, CreateBudgetRequest, Budget } from '@/types';
@@ -123,10 +123,17 @@ export default function BudgetsPage() {
     }
   };
 
-  const handleEdit = (budget: BudgetWithProgress) => {
+  const handleEdit = useCallback((budget: BudgetWithProgress) => {
     setEditingBudget(budget);
     setShowForm(true);
-  };
+  }, []);
+
+  const handleDeleteClick = useCallback((id: string) => {
+    const budget = budgets.find((b) => b.id === id);
+    if (budget) {
+      setDeleteConfirm(budget);
+    }
+  }, [budgets]);
 
   const handleDelete = async () => {
     if (!deleteConfirm) return;
@@ -198,10 +205,7 @@ export default function BudgetsPage() {
         <BudgetList
           budgets={budgets}
           onEdit={handleEdit}
-          onDelete={(id) => {
-            const budget = budgets.find((b) => b.id === id);
-            if (budget) setDeleteConfirm(budget);
-          }}
+          onDelete={handleDeleteClick}
         />
 
         {/* Delete Confirmation Modal */}

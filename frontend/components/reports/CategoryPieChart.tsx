@@ -1,5 +1,6 @@
 'use client';
 
+import { memo, useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { CategoryReportItem } from '@/lib/api/reportsClient';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
@@ -11,8 +12,9 @@ interface CategoryPieChartProps {
 
 /**
  * CategoryPieChart - visualize expenses/income by category
+ * Optimized with React.memo + useMemo for expensive Recharts rendering
  */
-export default function CategoryPieChart({ categories, isLoading }: CategoryPieChartProps) {
+function CategoryPieChart({ categories, isLoading }: CategoryPieChartProps) {
   if (isLoading) {
     return (
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm">
@@ -35,13 +37,17 @@ export default function CategoryPieChart({ categories, isLoading }: CategoryPieC
     );
   }
 
-  // Prepare data for Recharts
-  const chartData = categories.map((cat) => ({
-    name: cat.categoryName,
-    value: cat.total,
-    percentage: cat.percentage,
-    color: cat.categoryColor, // Use color from database
-  }));
+  // Prepare data for Recharts (memoized to avoid recalculation)
+  const chartData = useMemo(
+    () =>
+      categories.map((cat) => ({
+        name: cat.categoryName,
+        value: cat.total,
+        percentage: cat.percentage,
+        color: cat.categoryColor,
+      })),
+    [categories]
+  );
 
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
@@ -134,3 +140,5 @@ export default function CategoryPieChart({ categories, isLoading }: CategoryPieC
     </div>
   );
 }
+
+export default memo(CategoryPieChart);

@@ -2,10 +2,12 @@
  * TransactionList Component
  * 
  * Wyświetla listę transakcji w tabeli z akcjami edit/delete
+ * Optimized with React.memo to prevent unnecessary re-renders
  */
 
 'use client';
 
+import { memo } from 'react';
 import { Transaction, TransactionType } from '@/types/transaction';
 import { getCategoryIcon } from '@/lib/utils/categoryIcons';
 import { motion } from 'framer-motion';
@@ -17,7 +19,7 @@ interface TransactionListProps {
   onDelete: (id: string) => void;
 }
 
-export default function TransactionList({
+function TransactionList({
   transactions,
   isLoading = false,
   onEdit,
@@ -246,3 +248,5 @@ export default function TransactionList({
     </div>
   );
 }
+
+export default memo(TransactionList);

@@ -7,11 +7,27 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 ## [Unreleased]
 
 ### W planach
-- Performance optimization (React.memo, useMemo, code splitting)
 - Accessibility improvements (ARIA, focus management, keyboard navigation)
 - Wykresy wydatków - zaawansowana analityka
 - Export danych do CSV/PDF
 - Powiadomienia o przekroczeniu budżetu
+
+## [0.5.5] - 2025-10-06
+
+### Zmienione
+- **Performance Optimization** ⚡
+  * React.memo: CategoryPieChart (Recharts rendering), BudgetList, TransactionList
+  * useMemo: chartData calculation w CategoryPieChart (avoid recalculation on every render)
+  * useCallback: Stabilized onEdit/onDelete handlers w Dashboard + Budgets pages
+  * Dashboard: handleEdit, handleCancel, handleDelete → useCallback (prevent child re-renders)
+  * Budgets: handleEdit, handleDeleteClick → useCallback (stable function references)
+  * Result: Reduced unnecessary re-renders, smoother UI with large datasets
+
+### Techniczne
+- React.memo prevents component re-render if props unchanged
+- useMemo caches expensive calculations (Recharts data transformation)
+- useCallback stabilizes function references (critical for memo'd child components)
+- Performance gains most visible with 50+ transactions/budgets
 
 ## [0.5.4] - 2025-10-06
 
