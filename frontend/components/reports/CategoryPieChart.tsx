@@ -2,22 +2,12 @@
 
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { CategoryReportItem } from '@/lib/api/reportsClient';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 
 interface CategoryPieChartProps {
   categories: CategoryReportItem[];
   isLoading?: boolean;
 }
-
-const DEFAULT_COLORS = [
-  '#3B82F6', // blue-500
-  '#10B981', // green-500
-  '#F59E0B', // amber-500
-  '#EF4444', // red-500
-  '#8B5CF6', // violet-500
-  '#EC4899', // pink-500
-  '#14B8A6', // teal-500
-  '#F97316', // orange-500
-];
 
 /**
  * CategoryPieChart - visualize expenses/income by category
@@ -50,7 +40,7 @@ export default function CategoryPieChart({ categories, isLoading }: CategoryPieC
     name: cat.categoryName,
     value: cat.total,
     percentage: cat.percentage,
-    color: cat.categoryColor || undefined,
+    color: cat.categoryColor, // Use color from database
   }));
 
   const CustomTooltip = ({ active, payload }: any) => {
@@ -93,7 +83,7 @@ export default function CategoryPieChart({ categories, isLoading }: CategoryPieC
             {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={entry.color || DEFAULT_COLORS[index % DEFAULT_COLORS.length]}
+                fill={entry.color}
               />
             ))}
           </Pie>
@@ -115,7 +105,7 @@ export default function CategoryPieChart({ categories, isLoading }: CategoryPieC
         <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
           Szczegóły
         </h4>
-        {categories.slice(0, 5).map((cat, index) => (
+        {categories.slice(0, 5).map((cat) => (
           <div
             key={cat.categoryId}
             className="flex items-center justify-between py-2 border-b border-gray-100 dark:border-gray-700 last:border-0"
@@ -123,12 +113,11 @@ export default function CategoryPieChart({ categories, isLoading }: CategoryPieC
             <div className="flex items-center gap-3">
               <div
                 className="w-3 h-3 rounded-full"
-                style={{
-                  backgroundColor: cat.categoryColor || DEFAULT_COLORS[index % DEFAULT_COLORS.length],
-                }}
+                style={{ backgroundColor: cat.categoryColor }}
               ></div>
-              <span className="text-sm font-medium text-gray-900 dark:text-white">
-                {cat.categoryIcon} {cat.categoryName}
+              <span className="text-sm font-medium text-gray-900 dark:text-white inline-flex items-center gap-2">
+                <CategoryIcon iconName={cat.categoryIcon} color={cat.categoryColor} size={16} />
+                {cat.categoryName}
               </span>
             </div>
             <div className="text-right">

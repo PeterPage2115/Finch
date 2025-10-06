@@ -7,10 +7,60 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 ## [Unreleased]
 
 ### W planach
-- **FAZA 6**: Moduł Budżetów (Backend + Frontend)
-- Wykresy wydatków (Chart.js integration)
+- Wykresy wydatków - zaawansowana analityka
 - Export danych do CSV/PDF
-- Usprawnienia kolorystyki dla dark mode
+- Powiadomienia o przekroczeniu budżetu
+- Mobile - hamburger menu w nawigacji
+
+## [0.5.0] - 2025-10-06
+
+### Dodane
+- **Moduł Raportów (FAZA 6.3 UKOŃCZONA)** ✅
+  * Backend: ReportsModule z 2 endpointami
+    - GET /reports/summary - agregacja przychodów/wydatków dla okresu
+    - GET /reports/by-category - podział po kategoriach z procentami
+  * Frontend: Strona /reports z trzema sekcjami
+    - DateRangePicker - 4 presety (miesiąc/kwartał/rok/custom)
+    - SummaryCards - 3 karty (przychody/wydatki/bilans)
+    - CategoryPieChart - wykres kołowy z Recharts + top 5 lista
+  * QueryReportDto walidacja dat i filtrowania typu
+  * Responsywny layout, dark mode support
+  * Link "Raporty" w nawigacji
+
+- **Profesjonalne ikony lucide-react (zastąpienie emoji)** ✅
+  * CategoryIcon component - dynamiczne ładowanie ikon po nazwie
+  * 9 kategorii z ikonami: UtensilsCrossed (Jedzenie), Car (Transport), Gamepad2 (Rozrywka), Receipt (Rachunki), ShoppingBag (Zakupy), Heart (Zdrowie), MoreHorizontal (Inne wydatki), Wallet (Wynagrodzenie), TrendingUp (Inne przychody)
+  * System kolorów - hex colors per kategoria (#ef4444, #3b82f6, #a855f7, etc.)
+  * Migracja bazy: icon/color pola wymagane, UPDATE istniejących kategorii
+  * Refaktoryzacja: categoryIcons.ts, TransactionList, CategoryPieChart, BudgetCard
+  * Usunięto DEFAULT_COLORS array (kolory z bazy danych)
+
+### Zmienione
+- **Database schema** - Category.icon i Category.color wymagane (not null)
+- **CreateCategoryDto** - icon i color wymagane przy tworzeniu kategorii
+- **Seed script** - zaktualizowany z 9 kategoriami (7 expense, 2 income)
+- **Category interfaces** - icon/color nie nullable w TypeScript
+
+### Naprawione
+- **Emoji encoding issues** - RESOLVED przez zastąpienie ikonami
+  * Problem: Windows PowerShell terminal encoding podczas seed
+  * Rozwiązanie: Ikony lucide-react (nazwy stringów, nie emoji UTF-8)
+  * Dokumentacja: docs/EMOJI_FIX.md z prevention strategies
+  * Hex encoding workaround już niepotrzebny
+
+### Techniczne
+- Prisma migration: `20251006105943_replace_emoji_with_lucide_icons`
+- Recharts library - PieChart, Legend, Tooltip, ResponsiveContainer
+- Manual groupBy workaround - Prisma limitation z relacjami
+- Type-safe icon rendering z fallback HelpCircle
+- Scalable icon system - łatwe dodawanie nowych kategorii
+
+### Wnioski
+- ✅ Lucide-react icons profesjonalniejsze i bez encoding issues
+- ✅ Kolory z bazy danych lepsze niż hardcoded arrays
+- ✅ Recharts excellent for financial visualizations
+- ⚠️ Prisma groupBy nie działa z include - manual reduction pattern
+- 📝 Commit messages: prosty nagłówek + szczegóły w CHANGELOG
 
 ## [0.4.1] - 2025-10-06
 

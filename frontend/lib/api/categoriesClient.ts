@@ -11,16 +11,16 @@ export interface Category {
   id: string;
   name: string;
   type: TransactionType;
-  color: string | null;
-  icon: string | null;
+  color: string; // hex color (e.g., "#ef4444")
+  icon: string;  // lucide-react icon name (e.g., "UtensilsCrossed")
   createdAt: string;
 }
 
 export interface CreateCategoryDto {
   name: string;
   type: TransactionType;
-  color?: string;
-  icon?: string;
+  color: string;  // required - hex color
+  icon: string;   // required - lucide-react icon name
 }
 
 export interface UpdateCategoryDto {

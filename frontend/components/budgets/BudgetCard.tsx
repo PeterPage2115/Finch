@@ -1,7 +1,7 @@
 import { BudgetWithProgress } from '@/types';
 import ProgressBar from './ProgressBar';
 import { Pencil, Trash2 } from 'lucide-react';
-import { getCategoryIcon, getCategoryIconColor } from '@/lib/utils/categoryIcons';
+import { getCategoryIcon } from '@/lib/utils/categoryIcons';
 
 interface BudgetCardProps {
   budget: BudgetWithProgress;
@@ -29,8 +29,7 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
   };
 
   // Get icon component
-  const IconComponent = getCategoryIcon(category?.icon, category?.name);
-  const iconColorClass = getCategoryIconColor(category?.type || 'EXPENSE');
+  const IconComponent = getCategoryIcon(category?.icon || 'HelpCircle');
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
@@ -38,7 +37,10 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
       <div className="flex justify-between items-start mb-3">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
-            <IconComponent className={`${iconColorClass} dark:opacity-90`} size={20} />
+            <IconComponent 
+              style={{ color: category?.color || '#6b7280' }} 
+              size={20} 
+            />
             {category?.name || 'Kategoria'}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">

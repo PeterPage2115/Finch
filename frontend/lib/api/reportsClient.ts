@@ -15,8 +15,8 @@ export interface ReportSummary {
 export interface CategoryReportItem {
   categoryId: string;
   categoryName: string;
-  categoryIcon: string | null;
-  categoryColor: string | null;
+  categoryIcon: string;  // lucide-react icon name
+  categoryColor: string; // hex color
   total: number;
   percentage: number;
   transactionCount: number;

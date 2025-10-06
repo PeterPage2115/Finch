@@ -22,7 +22,7 @@ async function main() {
 
   console.log('✅ Created test user:', user.email);
 
-  // Create categories
+  // Create categories with lucide-react icon names
   const expenseCategories = await Promise.all([
     prisma.category.upsert({
       where: {
@@ -32,13 +32,16 @@ async function main() {
           type: 'EXPENSE',
         },
       },
-      update: {},
+      update: {
+        icon: 'UtensilsCrossed',
+        color: '#ef4444',
+      },
       create: {
         userId: user.id,
         name: 'Jedzenie',
         type: 'EXPENSE',
-        color: '#EF4444',
-        icon: '🍔',
+        icon: 'UtensilsCrossed',
+        color: '#ef4444',
       },
     }),
     prisma.category.upsert({
@@ -49,13 +52,16 @@ async function main() {
           type: 'EXPENSE',
         },
       },
-      update: {},
+      update: {
+        icon: 'Car',
+        color: '#3b82f6',
+      },
       create: {
         userId: user.id,
         name: 'Transport',
         type: 'EXPENSE',
-        color: '#3B82F6',
-        icon: '🚗',
+        icon: 'Car',
+        color: '#3b82f6',
       },
     }),
     prisma.category.upsert({
@@ -66,13 +72,96 @@ async function main() {
           type: 'EXPENSE',
         },
       },
-      update: {},
+      update: {
+        icon: 'Gamepad2',
+        color: '#a855f7',
+      },
       create: {
         userId: user.id,
         name: 'Rozrywka',
         type: 'EXPENSE',
-        color: '#8B5CF6',
-        icon: '🎮',
+        icon: 'Gamepad2',
+        color: '#a855f7',
+      },
+    }),
+    prisma.category.upsert({
+      where: {
+        userId_name_type: {
+          userId: user.id,
+          name: 'Rachunki',
+          type: 'EXPENSE',
+        },
+      },
+      update: {
+        icon: 'Receipt',
+        color: '#f59e0b',
+      },
+      create: {
+        userId: user.id,
+        name: 'Rachunki',
+        type: 'EXPENSE',
+        icon: 'Receipt',
+        color: '#f59e0b',
+      },
+    }),
+    prisma.category.upsert({
+      where: {
+        userId_name_type: {
+          userId: user.id,
+          name: 'Zakupy',
+          type: 'EXPENSE',
+        },
+      },
+      update: {
+        icon: 'ShoppingBag',
+        color: '#ec4899',
+      },
+      create: {
+        userId: user.id,
+        name: 'Zakupy',
+        type: 'EXPENSE',
+        icon: 'ShoppingBag',
+        color: '#ec4899',
+      },
+    }),
+    prisma.category.upsert({
+      where: {
+        userId_name_type: {
+          userId: user.id,
+          name: 'Zdrowie',
+          type: 'EXPENSE',
+        },
+      },
+      update: {
+        icon: 'Heart',
+        color: '#10b981',
+      },
+      create: {
+        userId: user.id,
+        name: 'Zdrowie',
+        type: 'EXPENSE',
+        icon: 'Heart',
+        color: '#10b981',
+      },
+    }),
+    prisma.category.upsert({
+      where: {
+        userId_name_type: {
+          userId: user.id,
+          name: 'Inne wydatki',
+          type: 'EXPENSE',
+        },
+      },
+      update: {
+        icon: 'MoreHorizontal',
+        color: '#6b7280',
+      },
+      create: {
+        userId: user.id,
+        name: 'Inne wydatki',
+        type: 'EXPENSE',
+        icon: 'MoreHorizontal',
+        color: '#6b7280',
       },
     }),
   ]);
@@ -86,13 +175,36 @@ async function main() {
           type: 'INCOME',
         },
       },
-      update: {},
+      update: {
+        icon: 'Wallet',
+        color: '#22c55e',
+      },
       create: {
         userId: user.id,
         name: 'Wynagrodzenie',
         type: 'INCOME',
-        color: '#10B981',
-        icon: '💰',
+        icon: 'Wallet',
+        color: '#22c55e',
+      },
+    }),
+    prisma.category.upsert({
+      where: {
+        userId_name_type: {
+          userId: user.id,
+          name: 'Inne przychody',
+          type: 'INCOME',
+        },
+      },
+      update: {
+        icon: 'TrendingUp',
+        color: '#14b8a6',
+      },
+      create: {
+        userId: user.id,
+        name: 'Inne przychody',
+        type: 'INCOME',
+        icon: 'TrendingUp',
+        color: '#14b8a6',
       },
     }),
   ]);

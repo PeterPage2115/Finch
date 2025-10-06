@@ -36,8 +36,8 @@ model Category {
   id        String       @id @default(uuid())
   name      String
   type      CategoryType @default(EXPENSE)
-  color     String?      // hex color for UI (e.g., "#3B82F6")
-  icon      String?      // icon name or emoji
+  color     String       // hex color for UI (e.g., "#ef4444")
+  icon      String       // lucide-react icon name (e.g., "UtensilsCrossed")
   userId    String
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
