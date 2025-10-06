@@ -1,3 +1,6 @@
+'use client';
+import { motion } from 'framer-motion';
+
 interface ProgressBarProps {
   percentage: number; // 0-100+
   spent: number;
@@ -39,9 +42,11 @@ export default function ProgressBar({ percentage, spent, limit, alerts = [] }: P
 
       {/* Progress bar */}
       <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden">
-        <div
-          className={`${colorClass} h-full rounded-full transition-all duration-300`}
-          style={{ width: `${displayPercentage}%` }}
+        <motion.div
+          initial={{ width: 0 }}
+          animate={{ width: `${displayPercentage}%` }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+          className={`${colorClass} h-full rounded-full`}
         />
       </div>
 

@@ -7,13 +7,40 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 ## [Unreleased]
 
 ### W planach
+- Page transitions (fadeIn on route change)
+- Performance optimization (React.memo, useMemo, code splitting)
+- Accessibility improvements (ARIA, focus management, keyboard navigation)
 - Wykresy wydatków - zaawansowana analityka
 - Export danych do CSV/PDF
 - Powiadomienia o przekroczeniu budżetu
-- Page transitions (fadeIn animations)
-- Budget progress bar animations
-- Performance optimization (React.memo, useMemo, code splitting)
-- Accessibility improvements (ARIA, focus management)
+
+## [0.5.3] - 2025-10-06
+
+### Dodane
+- **Budget Progress Bar Animations** 🎨
+  * framer-motion integration w ProgressBar component
+  * Smooth width animation: initial={{ width: 0 }} → animate={{ width: `${percentage}%` }}
+  * Duration: 1s, easing: easeOut (natural deceleration)
+  * Visual impact: Dashboard homepage (BudgetWidget) + Budgets page (BudgetCard)
+  * Replace CSS transition-all z motion.div (better control + performance)
+
+### Zmienione
+- ProgressBar.tsx: 'use client' + motion.div z animated width
+- Removed: static `style={{ width: \`${displayPercentage}%\` }}`
+- Added: framer-motion declarative animation
+
+## [0.5.2] - 2025-10-06 (UPDATE 2)
+
+### Naprawione
+- **CategoryList icons bug** 🐛
+  * CategoryList używał getCategoryIcon zamiast CategoryIcon component
+  * Pokazywały się kolorowe kropki zamiast ikon lucide-react
+  * Fix: Import CategoryIcon + render z iconName/color props
+- **Missing animations na primary buttons** ✨
+  * Dashboard: "Dodaj transakcję" button
+  * Budgets page: "Dodaj budżet" button
+  * Categories page: "Dodaj kategorię" button
+  * Wszystkie z whileHover={{ scale: 1.05 }}, whileTap={{ scale: 0.95 }}
 
 ## [0.5.2] - 2025-10-06
 
