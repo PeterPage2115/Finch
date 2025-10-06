@@ -158,6 +158,7 @@ function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
             onClick={() => onEdit(category)}
             className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
             title="Edytuj"
+            aria-label={`Edytuj kategorię ${category.name}`}
           >
             <Pencil className="w-4 h-4" />
           </motion.button>
@@ -167,6 +168,7 @@ function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
             onClick={() => onDelete(category)}
             className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
             title="Usuń"
+            aria-label={`Usuń kategorię ${category.name}`}
           >
             <Trash2 className="w-4 h-4" />
           </motion.button>

@@ -88,6 +88,7 @@ export default function CategoryForm({
                      focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
           placeholder="np. Zakupy spożywcze"
           disabled={isSubmitting}
+          autoFocus
         />
         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
           2-50 znaków

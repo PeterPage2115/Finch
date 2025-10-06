@@ -140,6 +140,7 @@ export default function TransactionForm({
               errors.amount ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
             }`}
             required
+            autoFocus
           />
           {errors.amount && (
             <p className="mt-1 text-sm text-red-600 dark:text-red-400">{errors.amount}</p>

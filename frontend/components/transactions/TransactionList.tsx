@@ -154,6 +154,7 @@ function TransactionList({
                     whileTap={{ scale: 0.95 }}
                     onClick={() => onEdit(transaction)}
                     className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 mr-4 transition"
+                    aria-label={`Edytuj transakcję ${transaction.description}`}
                   >
                     Edytuj
                   </motion.button>
@@ -162,6 +163,7 @@ function TransactionList({
                     whileTap={{ scale: 0.95 }}
                     onClick={() => onDelete(transaction.id)}
                     className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition"
+                    aria-label={`Usuń transakcję ${transaction.description}`}
                   >
                     Usuń
                   </motion.button>
@@ -229,6 +231,7 @@ function TransactionList({
                   whileTap={{ scale: 0.98 }}
                   onClick={() => onEdit(transaction)}
                   className="flex-1 px-3 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-lg transition"
+                  aria-label={`Edytuj transakcję ${transaction.description}`}
                 >
                   Edytuj
                 </motion.button>
@@ -237,6 +240,7 @@ function TransactionList({
                   whileTap={{ scale: 0.98 }}
                   onClick={() => onDelete(transaction.id)}
                   className="flex-1 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition"
+                  aria-label={`Usuń transakcję ${transaction.description}`}
                 >
                   Usuń
                 </motion.button>

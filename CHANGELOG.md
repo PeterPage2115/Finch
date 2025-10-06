@@ -7,10 +7,33 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 ## [Unreleased]
 
 ### W planach
-- Accessibility improvements (ARIA, focus management, keyboard navigation)
 - Wykresy wydatków - zaawansowana analityka
 - Export danych do CSV/PDF
 - Powiadomienia o przekroczeniu budżetu
+- Focus trap w drawer (focus-trap-react)
+- aria-live regions dla toastów/messages
+
+## [0.5.6] - 2025-10-06
+
+### Dodane
+- **Accessibility Improvements** ♿
+  * ARIA labels: Icon-only buttons (Edit/Delete w CategoryList, TransactionList desktop/mobile)
+  * ARIA labels format: "Edytuj kategorię {name}", "Usuń transakcję {description}"
+  * Enhanced focus styles: Global *:focus-visible outline (blue-500 light, blue-400 dark)
+  * Form auto-focus: TransactionForm (amount), CategoryForm (name), BudgetForm (amount)
+  * Keyboard navigation ready: All interactive elements focusable
+  * Screen reader friendly: Descriptive aria-labels for context
+
+### Zmienione
+- globals.css: Added *:focus-visible styles (2px outline, 2px offset, 4px border-radius)
+- CategoryList.tsx: aria-label dla Edit/Delete buttons
+- TransactionList.tsx: aria-label dla Edit/Delete (desktop table + mobile cards)
+- TransactionForm.tsx, CategoryForm.tsx, BudgetForm.tsx: autoFocus na pierwszym input
+
+### Techniczne
+- WCAG 2.1 Level AA compliance: Keyboard navigation + Screen reader support
+- Focus-visible: Only shows outline on keyboard focus (not mouse click)
+- Auto-focus improves UX: Immediately ready for input when form opens
 
 ## [0.5.5] - 2025-10-06
 
