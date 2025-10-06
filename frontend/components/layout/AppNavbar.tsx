@@ -10,6 +10,7 @@
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useTheme } from '@/lib/providers/ThemeProvider';
+import { Wallet } from 'lucide-react';
 
 export default function AppNavbar() {
   const router = useRouter();
@@ -30,9 +31,15 @@ export default function AppNavbar() {
         <div className="flex justify-between items-center h-16">
           {/* Logo & Navigation */}
           <div className="flex items-center space-x-8">
-            <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400 cursor-pointer" onClick={() => router.push('/dashboard')}>
-              💰 Tracker Kasy
-            </h1>
+            <div 
+              className="flex items-center gap-2 cursor-pointer" 
+              onClick={() => router.push('/dashboard')}
+            >
+              <Wallet className="text-indigo-600 dark:text-indigo-400" size={28} />
+              <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+                Tracker Kasy
+              </h1>
+            </div>
             <div className="hidden md:flex items-center space-x-4">
               <button
                 onClick={() => router.push('/dashboard')}

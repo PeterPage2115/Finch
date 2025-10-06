@@ -8,7 +8,7 @@
 
 import { Category } from '@/lib/api/categoriesClient';
 import { TransactionType } from '@/types/transaction';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, TrendingUp, TrendingDown } from 'lucide-react';
 import { getCategoryIcon, getCategoryIconColor } from '@/lib/utils/categoryIcons';
 
 interface CategoryListProps {
@@ -60,8 +60,8 @@ export default function CategoryList({
       {incomeCategories.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <span className="text-2xl">💰</span>
-            Przychody
+            <TrendingUp className="text-green-600 dark:text-green-400" size={24} />
+            <span>Przychody</span>
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
               ({incomeCategories.length})
             </span>
@@ -83,8 +83,8 @@ export default function CategoryList({
       {expenseCategories.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <span className="text-2xl">💸</span>
-            Wydatki
+            <TrendingDown className="text-red-600 dark:text-red-400" size={24} />
+            <span>Wydatki</span>
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
               ({expenseCategories.length})
             </span>

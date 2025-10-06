@@ -168,7 +168,7 @@ export default function DashboardPage() {
         {/* Welcome Card */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            Witaj, {user?.name || 'Użytkowniku'}! 👋
+            Witaj, {user?.name || 'Użytkowniku'}!
           </h2>
           <p className="text-gray-600 dark:text-gray-300">
             To jest Twój dashboard. Tutaj będziesz mógł zarządzać swoimi finansami.
