@@ -10,8 +10,26 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 - Wykresy wydatków - zaawansowana analityka
 - Export danych do CSV/PDF
 - Powiadomienia o przekroczeniu budżetu
-- Focus trap w drawer (focus-trap-react)
+- Focus trap w drawer - alternatywne rozwiązanie (v0.6.1)
 - aria-live regions dla toastów/messages
+
+## [0.6.0] - 2025-10-06 (In Progress)
+
+### Dodane (Added)
+- **Mobile Drawer Menu** 📱
+  * Fixed hamburger menu button click handler (replaced motion.button with plain button)
+  * Drawer now opens/closes correctly on mobile devices (< 768px)
+  * Smooth slide-in animation with Framer Motion
+  * Backdrop overlay with click-to-close functionality
+  * ESC key to close drawer
+  * Body scroll lock when drawer open
+  
+### Znane problemy (Known Issues)
+- **Focus Trap Removed** ⚠️
+  * focus-trap-react conflicts with Framer Motion AnimatePresence
+  * Drawer works but keyboard focus can escape to background elements
+  * Alternative focus trap solution planned for v0.6.1
+  * Impact: Minor accessibility issue - keyboard users can Tab outside drawer
 
 ## [0.5.10] - 2025-10-06
 
