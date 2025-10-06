@@ -1,23 +1,29 @@
 # TODO - Aplikacja do Śledzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
-**Status:** Faza 5 zakończona ✅ - Categories CRUD (Backend + Frontend) (86/86 zadań - 100%) 🎉
+**Status:** Faza 6 w trakcie 🚀 - Budgets Backend+Frontend ✅ (Raporty + Dashboard widget pending)
 
 ---
 
-**Ostatnie zmiany (6 października 2025 - Sesja 4):**
-- ✅ **FAZA 5 UKOŃCZONA 100%!** 🎉
-- ✅ Faza 5.1: Backend Categories CRUD (100%)
-- ✅ Faza 5.2: Frontend Categories UI (100%)
-  - Strona /categories z CategoryForm + CategoryList
-  - API Routes: POST, PATCH, DELETE
-  - Link "Kategorie" w navbar
+**Ostatnie zmiany (6 października 2025 - Sesja 5):**
+- ✅ **FAZA 6.1 + 6.2 UKOŃCZONA!** 🎉
+- ✅ Faza 6.1: Backend Budgets CRUD (100%)
+  - BudgetsModule, Service, Controller
+  - calculateProgress() z alertami (80%, 100%)
+  - Auto-obliczanie endDate dla okresów
+  - Business rule: unique userId+categoryId+startDate
+  - ⏳ Testy pending (Faza 7)
+- ✅ Faza 6.2: Frontend Budgets UI (100%)
+  - Strona /budgets z BudgetForm + BudgetList
+  - Progress bars (green/yellow/red)
   - Delete confirmation modal
-  - lucide-react icons
-- 📊 Total: 86/86 zadań = 100% MVP gotowe!
-- � Gotowi do Fazy 6: Budżety
+  - API Routes proxy
+  - Link "Budżety" w navbar
+  - ⏳ Dashboard widget pending (Faza 6.3)
+- 🐛 Bug fixes: Dark mode, emoji removal, unified navbar
+- � **Decyzja architektoniczna**: Budgets = kontrola wydatków (reactive), Savings Goals = cele oszczędnościowe (proactive) → osobne moduły!
 
-**Następny krok:** Faza 6 - Moduł Budżetów (Backend + Frontend) 💰📊
+**Następny krok:** Faza 6.3 - Podstawowe Raporty 📊 lub Dashboard widget
 
 ---
 
@@ -201,9 +207,19 @@
 - [x] Delete confirmation modal
 - [x] Link "Budżety" w dashboard navbar
 - [x] API Routes proxy (/api/budgets, /api/budgets/[id])
-- [ ] Dashboard widget "Budżety" z overview (TODO: Faza 6.3)
+- [ ] Dashboard widget "Budżety" z overview (TODO: przesunięte do 6.3)
 
-### 6.3 Podstawowe Raporty
+**Wnioski z Fazy 6 (Backend + Frontend):**
+- ✅ Budżety = kontrola wydatków z kategorii (reactive tracking)
+- ✅ calculateProgress() agreguje transakcje automatycznie
+- ✅ Alerty przy 80% i 100% limitu działają
+- ✅ Dark mode + lucide-react icons throughout
+- ✅ Business logic: unique constraint zapobiega duplikatom
+- ⚠️ Prisma Decimal → Number() conversion (jak w Transactions)
+- 📊 Brakuje: Dashboard widget, testy jednostkowe/integracyjne
+
+### 6.3 Dashboard Widget + Podstawowe Raporty
+- [ ] Dashboard widget "Budżety" (top 3 budżety z progress)
 - [ ] Endpoint: `GET /reports/summary` (podsumowanie: suma przychodów/wydatków za okres)
 - [ ] Endpoint: `GET /reports/by-category` (wydatki/przychody po kategorii)
 - [ ] Strona raportów (`/reports`) z wykresami (Chart.js/Recharts)
@@ -250,7 +266,7 @@
 ## 🎨 Faza 9: Polish i UX (Post-MVP)
 
 - [ ] Responsywność na urządzeniach mobilnych
-- [ ] Dark mode
+- [ ] Dark mode (✅ częściowo - zaimplementowane dla Dashboard, Categories, Budgets)
 - [ ] Animacje i transitions
 - [ ] Accessibility audit (a11y)
 - [ ] Optymalizacja wydajności (Lighthouse audit)
@@ -258,13 +274,55 @@
 
 ---
 
-## 📝 Notatki
+## � Faza 10: Cele Oszczędnościowe (Post-MVP) 🎯 PLANOWANE
+
+**Koncepcja:**
+- **Savings Goals** = śledzenie celów oszczędnościowych (np. "Wakacje w Grecji", "Nowy laptop", "Fundusz awaryjny")
+- **Różnica vs Budżety:**
+  - **Budżet** = REACTIVE (kontrolujesz wydatki: "max 500 zł na rozrywkę/miesiąc")
+  - **Savings Goal** = PROACTIVE (planujesz przyszłość: "odłóż 5000 zł na wakacje do grudnia")
+- **Funkcjonalność:**
+  - Nazwa celu (np. "Wakacje w Grecji")
+  - Kwota docelowa (targetAmount)
+  - Kwota aktualna (currentAmount - użytkownik manualnie aktualizuje lub linkuje z transakcjami INCOME do kategorii "Oszczędności")
+  - Termin (deadline - opcjonalny)
+  - Progress bar (currentAmount / targetAmount * 100%)
+  - Tracking history (data + kwota wpłaty)
+
+### 10.1 Backend - API Savings Goals (TODO)
+- [ ] Model `SavingsGoal` w Prisma (id, userId, name, targetAmount, currentAmount, deadline, createdAt, updatedAt)
+- [ ] Model `SavingsContribution` (id, goalId, amount, date, description) - historia wpłat
+- [ ] Moduł `SavingsGoalsModule` w NestJS
+- [ ] CRUD endpointy (POST, GET, PATCH, DELETE /savings-goals)
+- [ ] Endpoint: `POST /savings-goals/:id/contribute` (dodanie wpłaty)
+- [ ] Progress calculation (currentAmount / targetAmount)
+- [ ] Walidacja: targetAmount > 0, currentAmount >= 0
+
+### 10.2 Frontend - UI Savings Goals (TODO)
+- [ ] Strona `/savings-goals` z listą celów
+- [ ] Formularz tworzenia/edycji celu (nazwa, kwota docelowa, deadline)
+- [ ] Progress bars z kolorami (podobnie jak budżety)
+- [ ] Modal "Dodaj wpłatę" (kwota + data + opis)
+- [ ] Historia wpłat dla każdego celu
+- [ ] Dashboard widget "Cele Oszczędnościowe" (top 3)
+- [ ] API Routes proxy
+
+### 10.3 Integracje (opcjonalne)
+- [ ] Link z kategorią "Oszczędności" (automatyczne dodawanie transakcji INCOME jako wpłaty do celu)
+- [ ] Powiadomienia przy osiągnięciu kamieni milowych (25%, 50%, 75%, 100%)
+- [ ] Export danych celu do PDF/CSV
+
+---
+
+## �📝 Notatki
 
 - Każde zadanie powinno być realizowane zgodnie z zasadami KISS i YAGNI
 - Przed oznaczeniem zadania jako ukończonego: kod musi być przetestowany
 - Commit message'y według Conventional Commits: `feat:`, `fix:`, `test:`, `docs:`, etc.
 - Regularne push'e do GitHuba
+- **Budgets vs Savings Goals**: Budżety kontrolują wydatki (reactive), cele oszczędnościowe planują przyszłość (proactive) - to osobne funkcjonalności!
+- **Emoji w production**: Unikaj emoji w UI - używaj lucide-react icons dla consistency
 
 ---
 
-**Ostatnia aktualizacja:** 1 października 2025
+**Ostatnia aktualizacja:** 6 października 2025
