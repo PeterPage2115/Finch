@@ -213,7 +213,7 @@
 - [x] Auto-obliczanie endDate na podstawie period
 - [x] Walidacja: amount > 0, period (DAILY/WEEKLY/MONTHLY/YEARLY/CUSTOM)
 - [x] Business rule: unique constraint (userId + categoryId + startDate)
-- [ ] Testy jednostkowe
+- [x] Testy jednostkowe (24 tests, 100% passing ✅)
 - [ ] Testy integracyjne
 
 ### 6.2 Frontend - UI Budżetów ✅ UKOŃCZONA
@@ -235,8 +235,9 @@
 - ✅ Dark mode + lucide-react icons throughout
 - ✅ Business logic: unique constraint zapobiega duplikatom
 - ✅ Dashboard widget: top 3 budżety, compact progress bars, graceful error handling
+- ✅ Testy jednostkowe: 24 tests covering all CRUD + calculateProgress logic (100% passing)
 - ⚠️ Prisma Decimal → Number() conversion (jak w Transactions)
-- 📊 Brakuje: testy jednostkowe/integracyjne
+- 📊 Pozostało: testy integracyjne (e2e)
 
 ### 6.3 Dashboard Widget + Podstawowe Raporty
 - [x] Dashboard widget "Budżety" (top 3 budżety z progress) ✅ UKOŃCZONE
