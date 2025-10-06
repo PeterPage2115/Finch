@@ -9,7 +9,7 @@
 
 import { memo } from 'react';
 import { Transaction, TransactionType } from '@/types/transaction';
-import { getCategoryIcon } from '@/lib/utils/categoryIcons';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { motion } from 'framer-motion';
 
 interface TransactionListProps {
@@ -121,18 +121,16 @@ function TransactionList({
                   {transaction.description || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {transaction.category && (() => {
-                    const IconComponent = getCategoryIcon(transaction.category.icon || 'HelpCircle');
-                    return (
-                      <span className="inline-flex items-center gap-2">
-                        <IconComponent 
-                          style={{ color: transaction.category.color || '#6b7280' }} 
-                          size={18} 
-                        />
-                        <span className="text-gray-900 dark:text-gray-100">{transaction.category.name}</span>
-                      </span>
-                    );
-                  })()}
+                  {transaction.category && (
+                    <span className="inline-flex items-center gap-2">
+                      <CategoryIcon 
+                        iconName={transaction.category.icon || 'HelpCircle'}
+                        color={transaction.category.color || '#6b7280'} 
+                        size={18} 
+                      />
+                      <span className="text-gray-900 dark:text-gray-100">{transaction.category.name}</span>
+                    </span>
+                  )}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <span
@@ -177,10 +175,6 @@ function TransactionList({
       {/* Mobile Card View (visible only on mobile) */}
       <div className="md:hidden divide-y divide-gray-200 dark:divide-gray-700">
         {transactions.map((transaction) => {
-          const IconComponent = transaction.category 
-            ? getCategoryIcon(transaction.category.icon || 'HelpCircle')
-            : null;
-          
           return (
             <div key={transaction.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
               {/* Header: Date & Amount */}
@@ -202,10 +196,11 @@ function TransactionList({
 
               {/* Category & Type */}
               <div className="flex items-center gap-3 mb-3">
-                {transaction.category && IconComponent && (
+                {transaction.category && (
                   <div className="flex items-center gap-2">
-                    <IconComponent 
-                      style={{ color: transaction.category.color || '#6b7280' }} 
+                    <CategoryIcon 
+                      iconName={transaction.category.icon || 'HelpCircle'}
+                      color={transaction.category.color || '#6b7280'} 
                       size={18} 
                     />
                     <span className="text-sm text-gray-700 dark:text-gray-300">

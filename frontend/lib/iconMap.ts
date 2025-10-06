@@ -48,6 +48,8 @@ import {
   Laptop,
   Camera,
   Shirt,
+  Receipt,
+  MoreHorizontal,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -101,6 +103,8 @@ export const iconMap: Record<string, LucideIcon> = {
   Phone,
   Laptop,
   Camera,
+  Receipt,
+  MoreHorizontal,
   // Fallback
   HelpCircle,
 };
@@ -144,7 +148,7 @@ export const EXPENSE_SHOPPING_ICONS: IconCategory = {
 export const EXPENSE_HOME_ICONS: IconCategory = {
   name: 'Dom i rachunki',
   description: 'Ikony dla kategorii domowych i rachunków',
-  icons: ['Home', 'Zap'],
+  icons: ['Home', 'Zap', 'Receipt'],
 };
 
 export const EXPENSE_TRANSPORT_ICONS: IconCategory = {
@@ -174,7 +178,7 @@ export const EXPENSE_EDUCATION_ICONS: IconCategory = {
 export const GENERIC_ICONS: IconCategory = {
   name: 'Ogólne',
   description: 'Ogólne ikony uniwersalne',
-  icons: ['Tag', 'Star', 'Gift', 'Briefcase', 'Phone', 'Laptop', 'Camera'],
+  icons: ['Tag', 'Star', 'Gift', 'Briefcase', 'Phone', 'Laptop', 'Camera', 'MoreHorizontal'],
 };
 
 /**

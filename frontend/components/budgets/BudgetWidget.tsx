@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { BudgetWithProgress } from '@/types';
 import { TrendingUp, ArrowRight } from 'lucide-react';
-import { getCategoryIcon, getCategoryIconColor } from '@/lib/utils/categoryIcons';
+import { CategoryIcon } from '@/components/ui/CategoryIcon';
 
 interface BudgetWidgetProps {
   budgets: BudgetWithProgress[];
@@ -54,10 +54,6 @@ export default function BudgetWidget({ budgets, isLoading }: BudgetWidgetProps) 
 function BudgetWidgetItem({ budget }: { budget: BudgetWithProgress }) {
   const { category, progress } = budget;
 
-  // Get icon
-  const IconComponent = getCategoryIcon(category?.icon || 'HelpCircle');
-  const iconColorClass = getCategoryIconColor(category?.type || 'EXPENSE');
-
   // Format amounts
   const spent = progress.spent.toFixed(0);
   const limit = progress.limit.toFixed(0);
@@ -76,7 +72,11 @@ function BudgetWidgetItem({ budget }: { budget: BudgetWithProgress }) {
       {/* Category & Amount */}
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
-          <IconComponent className={`${iconColorClass} dark:opacity-90`} size={18} />
+          <CategoryIcon 
+            iconName={category?.icon || 'HelpCircle'}
+            color={category?.color || '#6b7280'}
+            size={18} 
+          />
           <span className="font-medium text-gray-900 dark:text-white text-sm">
             {category?.name || 'Kategoria'}
           </span>

@@ -28,6 +28,7 @@ out/
 *~
 .DS_Store
 .github/
+.playwright/
 
 # Docker volumes
 pgdata/
