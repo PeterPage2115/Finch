@@ -13,6 +13,30 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 - Focus trap w drawer (focus-trap-react)
 - aria-live regions dla toastów/messages
 
+## [0.5.10] - 2025-10-06
+
+### Utrzymanie (Maintenance)
+- **Project Structure Cleanup** 🧹
+  * Removed duplicates: docs/DOCKER.md (duplicate of root DOCKER.md), package-lock.json (empty, not needed in root)
+  * Removed old backups: TODO.old.md (outdated)
+  * Archived historical docs to docs/archive/:
+    - TODO_2025-10-06-chaos.md (961-line TODO before reorganization)
+    - Plan_projektu1_10_2025.md (initial plan, replaced by ROADMAP.md)
+    - PROJECT_STATUS_2025-10-06.md (old status, replaced by COMPLETED.md)
+    - EMOJI_FIX.md (emoji encoding fix, deprecated - now using lucide-react icons)
+  * Added docs/archive/README.md explaining archived documents
+
+- **Fixed .gitignore (CRITICAL)** 🔧
+  * Removed `.github/` from ignore - must track copilot-instructions.md and future workflows
+  * Removed `prisma/migrations/` from ignore - CRITICAL: schema history must be in Git!
+  * Impact: All future changes to .github/ and database migrations will be properly tracked
+
+### Dokumentacja
+- Clean project structure established:
+  * Root: Active docs (README, TODO, ROADMAP, COMPLETED, CHANGELOG, CONTRIBUTING, DOCKER)
+  * docs/: Technical documentation (API, DATABASE, FRONTEND_AUTH, CODE_REVIEW)
+  * docs/archive/: Historical documents, old reports, deprecated fixes
+
 ## [0.5.9] - 2025-10-06
 
 ### Naprawione
