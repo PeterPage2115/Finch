@@ -9,6 +9,7 @@
 import { useState } from 'react';
 import { Category } from '@/lib/api/categoriesClient';
 import { TransactionType } from '@/types/transaction';
+import { motion } from 'framer-motion';
 
 interface CategoryFormProps {
   category?: Category; // undefined = create mode, defined = edit mode
@@ -184,7 +185,9 @@ export default function CategoryForm({
 
       {/* Przyciski */}
       <div className="flex justify-end gap-3 pt-4">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
@@ -194,8 +197,10 @@ export default function CategoryForm({
                      disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Anuluj
-        </button>
-        <button
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           type="submit"
           disabled={isSubmitting}
           className="px-4 py-2 text-sm font-medium text-white
@@ -211,7 +216,7 @@ export default function CategoryForm({
           ) : (
             <>{isEditMode ? 'Zapisz zmiany' : 'Dodaj kategorię'}</>
           )}
-        </button>
+        </motion.button>
       </div>
     </form>
   );

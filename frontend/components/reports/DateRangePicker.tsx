@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Calendar } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 type DateRangePreset = 'month' | 'quarter' | 'year' | 'custom';
 
@@ -81,7 +82,9 @@ export default function DateRangePicker({
       {/* Preset buttons */}
       <div className="flex flex-wrap gap-2 mb-4">
         {presets.map((preset) => (
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             key={preset.key}
             onClick={() => handlePresetClick(preset.key)}
             className={`px-4 py-2 rounded-md font-medium transition-colors ${
@@ -91,7 +94,7 @@ export default function DateRangePicker({
             }`}
           >
             {preset.label}
-          </button>
+          </motion.button>
         ))}
       </div>
 
@@ -122,12 +125,14 @@ export default function DateRangePicker({
               />
             </div>
           </div>
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleCustomApply}
             className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-md font-medium transition-colors"
           >
             Zastosuj
-          </button>
+          </motion.button>
         </div>
       )}
 

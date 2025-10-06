@@ -10,6 +10,7 @@ import { Category } from '@/lib/api/categoriesClient';
 import { TransactionType } from '@/types/transaction';
 import { Pencil, Trash2, TrendingUp, TrendingDown } from 'lucide-react';
 import { getCategoryIcon, getCategoryIconColor } from '@/lib/utils/categoryIcons';
+import { motion } from 'framer-motion';
 
 interface CategoryListProps {
   categories: Category[];
@@ -115,7 +116,7 @@ interface CategoryCardProps {
 }
 
 function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
-  const IconComponent = getCategoryIcon(category.icon, category.name);
+  const IconComponent = getCategoryIcon(category.icon);
   const iconColorClass = getCategoryIconColor(category.type);
 
   return (
@@ -150,20 +151,24 @@ function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
 
         {/* Actions */}
         <div className="flex items-center gap-1 ml-2">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => onEdit(category)}
             className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
             title="Edytuj"
           >
             <Pencil className="w-4 h-4" />
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => onDelete(category)}
             className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
             title="Usuń"
           >
             <Trash2 className="w-4 h-4" />
-          </button>
+          </motion.button>
         </div>
       </div>
     </div>

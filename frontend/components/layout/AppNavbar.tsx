@@ -13,6 +13,7 @@ import { useAuthStore } from '@/lib/stores/authStore';
 import { useTheme } from '@/lib/providers/ThemeProvider';
 import { Wallet, Menu, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function AppNavbar() {
   const router = useRouter();
@@ -82,7 +83,9 @@ export default function AppNavbar() {
               </h1>
             </div>
             <div className="hidden md:flex items-center space-x-4">
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => router.push('/dashboard')}
                 className={`font-medium transition ${
                   isActive('/dashboard')
@@ -91,8 +94,10 @@ export default function AppNavbar() {
                 }`}
               >
                 Dashboard
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => router.push('/categories')}
                 className={`font-medium transition ${
                   isActive('/categories')
@@ -101,8 +106,10 @@ export default function AppNavbar() {
                 }`}
               >
                 Kategorie
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => router.push('/budgets')}
                 className={`font-medium transition ${
                   isActive('/budgets')
@@ -111,8 +118,10 @@ export default function AppNavbar() {
                 }`}
               >
                 Budżety
-              </button>
-              <button
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => router.push('/reports')}
                 className={`font-medium transition ${
                   isActive('/reports')
@@ -121,56 +130,73 @@ export default function AppNavbar() {
                 }`}
               >
                 Raporty
-              </button>
+              </motion.button>
             </div>
           </div>
 
           {/* User Menu */}
           <div className="flex items-center space-x-4">
             {/* Mobile Hamburger Button */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
               onClick={toggleMobileMenu}
               className="md:hidden p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
               aria-label="Open menu"
             >
               <Menu size={24} className="text-gray-700 dark:text-gray-200" />
-            </button>
+            </motion.button>
 
             {/* Dark Mode Toggle */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.1, rotate: 15 }}
+              whileTap={{ scale: 0.9 }}
               onClick={toggleTheme}
               className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
               title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
               aria-label="Toggle dark mode"
             >
               {theme === 'dark' ? '☀️' : '🌙'}
-            </button>
+            </motion.button>
             <div className="text-sm hidden sm:block">
               <p className="text-gray-700 dark:text-gray-200 font-medium">{user?.name || 'Użytkownik'}</p>
               <p className="text-gray-500 dark:text-gray-400 text-xs">{user?.email}</p>
             </div>
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               onClick={handleLogout}
               className="hidden sm:block px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition"
             >
               Wyloguj
-            </button>
+            </motion.button>
           </div>
         </div>
       </div>
 
       {/* Mobile Menu Drawer */}
-      {isMobileMenuOpen && (
-        <>
-          {/* Backdrop */}
-          <div
-            className="fixed inset-0 bg-black/50 z-40 md:hidden"
-            onClick={closeMobileMenu}
-            aria-hidden="true"
-          />
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 bg-black/50 z-40 md:hidden"
+              onClick={closeMobileMenu}
+              aria-hidden="true"
+            />
 
-          {/* Drawer */}
-          <div className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 shadow-xl z-50 transform transition-transform md:hidden">
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+              className="fixed inset-y-0 left-0 w-64 bg-white dark:bg-gray-900 shadow-xl z-50 md:hidden"
+            >
             <div className="flex flex-col h-full">
               {/* Drawer Header */}
               <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-800">
@@ -180,18 +206,22 @@ export default function AppNavbar() {
                     Tracker Kasy
                   </h2>
                 </div>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
                   onClick={closeMobileMenu}
                   className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                   aria-label="Close menu"
                 >
                   <X size={24} className="text-gray-700 dark:text-gray-200" />
-                </button>
+                </motion.button>
               </div>
 
               {/* Navigation Links */}
               <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => navigateTo('/dashboard')}
                   className={`w-full text-left px-4 py-3 rounded-lg font-medium transition ${
                     isActive('/dashboard')
@@ -200,8 +230,10 @@ export default function AppNavbar() {
                   }`}
                 >
                   Dashboard
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => navigateTo('/categories')}
                   className={`w-full text-left px-4 py-3 rounded-lg font-medium transition ${
                     isActive('/categories')
@@ -210,8 +242,10 @@ export default function AppNavbar() {
                   }`}
                 >
                   Kategorie
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => navigateTo('/budgets')}
                   className={`w-full text-left px-4 py-3 rounded-lg font-medium transition ${
                     isActive('/budgets')
@@ -220,8 +254,10 @@ export default function AppNavbar() {
                   }`}
                 >
                   Budżety
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => navigateTo('/reports')}
                   className={`w-full text-left px-4 py-3 rounded-lg font-medium transition ${
                     isActive('/reports')
@@ -230,7 +266,7 @@ export default function AppNavbar() {
                   }`}
                 >
                   Raporty
-                </button>
+                </motion.button>
               </nav>
 
               {/* Drawer Footer - User Info & Logout */}
@@ -243,17 +279,20 @@ export default function AppNavbar() {
                     {user?.email}
                   </p>
                 </div>
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={handleLogout}
                   className="w-full px-4 py-3 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition"
                 >
                   Wyloguj
-                </button>
+                </motion.button>
               </div>
             </div>
-          </div>
+          </motion.div>
         </>
       )}
+    </AnimatePresence>
     </nav>
   );
 }

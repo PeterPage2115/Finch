@@ -8,6 +8,7 @@
 
 import { Transaction, TransactionType } from '@/types/transaction';
 import { getCategoryIcon } from '@/lib/utils/categoryIcons';
+import { motion } from 'framer-motion';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -146,18 +147,22 @@ export default function TransactionList({
                   {formatAmount(transaction.amount, transaction.type)}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => onEdit(transaction)}
                     className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-900 dark:hover:text-indigo-300 mr-4 transition"
                   >
                     Edytuj
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => onDelete(transaction.id)}
                     className="text-red-600 dark:text-red-400 hover:text-red-900 dark:hover:text-red-300 transition"
                   >
                     Usuń
-                  </button>
+                  </motion.button>
                 </td>
               </tr>
             ))}
@@ -217,18 +222,22 @@ export default function TransactionList({
 
               {/* Actions */}
               <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-gray-700">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => onEdit(transaction)}
                   className="flex-1 px-3 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-lg transition"
                 >
                   Edytuj
-                </button>
-                <button
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => onDelete(transaction.id)}
                   className="flex-1 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition"
                 >
                   Usuń
-                </button>
+                </motion.button>
               </div>
             </div>
           );

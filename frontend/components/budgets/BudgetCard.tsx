@@ -2,6 +2,7 @@ import { BudgetWithProgress } from '@/types';
 import ProgressBar from './ProgressBar';
 import { Pencil, Trash2 } from 'lucide-react';
 import { getCategoryIcon } from '@/lib/utils/categoryIcons';
+import { motion } from 'framer-motion';
 
 interface BudgetCardProps {
   budget: BudgetWithProgress;
@@ -50,20 +51,24 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
 
         {/* Actions */}
         <div className="flex gap-2">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => onEdit(budget)}
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
             aria-label="Edytuj budżet"
           >
             <Pencil size={18} />
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={() => onDelete(budget.id)}
             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
             aria-label="Usuń budżet"
           >
             <Trash2 size={18} />
-          </button>
+          </motion.button>
         </div>
       </div>
 

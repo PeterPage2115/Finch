@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { BudgetPeriod, BudgetWithProgress, CreateBudgetRequest } from '@/types';
 import { Category } from '@/lib/api/categoriesClient';
+import { motion } from 'framer-motion';
 
 interface BudgetFormProps {
   budget?: BudgetWithProgress;
@@ -224,21 +225,25 @@ export default function BudgetForm({
 
       {/* Actions */}
       <div className="flex gap-3 pt-4">
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           type="submit"
           disabled={isSubmitting}
           className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isSubmitting ? 'Zapisywanie...' : isEditMode ? 'Zapisz zmiany' : 'Utwórz budżet'}
-        </button>
-        <button
+        </motion.button>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           type="button"
           onClick={onCancel}
           disabled={isSubmitting}
           className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Anuluj
-        </button>
+        </motion.button>
       </div>
     </form>
   );

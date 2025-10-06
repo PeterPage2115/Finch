@@ -10,7 +10,7 @@ const nextConfig: NextConfig = {
   
   // Disable ESLint during build (handled by CI/CD)
   eslint: {
-    ignoreDuringBuilds: false,
+    ignoreDuringBuilds: true,
   },
 };
 

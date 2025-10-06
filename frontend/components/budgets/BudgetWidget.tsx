@@ -55,7 +55,7 @@ function BudgetWidgetItem({ budget }: { budget: BudgetWithProgress }) {
   const { category, progress } = budget;
 
   // Get icon
-  const IconComponent = getCategoryIcon(category?.icon, category?.name);
+  const IconComponent = getCategoryIcon(category?.icon || 'HelpCircle');
   const iconColorClass = getCategoryIconColor(category?.type || 'EXPENSE');
 
   // Format amounts

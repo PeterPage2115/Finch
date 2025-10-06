@@ -8,6 +8,7 @@
 
 import { useState, useEffect } from 'react';
 import { Transaction, TransactionType, CreateTransactionDto } from '@/types/transaction';
+import { motion } from 'framer-motion';
 
 interface TransactionFormProps {
   transaction?: Transaction | null; // Jeśli podane, to tryb edycji
@@ -208,21 +209,25 @@ export default function TransactionForm({
 
         {/* Buttons */}
         <div className="flex justify-end space-x-3 pt-4">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             type="button"
             onClick={onCancel}
             className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition"
             disabled={isLoading}
           >
             Anuluj
-          </button>
-          <button
+          </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             type="submit"
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 dark:bg-indigo-500 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
             {isLoading ? 'Zapisywanie...' : transaction ? 'Zaktualizuj' : 'Dodaj'}
-          </button>
+          </motion.button>
         </div>
       </form>
     </div>
