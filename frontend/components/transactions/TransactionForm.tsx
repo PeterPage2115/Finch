@@ -162,7 +162,7 @@ export default function TransactionForm({
             <option value="">Wybierz kategorię</option>
             {filteredCategories.map((cat) => (
               <option key={cat.id} value={cat.id} className="bg-white dark:bg-gray-700">
-                {cat.icon} {cat.name}
+                {cat.name}
               </option>
             ))}
           </select>

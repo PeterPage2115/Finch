@@ -117,6 +117,41 @@ export default function DashboardPage() {
     fetchData();
   }, [isAuthenticated, token, setTransactions, setLoading, setError]);
 
+  // Refetch budgets (called after transaction create/update/delete)
+  const refetchBudgets = async () => {
+    if (!token) return;
+    
+    try {
+      setBudgetsLoading(true);
+      const budgetsResponse = await fetchBudgets(token).catch(() => []);
+      
+      if (budgetsResponse.length > 0) {
+        const budgetsWithProgress = await Promise.all(
+          budgetsResponse.slice(0, 5).map(async (budget) => {
+            try {
+              return await fetchBudgetById(token, budget.id);
+            } catch {
+              return null;
+            }
+          })
+        );
+        
+        const validBudgets = budgetsWithProgress.filter((b): b is BudgetWithProgress => b !== null);
+        const topBudgets = validBudgets
+          .sort((a, b) => b.progress.percentage - a.progress.percentage)
+          .slice(0, 3);
+        
+        setBudgets(topBudgets);
+      } else {
+        setBudgets([]);
+      }
+    } catch (err) {
+      console.error('Error refetching budgets:', err);
+    } finally {
+      setBudgetsLoading(false);
+    }
+  };
+
   const handleLogout = () => {
     logout();
     router.push('/login');
@@ -153,6 +188,9 @@ export default function DashboardPage() {
 
       setShowForm(false);
       setEditingTransaction(null);
+      
+      // Refetch budgets to update widget with new transaction
+      await refetchBudgets();
     } catch (err) {
       console.error('Error submitting transaction:', err);
       alert('Nie udało się zapisać transakcji');
@@ -168,6 +206,9 @@ export default function DashboardPage() {
     try {
       await transactionsApi.delete(token, id);
       removeTransaction(id);
+      
+      // Refetch budgets to update widget after transaction deletion
+      await refetchBudgets();
     } catch (err) {
       console.error('Error deleting transaction:', err);
       alert('Nie udało się usunąć transakcji');
