@@ -1,4 +1,23 @@
-# TODO - Aplikacja do Śledzenia Finansów
+# TODO **Ostatnie zmiany (6 października 2025 - Sesja 5):**
+- ✅ **FAZA 6.1 + 6.2 UKOŃCZONA!** 🎉
+- ✅ Faza 6.1: Backend Budgets CRUD (100%)
+  - BudgetsModule, Service, Controller
+  - calculateProgress() z alertami (80%, 100%)
+  - Auto-obliczanie endDate dla okresów
+  - Business rule: unique userId+categoryId+startDate
+  - ⏳ Testy pending (Faza 7)
+- ✅ Faza 6.2: Frontend Budgets UI (100%)
+  - Strona /budgets z BudgetForm + BudgetList
+  - Progress bars (green/yellow/red)
+  - Delete confirmation modal
+  - API Routes proxy
+  - Link "Budżety" w navbar
+  - **Dashboard widget ✅** (top 3 budżety, compact design)
+- 🐛 Bug fixes: Dark mode, emoji removal, unified navbar
+- 💡 **Decyzja architektoniczna**: Budgets = kontrola wydatków (reactive), Savings Goals = cele oszczędnościowe (proactive) → osobne moduły!
+- 📈 **Postęp**: Dashboard widget done, pozostają Raporty (Faza 6.3) + Testy (Faza 7)
+
+**Następny krok:** Faza 6.3 - Podstawowe Raporty 📊 lub Faza 7 - Testyzenia Finansów
 
 **Data rozpoczęcia:** 1 października 2025  
 **Status:** Faza 6 w trakcie 🚀 - Budgets Backend+Frontend ✅ (Raporty + Dashboard widget pending)
@@ -207,7 +226,7 @@
 - [x] Delete confirmation modal
 - [x] Link "Budżety" w dashboard navbar
 - [x] API Routes proxy (/api/budgets, /api/budgets/[id])
-- [ ] Dashboard widget "Budżety" z overview (TODO: przesunięte do 6.3)
+- [x] Dashboard widget "Budżety" z overview (top 3 by percentage)
 
 **Wnioski z Fazy 6 (Backend + Frontend):**
 - ✅ Budżety = kontrola wydatków z kategorii (reactive tracking)
@@ -215,11 +234,12 @@
 - ✅ Alerty przy 80% i 100% limitu działają
 - ✅ Dark mode + lucide-react icons throughout
 - ✅ Business logic: unique constraint zapobiega duplikatom
+- ✅ Dashboard widget: top 3 budżety, compact progress bars, graceful error handling
 - ⚠️ Prisma Decimal → Number() conversion (jak w Transactions)
-- 📊 Brakuje: Dashboard widget, testy jednostkowe/integracyjne
+- 📊 Brakuje: testy jednostkowe/integracyjne
 
 ### 6.3 Dashboard Widget + Podstawowe Raporty
-- [ ] Dashboard widget "Budżety" (top 3 budżety z progress)
+- [x] Dashboard widget "Budżety" (top 3 budżety z progress) ✅ UKOŃCZONE
 - [ ] Endpoint: `GET /reports/summary` (podsumowanie: suma przychodów/wydatków za okres)
 - [ ] Endpoint: `GET /reports/by-category` (wydatki/przychody po kategorii)
 - [ ] Strona raportów (`/reports`) z wykresami (Chart.js/Recharts)
