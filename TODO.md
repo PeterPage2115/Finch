@@ -175,27 +175,33 @@
 
 ## 📈 Faza 6: Budżety i Raporty (MVP) 🚀 W TRAKCIE
 
-### 6.1 Backend - API Budżetów
-- [ ] Moduł `BudgetsModule` w NestJS
-- [ ] DTO (CreateBudgetDto, UpdateBudgetDto)
-- [ ] Endpoint: `POST /budgets` (tworzenie budżetu)
-- [ ] Endpoint: `GET /budgets` (lista budżetów z filtrowaniem)
-- [ ] Endpoint: `GET /budgets/:id` (szczegóły + postęp)
-- [ ] Endpoint: `PATCH /budgets/:id` (edycja)
-- [ ] Endpoint: `DELETE /budgets/:id` (usunięcie)
-- [ ] Logika obliczania postępu budżetu (wydane/limit)
-- [ ] Walidacja: amount > 0, period (MONTHLY/WEEKLY/YEARLY)
+### 6.1 Backend - API Budżetów ✅ UKOŃCZONA
+- [x] Moduł `BudgetsModule` w NestJS
+- [x] DTO (CreateBudgetDto, UpdateBudgetDto, QueryBudgetDto)
+- [x] Endpoint: `POST /budgets` (tworzenie budżetu)
+- [x] Endpoint: `GET /budgets` (lista budżetów z filtrowaniem)
+- [x] Endpoint: `GET /budgets/:id` (szczegóły + postęp)
+- [x] Endpoint: `GET /budgets/:id/progress` (tylko progress)
+- [x] Endpoint: `PATCH /budgets/:id` (edycja)
+- [x] Endpoint: `DELETE /budgets/:id` (usunięcie)
+- [x] Logika obliczania postępu budżetu (spent/limit/percentage/alerts)
+- [x] Auto-obliczanie endDate na podstawie period
+- [x] Walidacja: amount > 0, period (DAILY/WEEKLY/MONTHLY/YEARLY/CUSTOM)
+- [x] Business rule: unique constraint (userId + categoryId + startDate)
 - [ ] Testy jednostkowe
 - [ ] Testy integracyjne
 
-### 6.2 Frontend - UI Budżetów
-- [ ] Strona budżetów (`/budgets`)
-- [ ] Formularz tworzenia budżetu (kategoria, kwota, okres)
-- [ ] Lista budżetów z progress barami
-- [ ] Progress colors: green (<80%), yellow (80-99%), red (≥100%)
-- [ ] Alerty przy przekroczeniu budżetu (80%, 100%)
-- [ ] Dashboard widget "Budżety" z overview
-- [ ] Loading states i error handling
+### 6.2 Frontend - UI Budżetów ✅ UKOŃCZONA
+- [x] Strona budżetów (`/budgets`)
+- [x] Formularz tworzenia/edycji budżetu (kategoria, kwota, okres, daty)
+- [x] Lista budżetów z progress barami (BudgetList + BudgetCard)
+- [x] Progress colors: green (<80%), yellow (80-99%), red (≥100%)
+- [x] Alerty przy przekroczeniu budżetu (80%, 100%)
+- [x] Loading states i error handling
+- [x] Delete confirmation modal
+- [x] Link "Budżety" w dashboard navbar
+- [x] API Routes proxy (/api/budgets, /api/budgets/[id])
+- [ ] Dashboard widget "Budżety" z overview (TODO: Faza 6.3)
 
 ### 6.3 Podstawowe Raporty
 - [ ] Endpoint: `GET /reports/summary` (podsumowanie: suma przychodów/wydatków za okres)
