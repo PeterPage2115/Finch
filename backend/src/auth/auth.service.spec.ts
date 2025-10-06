@@ -46,6 +46,9 @@ describe('AuthService', () => {
               findUnique: jest.fn(),
               create: jest.fn(),
             },
+            category: {
+              createMany: jest.fn(),
+            },
           },
         },
         {
@@ -78,6 +81,7 @@ describe('AuthService', () => {
         email: mockRegisterDto.email,
         name: mockRegisterDto.name,
       });
+      jest.spyOn(prismaService.category, 'createMany').mockResolvedValue({ count: 7 });
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('mock-jwt-token');
 
@@ -94,6 +98,7 @@ describe('AuthService', () => {
       });
       expect(bcrypt.hash).toHaveBeenCalledWith(mockRegisterDto.password, 10);
       expect(prismaService.user.create).toHaveBeenCalled();
+      expect(prismaService.category.createMany).toHaveBeenCalled();
     });
 
     it('should throw ConflictException if user already exists', async () => {
@@ -115,6 +120,7 @@ describe('AuthService', () => {
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
       jest.spyOn(prismaService.user, 'create').mockResolvedValue(mockUser);
+      jest.spyOn(prismaService.category, 'createMany').mockResolvedValue({ count: 7 });
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('mock-jwt-token');
 
       // Act
@@ -239,6 +245,7 @@ describe('AuthService', () => {
         .mockResolvedValue('mock-jwt-token');
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
       jest.spyOn(prismaService.user, 'create').mockResolvedValue(mockUser);
+      jest.spyOn(prismaService.category, 'createMany').mockResolvedValue({ count: 7 });
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
 
       // Act
