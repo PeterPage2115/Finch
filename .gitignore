@@ -27,7 +27,6 @@ out/
 *.swo
 *~
 .DS_Store
-.github/
 .playwright/
 
 # Docker volumes
@@ -45,9 +44,6 @@ lerna-debug.log*
 
 # TypeScript
 *.tsbuildinfo
-
-# Prisma
-prisma/migrations/
 
 # OS
 Thumbs.db
