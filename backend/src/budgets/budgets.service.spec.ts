@@ -4,6 +4,7 @@ import { PrismaService } from '../prisma.service';
 import { NotFoundException, BadRequestException, ConflictException } from '@nestjs/common';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
+import { Decimal } from '@prisma/client/runtime/library';
 
 // Disable strict type checking for Prisma mocks (Decimal types)
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -30,7 +31,7 @@ describe('BudgetsService', () => {
 
   const mockBudget = {
     id: mockBudgetId,
-    amount: 1000 as any, // Prisma uses Decimal, use 'as any' in tests
+    amount: new Decimal(1000),
     categoryId: mockCategoryId,
     userId: mockUserId,
     period: 'MONTHLY' as const,
@@ -207,13 +208,13 @@ describe('BudgetsService', () => {
 
       jest.spyOn(prismaService.budget, 'findFirst').mockResolvedValue(mockBudgetWithCategory as any);
       // calculateProgress internally uses findUnique, so mock it too
-      jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget as any);
+      jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: 500 },
+        _sum: { amount: new Decimal(500) },
         _count: { amount: 5 },
-        _avg: { amount: 100 },
-        _min: { amount: 50 },
-        _max: { amount: 150 },
+        _avg: { amount: new Decimal(100) },
+        _min: { amount: new Decimal(50) },
+        _max: { amount: new Decimal(150) },
       } as any);
 
       const result = await service.findOne(mockBudgetId, mockUserId);
@@ -258,11 +259,11 @@ describe('BudgetsService', () => {
     it('should calculate progress at 50% (no alerts)', async () => {
       jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: 500 },
+        _sum: { amount: new Decimal(500) },
         _count: { amount: 5 },
-        _avg: { amount: 100 },
-        _min: { amount: 50 },
-        _max: { amount: 150 },
+        _avg: { amount: new Decimal(100) },
+        _min: { amount: new Decimal(50) },
+        _max: { amount: new Decimal(150) },
       });
 
       const result = await service.calculateProgress(mockBudgetId);
@@ -276,11 +277,11 @@ describe('BudgetsService', () => {
     it('should show 80% alert when spent is 80-99%', async () => {
       jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: 850 }, // 85% of 1000
+        _sum: { amount: new Decimal(850) }, // 85% of 1000
         _count: { amount: 5 },
-        _avg: { amount: 170 },
-        _min: { amount: 100 },
-        _max: { amount: 200 },
+        _avg: { amount: new Decimal(170) },
+        _min: { amount: new Decimal(100) },
+        _max: { amount: new Decimal(200) },
       });
 
       const result = await service.calculateProgress(mockBudgetId);
@@ -293,11 +294,11 @@ describe('BudgetsService', () => {
     it('should show both 80% and 100% alerts at 100%', async () => {
       jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: 1000 }, // Exactly 100%
+        _sum: { amount: new Decimal(1000) }, // Exactly 100%
         _count: { amount: 10 },
-        _avg: { amount: 100 },
-        _min: { amount: 50 },
-        _max: { amount: 150 },
+        _avg: { amount: new Decimal(100) },
+        _min: { amount: new Decimal(50) },
+        _max: { amount: new Decimal(150) },
       });
 
       const result = await service.calculateProgress(mockBudgetId);
@@ -309,11 +310,11 @@ describe('BudgetsService', () => {
     it('should handle budget exceeded (>100%)', async () => {
       jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: 1200 }, // 120%
+        _sum: { amount: new Decimal(1200) }, // 120%
         _count: { amount: 12 },
-        _avg: { amount: 100 },
-        _min: { amount: 50 },
-        _max: { amount: 200 },
+        _avg: { amount: new Decimal(100) },
+        _min: { amount: new Decimal(50) },
+        _max: { amount: new Decimal(200) },
       });
 
       const result = await service.calculateProgress(mockBudgetId);
@@ -326,11 +327,11 @@ describe('BudgetsService', () => {
     it('should only count EXPENSE transactions (not INCOME)', async () => {
       jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: 300 },
+        _sum: { amount: new Decimal(300) },
         _count: { amount: 3 },
-        _avg: { amount: 100 },
-        _min: { amount: 50 },
-        _max: { amount: 150 },
+        _avg: { amount: new Decimal(100) },
+        _min: { amount: new Decimal(50) },
+        _max: { amount: new Decimal(150) },
       });
 
       await service.calculateProgress(mockBudgetId);
@@ -345,11 +346,11 @@ describe('BudgetsService', () => {
     it('should only count transactions within budget period', async () => {
       jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: 400 },
+        _sum: { amount: new Decimal(400) },
         _count: { amount: 4 },
-        _avg: { amount: 100 },
-        _min: { amount: 50 },
-        _max: { amount: 150 },
+        _avg: { amount: new Decimal(100) },
+        _min: { amount: new Decimal(50) },
+        _max: { amount: new Decimal(150) },
       });
 
       await service.calculateProgress(mockBudgetId);
@@ -369,11 +370,11 @@ describe('BudgetsService', () => {
     it('should only count transactions for category', async () => {
       jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: 600 },
+        _sum: { amount: new Decimal(600) },
         _count: { amount: 6 },
-        _avg: { amount: 100 },
-        _min: { amount: 50 },
-        _max: { amount: 150 },
+        _avg: { amount: new Decimal(100) },
+        _min: { amount: new Decimal(50) },
+        _max: { amount: new Decimal(150) },
       });
 
       await service.calculateProgress(mockBudgetId);
@@ -400,7 +401,7 @@ describe('BudgetsService', () => {
     };
 
     it('should successfully update budget', async () => {
-      const updatedBudget = { ...mockBudget, amount: 1500 };
+      const updatedBudget = { ...mockBudget, amount: new Decimal(1500) };
       jest.spyOn(prismaService.budget, 'findFirst').mockResolvedValue(mockBudget);
       jest.spyOn(prismaService.budget, 'update').mockResolvedValue(updatedBudget);
 
