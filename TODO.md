@@ -239,13 +239,18 @@
 - ⚠️ Prisma Decimal → Number() conversion (jak w Transactions)
 - 📊 Pozostało: testy integracyjne (e2e)
 
-### 6.3 Dashboard Widget + Podstawowe Raporty
-- [x] Dashboard widget "Budżety" (top 3 budżety z progress) ✅ UKOŃCZONE
-- [ ] Endpoint: `GET /reports/summary` (podsumowanie: suma przychodów/wydatków za okres)
-- [ ] Endpoint: `GET /reports/by-category` (wydatki/przychody po kategorii)
-- [ ] Strona raportów (`/reports`) z wykresami (Chart.js/Recharts)
-- [ ] Wybór okresu dla raportów (miesiąc, kwartał, rok)
-- [ ] Export danych do CSV (opcjonalnie)
+### 6.3 Dashboard Widget + Podstawowe Raporty ✅ UKOŃCZONA
+- [x] Dashboard widget "Budżety" (top 3 budżety z progress) ✅
+- [x] Endpoint: `GET /reports/summary` (podsumowanie: suma przychodów/wydatków za okres)
+- [x] Endpoint: `GET /reports/by-category` (wydatki/przychody po kategorii)
+- [x] Strona raportów (`/reports`) z wykresami (Recharts PieChart)
+- [x] Wybór okresu dla raportów (miesiąc, kwartał, rok, własny zakres)
+- [x] DateRangePicker z presetami (bieżący miesiąc/kwartał/rok)
+- [x] SummaryCards (income/expense/balance z ikonami)
+- [x] CategoryPieChart (breakdown wydatków z percentagami)
+- [x] Link "Raporty" w nawigacji
+- [x] Dark mode support
+- [ ] Export danych do CSV (opcjonalnie - Faza 8)
 
 ---
 
