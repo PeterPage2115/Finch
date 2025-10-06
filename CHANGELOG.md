@@ -10,7 +10,60 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 - Wykresy wydatków - zaawansowana analityka
 - Export danych do CSV/PDF
 - Powiadomienia o przekroczeniu budżetu
-- Mobile - hamburger menu w nawigacji
+- Animations & micro-interactions (framer-motion)
+- Performance optimization (React.memo, useMemo, code splitting)
+- Accessibility improvements (ARIA, focus management)
+
+## [0.5.1] - 2025-10-06
+
+### Dodane
+- **Mobile Responsiveness (CZĘŚĆ 1/2)** 📱
+  * AppNavbar hamburger menu:
+    - Slide-in drawer z lewej strony (width 256px)
+    - Backdrop overlay (semi-transparent black)
+    - Close na ESC key (keyboard accessibility)
+    - Body scroll lock gdy menu otwarte
+    - Menu, X icons z lucide-react
+    - User info i logout w drawer footer
+    - Smooth transitions i hover states
+  * TransactionList mobile cards:
+    - Desktop: Table view (zachowana istniejąca funkcjonalność)
+    - Mobile (<768px): Card view z vertical layout
+    - Każda karta: Data, kwota, opis, kategoria z ikoną, typ, akcje
+    - Full-width action buttons (Edytuj/Usuń)
+    - Better touch targets (44px minimum height)
+  * Responsive grid layouts:
+    - Dashboard summary cards: grid-cols-1 md:grid-cols-3 (już było)
+    - Reports SummaryCards: grid-cols-1 md:grid-cols-3 (już było)
+    - Tailwind breakpoint: md (768px) jako punkt przełączenia
+
+### Zmienione
+- AppNavbar struktura:
+  * useState dla isMobileMenuOpen state
+  * useEffect hooks: body scroll lock + ESC key listener
+  * Hamburger button visible tylko <md breakpoint
+  * Desktop nav hidden <md, flex >=md (bez zmian)
+  * Logout button hidden <sm (przeniesiony do mobile drawer)
+- TransactionList rendering logic:
+  * Dual views: `.hidden.md:block` dla tabeli, `.md:hidden` dla kart
+  * DRY principle: Shared formatters (formatDate, formatAmount)
+  * Mobile cards optymalizacja: flex-1 buttons, pełna szerokość
+
+### Techniczne
+- Breakpoint strategy: Tailwind md (768px) jako główny separator mobile/desktop
+- Accessibility: aria-label na hamburger/close buttons, aria-hidden na backdrop
+- Touch targets: Minimum 44x44px (Apple HIG standard)
+- Z-index hierarchy: backdrop z-40, drawer z-50
+- CSS transitions: transform/opacity dla smooth animations
+- No JavaScript animations yet (pure CSS, framer-motion w następnej fazie)
+
+### Wnioski
+- ✅ Hamburger menu pattern intuicyjny i widely adopted
+- ✅ Dual view (table/cards) lepsze niż horizontal scroll na mobile
+- ✅ Body scroll lock prevents background scrolling (UX improvement)
+- ✅ ESC key support improves keyboard accessibility
+- 📝 Grid layouts były już responsive - Dashboard i Reports OK out of the box
+- 🔜 Next: Forms touch targets, DateRangePicker mobile, framer-motion animations
 
 ## [0.5.0] - 2025-10-06
 

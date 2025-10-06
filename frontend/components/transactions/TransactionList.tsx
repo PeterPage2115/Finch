@@ -82,8 +82,9 @@ export default function TransactionList({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden border border-gray-200 dark:border-gray-700">
-      <div className="overflow-x-auto">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
+      {/* Desktop Table View (hidden on mobile) */}
+      <div className="hidden md:block overflow-x-auto">
         <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
           <thead className="bg-gray-50 dark:bg-gray-900">
             <tr>
@@ -162,6 +163,76 @@ export default function TransactionList({
             ))}
           </tbody>
         </table>
+      </div>
+
+      {/* Mobile Card View (visible only on mobile) */}
+      <div className="md:hidden divide-y divide-gray-200 dark:divide-gray-700">
+        {transactions.map((transaction) => {
+          const IconComponent = transaction.category 
+            ? getCategoryIcon(transaction.category.icon || 'HelpCircle')
+            : null;
+          
+          return (
+            <div key={transaction.id} className="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+              {/* Header: Date & Amount */}
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  {formatDate(transaction.date)}
+                </span>
+                <div className="text-right">
+                  {formatAmount(transaction.amount, transaction.type)}
+                </div>
+              </div>
+
+              {/* Description */}
+              {transaction.description && (
+                <p className="text-sm text-gray-900 dark:text-gray-100 mb-2">
+                  {transaction.description}
+                </p>
+              )}
+
+              {/* Category & Type */}
+              <div className="flex items-center gap-3 mb-3">
+                {transaction.category && IconComponent && (
+                  <div className="flex items-center gap-2">
+                    <IconComponent 
+                      style={{ color: transaction.category.color || '#6b7280' }} 
+                      size={18} 
+                    />
+                    <span className="text-sm text-gray-700 dark:text-gray-300">
+                      {transaction.category.name}
+                    </span>
+                  </div>
+                )}
+                <span
+                  className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                    transaction.type === TransactionType.INCOME
+                      ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                      : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                  }`}
+                >
+                  {transaction.type === TransactionType.INCOME ? 'Przychód' : 'Wydatek'}
+                </span>
+              </div>
+
+              {/* Actions */}
+              <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-gray-700">
+                <button
+                  onClick={() => onEdit(transaction)}
+                  className="flex-1 px-3 py-2 text-sm font-medium text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 hover:bg-indigo-100 dark:hover:bg-indigo-900/50 rounded-lg transition"
+                >
+                  Edytuj
+                </button>
+                <button
+                  onClick={() => onDelete(transaction.id)}
+                  className="flex-1 px-3 py-2 text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 hover:bg-red-100 dark:hover:bg-red-900/50 rounded-lg transition"
+                >
+                  Usuń
+                </button>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
