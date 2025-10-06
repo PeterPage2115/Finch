@@ -14,7 +14,8 @@ import {
 } from '@/lib/api/budgetsClient';
 import BudgetForm from '@/components/budgets/BudgetForm';
 import BudgetList from '@/components/budgets/BudgetList';
-import { Plus, ArrowLeft } from 'lucide-react';
+import AppNavbar from '@/components/layout/AppNavbar';
+import { Plus } from 'lucide-react';
 
 /**
  * Budgets Page - manage user budgets
@@ -157,19 +158,13 @@ export default function BudgetsPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
+      {/* Navigation */}
+      <AppNavbar />
+
+      <div className="max-w-7xl mx-auto mt-8">
+        {/* Page Header */}
         <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => router.push('/dashboard')}
-              className="p-2 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-colors"
-              aria-label="Powrót do dashboardu"
-            >
-              <ArrowLeft size={24} />
-            </button>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Budżety</h1>
-          </div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Budżety</h1>
 
           <button
             onClick={() => {

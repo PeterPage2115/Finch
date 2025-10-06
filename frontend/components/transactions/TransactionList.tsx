@@ -7,6 +7,7 @@
 'use client';
 
 import { Transaction, TransactionType } from '@/types/transaction';
+import { getCategoryIcon, getCategoryIconColor } from '@/lib/utils/categoryIcons';
 
 interface TransactionListProps {
   transactions: Transaction[];
@@ -116,12 +117,16 @@ export default function TransactionList({
                   {transaction.description || '-'}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
-                  {transaction.category && (
-                    <span className="inline-flex items-center">
-                      <span className="mr-1">{transaction.category.icon}</span>
-                      <span className="text-gray-900 dark:text-gray-100">{transaction.category.name}</span>
-                    </span>
-                  )}
+                  {transaction.category && (() => {
+                    const IconComponent = getCategoryIcon(transaction.category.icon, transaction.category.name);
+                    const iconColorClass = getCategoryIconColor(transaction.category.type);
+                    return (
+                      <span className="inline-flex items-center gap-2">
+                        <IconComponent className={`${iconColorClass} dark:opacity-90`} size={18} />
+                        <span className="text-gray-900 dark:text-gray-100">{transaction.category.name}</span>
+                      </span>
+                    );
+                  })()}
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <span

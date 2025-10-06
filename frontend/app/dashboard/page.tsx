@@ -4,17 +4,16 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useTransactionsStore } from '@/lib/stores/transactionsStore';
-import { useTheme } from '@/lib/providers/ThemeProvider';
 import { transactionsApi } from '@/lib/api/transactionsClient';
 import { categoriesApi, type Category } from '@/lib/api/categoriesClient';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionForm from '@/components/transactions/TransactionForm';
+import AppNavbar from '@/components/layout/AppNavbar';
 import type { Transaction, CreateTransactionDto, TransactionType } from '@/types/transaction';
 
 export default function DashboardPage() {
   const router = useRouter();
   const { user, logout, isAuthenticated, token, _hasHydrated } = useAuthStore();
-  const { theme, toggleTheme } = useTheme();
   const {
     transactions,
     meta,
@@ -160,63 +159,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black transition-colors">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
       {/* Navigation Bar */}
-      <nav className="bg-white dark:bg-gray-900 shadow-sm border-b border-gray-200 dark:border-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            {/* Logo & Navigation */}
-            <div className="flex items-center space-x-8">
-              <h1 className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
-                💰 Tracker Kasy
-              </h1>
-              <div className="hidden md:flex items-center space-x-4">
-                <a
-                  href="/dashboard"
-                  className="text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition"
-                >
-                  Dashboard
-                </a>
-                <a
-                  href="/categories"
-                  className="text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition"
-                >
-                  Kategorie
-                </a>
-                <a
-                  href="/budgets"
-                  className="text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition"
-                >
-                  Budżety
-                </a>
-              </div>
-            </div>
-
-            {/* User Menu */}
-            <div className="flex items-center space-x-4">
-              {/* Dark Mode Toggle */}
-              <button
-                onClick={toggleTheme}
-                className="p-2 rounded-lg bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
-                title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
-                aria-label="Toggle dark mode"
-              >
-                {theme === 'dark' ? '☀️' : '🌙'}
-              </button>
-              <div className="text-sm">
-                <p className="text-gray-700 dark:text-gray-200 font-medium">{user?.name || 'Użytkownik'}</p>
-                <p className="text-gray-500 dark:text-gray-400 text-xs">{user?.email}</p>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition"
-              >
-                Wyloguj
-              </button>
-            </div>
-          </div>
-        </div>
-      </nav>
+      <AppNavbar />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

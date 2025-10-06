@@ -12,7 +12,8 @@ import { useAuthStore } from '@/lib/stores/authStore';
 import { Category, categoriesApi } from '@/lib/api/categoriesClient';
 import CategoryForm, { CategoryFormData } from '@/components/categories/CategoryForm';
 import CategoryList from '@/components/categories/CategoryList';
-import { Plus, ArrowLeft } from 'lucide-react';
+import AppNavbar from '@/components/layout/AppNavbar';
+import { Plus } from 'lucide-react';
 
 export default function CategoriesPage() {
   const router = useRouter();
@@ -109,32 +110,28 @@ export default function CategoriesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-black">
-      {/* Header */}
-      <div className="bg-white dark:bg-gray-900 shadow">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Navigation */}
+      <AppNavbar />
+
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
+        <div className="mb-6">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => router.push('/dashboard')}
-                className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-              >
-                <ArrowLeft className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              </button>
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                  Kategorie
-                </h1>
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                  Zarządzaj swoimi kategoriami finansowymi
-                </p>
-              </div>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Kategorie
+              </h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                Zarządzaj swoimi kategoriami finansowymi
+              </p>
             </div>
             
             {!showForm && (
               <button
                 onClick={handleAddNew}
-                className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+                className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Dodaj kategorię
@@ -142,10 +139,6 @@ export default function CategoriesPage() {
             )}
           </div>
         </div>
-      </div>
-
-      {/* Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Error Message */}
         {error && (
           <div className="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">

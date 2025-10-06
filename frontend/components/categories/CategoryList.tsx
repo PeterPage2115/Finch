@@ -9,6 +9,7 @@
 import { Category } from '@/lib/api/categoriesClient';
 import { TransactionType } from '@/types/transaction';
 import { Pencil, Trash2 } from 'lucide-react';
+import { getCategoryIcon, getCategoryIconColor } from '@/lib/utils/categoryIcons';
 
 interface CategoryListProps {
   categories: Category[];
@@ -114,12 +115,17 @@ interface CategoryCardProps {
 }
 
 function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
+  const IconComponent = getCategoryIcon(category.icon, category.name);
+  const iconColorClass = getCategoryIconColor(category.type);
+
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3 flex-1">
           {/* Ikona */}
-          <div className="text-3xl">{category.icon || '📦'}</div>
+          <div className="flex-shrink-0">
+            <IconComponent className={`${iconColorClass} dark:opacity-90`} size={32} />
+          </div>
 
           {/* Nazwa i kolor */}
           <div className="flex-1">
