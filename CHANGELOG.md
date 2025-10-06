@@ -11,7 +11,7 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 - Export danych do CSV/PDF
 - Powiadomienia o przekroczeniu budżetu
 - Focus trap w drawer - alternatywne rozwiązanie (v0.6.1)
-- aria-live regions dla toastów/messages
+- Comprehensive screen reader testing (v0.6.0 Phase 3)
 
 ## [0.6.0] - 2025-10-06 (In Progress)
 
@@ -23,6 +23,20 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
   * Backdrop overlay with click-to-close functionality
   * ESC key to close drawer
   * Body scroll lock when drawer open
+
+- **aria-live Regions for Screen Readers** ♿ (WCAG 2.1 AA)
+  * Notification store with Zustand (auto-remove after 3 seconds)
+  * AriaLiveRegion component (role="status", aria-live="polite", aria-atomic="true")
+  * sr-only class for visual hiding (accessible to screen readers)
+  * Icon prefixes: ✓ success, ✗ error, ℹ info
+  * **Dashboard integration:** 5 notifications (transaction create/update/delete + errors)
+  * **Categories integration:** 5 notifications (category create/update/delete + errors)
+  * Replaced all native alert() calls with accessible addNotification()
+  * Screen reader users now receive audible feedback for all CRUD operations
+
+### Zmienione (Changed)
+- **Dashboard page:** Replaced alert() with notification system, added success messages
+- **Categories page:** Replaced alert() with notification system, added success messages
   
 ### Znane problemy (Known Issues)
 - **Focus Trap Removed** ⚠️
