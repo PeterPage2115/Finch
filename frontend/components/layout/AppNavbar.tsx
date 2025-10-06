@@ -71,6 +71,16 @@ export default function AppNavbar() {
               >
                 Budżety
               </button>
+              <button
+                onClick={() => router.push('/reports')}
+                className={`font-medium transition ${
+                  isActive('/reports')
+                    ? 'text-indigo-600 dark:text-indigo-400'
+                    : 'text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400'
+                }`}
+              >
+                Raporty
+              </button>
             </div>
           </div>
 
