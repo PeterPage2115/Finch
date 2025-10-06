@@ -6,10 +6,13 @@ import { useAuthStore } from '@/lib/stores/authStore';
 import { useTransactionsStore } from '@/lib/stores/transactionsStore';
 import { transactionsApi } from '@/lib/api/transactionsClient';
 import { categoriesApi, type Category } from '@/lib/api/categoriesClient';
+import { fetchBudgets, fetchBudgetById } from '@/lib/api/budgetsClient';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionForm from '@/components/transactions/TransactionForm';
 import AppNavbar from '@/components/layout/AppNavbar';
+import BudgetWidget from '@/components/budgets/BudgetWidget';
 import type { Transaction, CreateTransactionDto, TransactionType } from '@/types/transaction';
+import type { BudgetWithProgress } from '@/types';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -32,6 +35,10 @@ export default function DashboardPage() {
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  
+  // Budget widget state
+  const [budgets, setBudgets] = useState<BudgetWithProgress[]>([]);
+  const [budgetsLoading, setBudgetsLoading] = useState(true);
 
   useEffect(() => {
     // Wait for hydration before checking auth
@@ -52,16 +59,47 @@ export default function DashboardPage() {
     const fetchData = async () => {
       try {
         setLoading(true);
+        setBudgetsLoading(true);
         setError(null);
         
-        // Fetch transactions and categories in parallel
-        const [transactionsResponse, categoriesResponse] = await Promise.all([
+        // Fetch transactions, categories, and budgets in parallel
+        const [transactionsResponse, categoriesResponse, budgetsResponse] = await Promise.all([
           transactionsApi.getAll(token, { page: 1, limit: 50 }),
           categoriesApi.getAll(token),
+          fetchBudgets(token).catch(() => []), // Graceful fallback for budgets
         ]);
         
         setTransactions(transactionsResponse);
         setCategories(categoriesResponse);
+        
+        // Fetch progress for top budgets (limit to 5 to reduce API calls)
+        if (budgetsResponse.length > 0) {
+          try {
+            const budgetsWithProgress = await Promise.all(
+              budgetsResponse.slice(0, 5).map(async (budget) => {
+                try {
+                  return await fetchBudgetById(token, budget.id);
+                } catch {
+                  // Fallback for individual budget fetch failure
+                  return null;
+                }
+              })
+            );
+            
+            // Filter out nulls and sort by percentage DESC, take top 3
+            const validBudgets = budgetsWithProgress.filter((b): b is BudgetWithProgress => b !== null);
+            const topBudgets = validBudgets
+              .sort((a, b) => b.progress.percentage - a.progress.percentage)
+              .slice(0, 3);
+            
+            setBudgets(topBudgets);
+          } catch (err) {
+            console.error('Error fetching budget progress:', err);
+            setBudgets([]);
+          }
+        } else {
+          setBudgets([]);
+        }
       } catch (err: any) {
         console.error('Error fetching data:', err);
         const errorMessage = err?.message || 'Nie udało się pobrać danych';
@@ -69,8 +107,10 @@ export default function DashboardPage() {
         // Set empty data to prevent undefined errors
         setTransactions({ data: [], meta: { total: 0, page: 1, limit: 50, totalPages: 0 } });
         setCategories([]);
+        setBudgets([]);
       } finally {
         setLoading(false);
+        setBudgetsLoading(false);
       }
     };
 
@@ -256,6 +296,11 @@ export default function DashboardPage() {
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Ten miesiąc</p>
           </div>
+        </div>
+
+        {/* Budget Widget */}
+        <div className="mb-6">
+          <BudgetWidget budgets={budgets} isLoading={budgetsLoading} />
         </div>
 
         {/* Error message */}
