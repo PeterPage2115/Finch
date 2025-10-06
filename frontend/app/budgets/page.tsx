@@ -16,6 +16,7 @@ import BudgetForm from '@/components/budgets/BudgetForm';
 import BudgetList from '@/components/budgets/BudgetList';
 import AppNavbar from '@/components/layout/AppNavbar';
 import { Plus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 /**
  * Budgets Page - manage user budgets
@@ -160,7 +161,9 @@ export default function BudgetsPage() {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Budżety</h1>
 
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={() => {
               setEditingBudget(undefined);
               setShowForm(!showForm);
@@ -169,7 +172,7 @@ export default function BudgetsPage() {
           >
             <Plus size={20} />
             Dodaj budżet
-          </button>
+          </motion.button>
         </div>
 
         {/* Error Message */}

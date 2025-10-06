@@ -13,6 +13,7 @@ import AppNavbar from '@/components/layout/AppNavbar';
 import BudgetWidget from '@/components/budgets/BudgetWidget';
 import type { Transaction, CreateTransactionDto, TransactionType } from '@/types/transaction';
 import type { BudgetWithProgress } from '@/types';
+import { motion } from 'framer-motion';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -353,12 +354,14 @@ export default function DashboardPage() {
 
         {/* Add New Button */}
         <div className="mb-6">
-          <button
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             onClick={handleAddNew}
             className="px-6 py-3 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg shadow-md transition"
           >
             + Dodaj transakcję
-          </button>
+          </motion.button>
         </div>
 
         {/* Transaction Form */}

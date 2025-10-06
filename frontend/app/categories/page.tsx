@@ -14,6 +14,7 @@ import CategoryForm, { CategoryFormData } from '@/components/categories/Category
 import CategoryList from '@/components/categories/CategoryList';
 import AppNavbar from '@/components/layout/AppNavbar';
 import { Plus } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function CategoriesPage() {
   const router = useRouter();
@@ -129,13 +130,15 @@ export default function CategoriesPage() {
             </div>
             
             {!showForm && (
-              <button
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={handleAddNew}
                 className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition"
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Dodaj kategorię
-              </button>
+              </motion.button>
             )}
           </div>
         </div>
