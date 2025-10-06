@@ -1,6 +1,7 @@
 import { BudgetWithProgress } from '@/types';
 import ProgressBar from './ProgressBar';
 import { Pencil, Trash2 } from 'lucide-react';
+import { getCategoryIcon, getCategoryIconColor } from '@/lib/utils/categoryIcons';
 
 interface BudgetCardProps {
   budget: BudgetWithProgress;
@@ -27,16 +28,20 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
     CUSTOM: 'Niestandardowy',
   };
 
+  // Get icon component
+  const IconComponent = getCategoryIcon(category?.icon, category?.name);
+  const iconColorClass = getCategoryIconColor(category?.type || 'EXPENSE');
+
   return (
-    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
       {/* Header */}
       <div className="flex justify-between items-start mb-3">
         <div>
-          <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            {category?.icon && <span>{category.icon}</span>}
+          <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+            <IconComponent className={`${iconColorClass} dark:opacity-90`} size={20} />
             {category?.name || 'Kategoria'}
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
             {periodLabels[period]} • {start} - {end}
           </p>
         </div>
@@ -69,8 +74,8 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
       />
 
       {/* Remaining Amount */}
-      <div className="mt-3 text-sm text-gray-600">
-        Pozostało: <span className={`font-semibold ${progress.remaining >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+      <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
+        Pozostało: <span className={`font-semibold ${progress.remaining >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
           {progress.remaining.toFixed(2)} zł
         </span>
       </div>
