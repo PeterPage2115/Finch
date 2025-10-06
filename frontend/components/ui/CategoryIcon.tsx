@@ -1,4 +1,73 @@
-import * as LucideIcons from 'lucide-react';
+'use client';
+
+import {
+  HelpCircle,
+  // Income icons
+  DollarSign,
+  TrendingUp,
+  Wallet,
+  PiggyBank,
+  Coins,
+  // Expense icons
+  UtensilsCrossed,
+  ShoppingBag,
+  Home,
+  Zap,
+  Car,
+  Bus,
+  Train,
+  Plane,
+  Heart,
+  Pill,
+  Film,
+  Gamepad2,
+  Coffee,
+  ShoppingCart,
+  MoreHorizontal,
+  CreditCard,
+  // Generic icons
+  Tag,
+  Star,
+  Gift,
+  Book,
+  Briefcase,
+  type LucideIcon,
+} from 'lucide-react';
+
+// Icon mapping object - maps icon names to lucide-react components
+const iconMap: Record<string, LucideIcon> = {
+  // Income
+  DollarSign,
+  TrendingUp,
+  Wallet,
+  PiggyBank,
+  Coins,
+  // Expense
+  UtensilsCrossed,
+  ShoppingBag,
+  Home,
+  Zap,
+  Car,
+  Bus,
+  Train,
+  Plane,
+  Heart,
+  Pill,
+  Film,
+  Gamepad2,
+  Coffee,
+  ShoppingCart,
+  MoreHorizontal,
+  CreditCard,
+  // Generic
+  Tag,
+  Star,
+  Gift,
+  Book,
+  Briefcase,
+  // Fallback
+  HelpCircle,
+};
 
 interface CategoryIconProps {
   iconName: string;
@@ -21,18 +90,8 @@ export function CategoryIcon({
   size = 20, 
   className = '' 
 }: CategoryIconProps) {
-  // Get the icon component from lucide-react
-  const IconComponent = (LucideIcons as any)[iconName];
-  
-  // Fallback to HelpCircle if icon not found
-  if (!IconComponent || typeof IconComponent !== 'function') {
-    return (
-      <LucideIcons.HelpCircle 
-        size={size} 
-        className={`text-gray-400 ${className}`}
-      />
-    );
-  }
+  // Get the icon component from the mapping
+  const IconComponent = iconMap[iconName] || HelpCircle;
   
   return (
     <IconComponent 

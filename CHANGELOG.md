@@ -13,6 +13,29 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 - Focus trap w drawer (focus-trap-react)
 - aria-live regions dla toastów/messages
 
+## [0.5.7] - 2025-10-06
+
+### Naprawione
+- **CRITICAL BUG FIX:** Lucide-react icons rendering as "?" ❌→✅
+  * Problem: CategoryIcon.tsx używał dynamicznego importu `(LucideIcons as any)[iconName]`
+  * Przyczyna: Next.js 15 SSR nie wspiera dynamicznych importów z zewnętrznych pakietów
+  * Rozwiązanie: Stworzono explicit icon mapping object (30+ ikon)
+  * Icons included: DollarSign, TrendingUp, Wallet, UtensilsCrossed, Car, Heart, Gamepad2, Home, Zap, etc.
+  * Fallback: HelpCircle jeśli ikona nie znaleziona
+  * Impact: Wszystkie strony z kategoriami (Dashboard, Categories, Reports) - ikony renderują się poprawnie
+
+### Zmienione
+- CategoryIcon.tsx: Dodano `'use client'` directive
+- CategoryIcon.tsx: Explicit import ikon z lucide-react (zamiast `import * as`)
+- CategoryIcon.tsx: Icon mapping object `Record<string, LucideIcon>`
+- CategoryIcon.tsx: Uproszczona logika - `iconMap[iconName] || HelpCircle`
+
+### Techniczne
+- Usunięto dynamiczny import: `(LucideIcons as any)[iconName]` (nie działa w Next.js 15)
+- Type-safe mapping: `Record<string, LucideIcon>` zapewnia TypeScript checks
+- Performance: Explicit imports = better tree-shaking (mniejszy bundle size)
+- Maintainability: Łatwe dodawanie nowych ikon (dodaj do import + iconMap)
+
 ## [0.5.6] - 2025-10-06
 
 ### Dodane
