@@ -173,7 +173,7 @@
 
 ---
 
-## 📈 Faza 6: Budżety i Raporty (MVP) ⏭️ NASTĘPNA
+## 📈 Faza 6: Budżety i Raporty (MVP) 🚀 W TRAKCIE
 
 ### 6.1 Backend - API Budżetów
 - [ ] Moduł `BudgetsModule` w NestJS
