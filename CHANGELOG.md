@@ -13,6 +13,32 @@ Format oparty na [Keep a Changelog](https://keepachangelog.com/pl/1.0.0/).
 - Focus trap w drawer (focus-trap-react)
 - aria-live regions dla toastów/messages
 
+## [0.5.9] - 2025-10-06
+
+### Naprawione
+- **COMPLETE ICON SYSTEM FIX** - All components now use CategoryIcon ✅
+  * Problem: TransactionList, BudgetWidget, BudgetCard używały getCategoryIcon() z dynamic imports
+  * Dynamic imports `(LucideIcons as any)[iconName]` nie działały w Next.js 15 SSR
+  * Ikony pokazywały się jako '?' w Dashboard, Transactions, Budgets
+  
+  **Replaced getCategoryIcon with CategoryIcon component:**
+  - TransactionList.tsx - desktop table + mobile card view
+  - BudgetWidget.tsx - dashboard widget ikony
+  - BudgetCard.tsx - budget card header ikony
+  
+  **Updated iconMap.ts:**
+  - Added Receipt to EXPENSE_HOME_ICONS (używane w seed data: "Rachunki")
+  - Added MoreHorizontal to GENERIC_ICONS (używane w seed data: "Inne wydatki")
+  
+  **Removed deprecated:**
+  - lib/utils/categoryIcons.ts - file deleted (dynamic imports deprecated)
+
+### Techniczne
+- All icons now use centralized lib/iconMap.ts (single source of truth)
+- Tested: Dashboard ✅, Transactions ✅, Budgets ✅, Reports ✅, Categories ✅
+- Performance: Explicit imports = better tree-shaking, faster SSR
+- No more '?' icons anywhere in application
+
 ## [0.5.8] - 2025-10-06
 
 ### Dodane
