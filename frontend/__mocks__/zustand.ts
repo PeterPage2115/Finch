@@ -7,6 +7,7 @@
  * Pattern from: https://github.com/pmndrs/zustand/blob/main/docs/guides/testing.md
  */
 import { act } from '@testing-library/react';
+import { vi, afterEach } from 'vitest';
 import type * as ZustandExportedTypes from 'zustand';
 export * from 'zustand';
 
