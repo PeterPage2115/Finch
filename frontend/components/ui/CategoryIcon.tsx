@@ -12,7 +12,17 @@ interface CategoryIconProps {
 
 /**
  * Emoji to Lucide icon name mapping
- * Provides backward compatibility for categories stored with emoji icons
+ * 
+ * ⚠️ LEGACY SUPPORT ONLY - DO NOT USE FOR NEW CATEGORIES
+ * 
+ * This mapping provides backward compatibility for categories that were
+ * created with emoji icons before migration to Lucide names (pre-2025-10-08).
+ * 
+ * New categories MUST use Lucide icon names (e.g., 'Car', 'UtensilsCrossed').
+ * The backend validates and rejects emoji in CreateCategoryDto/UpdateCategoryDto.
+ * 
+ * This map will remain in place as a safety net but should not be extended.
+ * If you need to add a new icon, add it to frontend/lib/iconMap.ts instead.
  */
 const emojiToLucideMap: Record<string, string> = {
   // Food & Drinks

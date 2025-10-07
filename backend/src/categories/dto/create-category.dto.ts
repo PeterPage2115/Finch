@@ -1,11 +1,12 @@
 import {
   IsEnum,
   IsNotEmpty,
-  IsOptional,
   IsString,
   Length,
   Matches,
+  IsIn,
 } from 'class-validator';
+import { ALLOWED_LUCIDE_ICONS } from '../constants/allowed-icons';
 
 export enum CategoryType {
   INCOME = 'INCOME',
@@ -35,6 +36,13 @@ export class CreateCategoryDto {
 
   @IsNotEmpty({ message: 'Ikona jest wymagana' })
   @IsString({ message: 'Ikona musi być tekstem (nazwa ikony lucide-react)' })
-  @Length(2, 50, { message: 'Nazwa ikony musi mieć od 2 do 50 znaków' })
+  @Matches(/^[A-Z][a-zA-Z0-9]*$/, {
+    message:
+      'Ikona musi być nazwą ikony Lucide w formacie PascalCase (np. Car, UtensilsCrossed). Emoji nie są dozwolone.',
+  })
+  @IsIn([...ALLOWED_LUCIDE_ICONS], {
+    message:
+      'Ikona musi być jedną z dozwolonych ikon Lucide. Sprawdź dokumentację aby zobaczyć listę dostępnych ikon.',
+  })
   icon: string;
 }
