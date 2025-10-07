@@ -5,10 +5,11 @@ import {
   HttpCode,
   HttpStatus,
   Get,
+  Patch,
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto } from './dto';
+import { RegisterDto, LoginDto, UpdateProfileDto, ChangePasswordDto } from './dto';
 import { JwtAuthGuard } from './guards';
 import { CurrentUser } from './decorators';
 
@@ -52,5 +53,39 @@ export class AuthController {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
+  }
+
+  /**
+   * PATCH /auth/profile
+   * Aktualizacja profilu użytkownika (name, email)
+   * Wymaga tokenu JWT w nagłówku Authorization
+   */
+  @Patch('profile')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async updateProfile(
+    @CurrentUser() user: any,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    return this.authService.updateProfile(user.id, updateProfileDto);
+  }
+
+  /**
+   * PATCH /auth/change-password
+   * Zmiana hasła użytkownika
+   * Wymaga tokenu JWT w nagłówku Authorization
+   */
+  @Patch('change-password')
+  @UseGuards(JwtAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async changePassword(
+    @CurrentUser() user: any,
+    @Body() changePasswordDto: ChangePasswordDto,
+  ) {
+    return this.authService.changePassword(
+      user.id,
+      changePasswordDto.oldPassword,
+      changePasswordDto.newPassword,
+    );
   }
 }

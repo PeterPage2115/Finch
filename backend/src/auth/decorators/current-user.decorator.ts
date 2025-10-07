@@ -2,7 +2,7 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 /**
  * Decorator do wyciągania zalogowanego użytkownika z request
- * Użycie: 
+ * Użycie:
  * - @CurrentUser() user - zwraca cały obiekt użytkownika
  * - @CurrentUser('id') userId - zwraca tylko ID użytkownika
  * - @CurrentUser('email') email - zwraca tylko email użytkownika

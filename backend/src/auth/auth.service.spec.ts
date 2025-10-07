@@ -81,7 +81,9 @@ describe('AuthService', () => {
         email: mockRegisterDto.email,
         name: mockRegisterDto.name,
       });
-      jest.spyOn(prismaService.category, 'createMany').mockResolvedValue({ count: 7 });
+      jest
+        .spyOn(prismaService.category, 'createMany')
+        .mockResolvedValue({ count: 7 });
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('mock-jwt-token');
 
@@ -120,7 +122,9 @@ describe('AuthService', () => {
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
       jest.spyOn(prismaService.user, 'create').mockResolvedValue(mockUser);
-      jest.spyOn(prismaService.category, 'createMany').mockResolvedValue({ count: 7 });
+      jest
+        .spyOn(prismaService.category, 'createMany')
+        .mockResolvedValue({ count: 7 });
       jest.spyOn(jwtService, 'signAsync').mockResolvedValue('mock-jwt-token');
 
       // Act
@@ -211,7 +215,9 @@ describe('AuthService', () => {
         createdAt: mockUser.createdAt,
         updatedAt: mockUser.updatedAt,
       };
-      jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(userWithoutPassword as any);
+      jest
+        .spyOn(prismaService.user, 'findUnique')
+        .mockResolvedValue(userWithoutPassword as any);
 
       // Act
       const result = await service.validateUser(mockUser.id);
@@ -245,7 +251,9 @@ describe('AuthService', () => {
         .mockResolvedValue('mock-jwt-token');
       jest.spyOn(prismaService.user, 'findUnique').mockResolvedValue(null);
       jest.spyOn(prismaService.user, 'create').mockResolvedValue(mockUser);
-      jest.spyOn(prismaService.category, 'createMany').mockResolvedValue({ count: 7 });
+      jest
+        .spyOn(prismaService.category, 'createMany')
+        .mockResolvedValue({ count: 7 });
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
 
       // Act

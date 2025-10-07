@@ -28,7 +28,9 @@ export class AuthService {
     });
 
     if (existingUser) {
-      throw new ConflictException('Użytkownik o tym adresie email już istnieje');
+      throw new ConflictException(
+        'Użytkownik o tym adresie email już istnieje',
+      );
     }
 
     // Hashuj hasło
@@ -72,7 +74,10 @@ export class AuthService {
     }
 
     // Sprawdź hasło
-    const isPasswordValid = await this.comparePasswords(password, user.password);
+    const isPasswordValid = await this.comparePasswords(
+      password,
+      user.password,
+    );
 
     if (!isPasswordValid) {
       throw new UnauthorizedException('Nieprawidłowy email lub hasło');
@@ -102,6 +107,69 @@ export class AuthService {
     }
 
     return user;
+  }
+
+  /**
+   * Aktualizacja profilu użytkownika
+   */
+  async updateProfile(userId: string, updateData: { name?: string; email?: string }) {
+    // Sprawdź czy email nie jest już zajęty przez innego użytkownika
+    if (updateData.email) {
+      const existingUser = await this.prisma.user.findUnique({
+        where: { email: updateData.email },
+      });
+
+      if (existingUser && existingUser.id !== userId) {
+        throw new ConflictException('Podany adres email jest już używany');
+      }
+    }
+
+    // Aktualizuj profil
+    const updatedUser = await this.prisma.user.update({
+      where: { id: userId },
+      data: updateData,
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    return updatedUser;
+  }
+
+  /**
+   * Zmiana hasła użytkownika
+   */
+  async changePassword(userId: string, oldPassword: string, newPassword: string) {
+    // Pobierz użytkownika z hasłem
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new UnauthorizedException('Użytkownik nie istnieje');
+    }
+
+    // Sprawdź czy stare hasło jest poprawne
+    const isOldPasswordValid = await this.comparePasswords(oldPassword, user.password);
+
+    if (!isOldPasswordValid) {
+      throw new UnauthorizedException('Obecne hasło jest nieprawidłowe');
+    }
+
+    // Zahashuj nowe hasło
+    const hashedNewPassword = await this.hashPassword(newPassword);
+
+    // Zaktualizuj hasło
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedNewPassword },
+    });
+
+    return { message: 'Hasło zostało pomyślnie zmienione' };
   }
 
   /**
@@ -145,14 +213,49 @@ export class AuthService {
   private async createDefaultCategories(userId: string) {
     const defaultCategories = [
       // Kategorie wydatków
-      { name: 'Jedzenie', type: 'EXPENSE' as const, icon: '🍔', color: '#10B981' },
-      { name: 'Transport', type: 'EXPENSE' as const, icon: '🚗', color: '#3B82F6' },
-      { name: 'Rozrywka', type: 'EXPENSE' as const, icon: '🎮', color: '#8B5CF6' },
-      { name: 'Zdrowie', type: 'EXPENSE' as const, icon: '⚕️', color: '#EF4444' },
-      { name: 'Rachunki', type: 'EXPENSE' as const, icon: '📄', color: '#F59E0B' },
+      {
+        name: 'Jedzenie',
+        type: 'EXPENSE' as const,
+        icon: '🍔',
+        color: '#10B981',
+      },
+      {
+        name: 'Transport',
+        type: 'EXPENSE' as const,
+        icon: '🚗',
+        color: '#3B82F6',
+      },
+      {
+        name: 'Rozrywka',
+        type: 'EXPENSE' as const,
+        icon: '🎮',
+        color: '#8B5CF6',
+      },
+      {
+        name: 'Zdrowie',
+        type: 'EXPENSE' as const,
+        icon: '⚕️',
+        color: '#EF4444',
+      },
+      {
+        name: 'Rachunki',
+        type: 'EXPENSE' as const,
+        icon: '📄',
+        color: '#F59E0B',
+      },
       // Kategorie przychodów
-      { name: 'Wynagrodzenie', type: 'INCOME' as const, icon: '💰', color: '#10B981' },
-      { name: 'Inne przychody', type: 'INCOME' as const, icon: '💵', color: '#06B6D4' },
+      {
+        name: 'Wynagrodzenie',
+        type: 'INCOME' as const,
+        icon: '💰',
+        color: '#10B981',
+      },
+      {
+        name: 'Inne przychody',
+        type: 'INCOME' as const,
+        icon: '💵',
+        color: '#06B6D4',
+      },
     ];
 
     await this.prisma.category.createMany({
