@@ -1,7 +1,7 @@
 ﻿# 📋 TODO - Current Sprint
 
-> **Current Version:** v0.9.0-alpha Complete ✅  
-> **Next Priority:** v0.9.0-beta Trends Timeline
+> **Current Version:** v0.9.0-beta Complete ✅  
+> **Next Priority:** v0.9.0-rc Export Functionality
 
 ---
 
@@ -12,7 +12,13 @@
   - Frontend: Enhanced Pie Chart, Bar Chart, Category Details Modal
   - Interactive charts with click handlers and Polish locale
 
-- [ ] **v0.9.0-beta: Trends Timeline** - Month-to-month comparison charts
+- [x] **v0.9.0-beta: Trends Timeline** ✅ (Complete)
+  - Backend: Trends comparison endpoint (current vs previous period)
+  - Backend: Monthly trend endpoint (last N months)
+  - Frontend: TrendsComparisonCards (3 cards with change indicators)
+  - Frontend: MonthlyTrendChart (line chart with 3 metrics)
+  - Period-over-period analysis with percentage changes
+
 - [ ] **v0.9.0-rc: Export Functionality** - CSV/PDF export
 
 ---
