@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { DownloadIcon, FileTextIcon, Loader2Icon } from 'lucide-react';
+import { API_URL } from '@/lib/api/config';
 
 interface ExportButtonsProps {
   startDate: string;
@@ -18,7 +19,7 @@ export function ExportButtons({ startDate, endDate, token }: ExportButtonsProps)
       setIsExportingCSV(true);
 
       const response = await fetch(
-        `http://localhost:3001/reports/export/csv?startDate=${startDate}&endDate=${endDate}`,
+        `${API_URL}/reports/export/csv?startDate=${startDate}&endDate=${endDate}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -55,7 +56,7 @@ export function ExportButtons({ startDate, endDate, token }: ExportButtonsProps)
       setIsExportingPDF(true);
 
       const response = await fetch(
-        `http://localhost:3001/reports/export/pdf?startDate=${startDate}&endDate=${endDate}`,
+        `${API_URL}/reports/export/pdf?startDate=${startDate}&endDate=${endDate}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

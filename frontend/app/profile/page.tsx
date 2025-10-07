@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuthStore } from '@/lib/stores/authStore';
+import { API_URL } from '@/lib/api/config';
 import AppNavbar from '@/components/layout/AppNavbar';
 
 export default function ProfilePage() {
@@ -29,7 +30,7 @@ export default function ProfilePage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3001/auth/profile', {
+      const response = await fetch(`${API_URL}/auth/profile`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -73,7 +74,7 @@ export default function ProfilePage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3001/auth/change-password', {
+      const response = await fetch(`${API_URL}/auth/change-password`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

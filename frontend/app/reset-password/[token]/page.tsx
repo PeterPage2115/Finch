@@ -3,6 +3,7 @@
 import { useState, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { API_URL } from '@/lib/api/config';
 
 export default function ResetPasswordPage({
   params,
@@ -55,7 +56,7 @@ export default function ResetPasswordPage({
 
     try {
       const response = await fetch(
-        'http://localhost:3001/auth/reset-password',
+        `${API_URL}/auth/reset-password`,
         {
           method: 'POST',
           headers: {

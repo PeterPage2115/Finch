@@ -5,6 +5,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { fetchSummary, fetchByCategoryReport, ReportSummary, CategoryReport } from '@/lib/api/reportsClient';
+import { API_URL } from '@/lib/api/config';
 import AppNavbar from '@/components/layout/AppNavbar';
 import DateRangePicker from '@/components/reports/DateRangePicker';
 import SummaryCards from '@/components/reports/SummaryCards';
@@ -65,15 +66,15 @@ export default function ReportsPage() {
         fetchSummary(token, startDate, endDate),
         fetchByCategoryReport(token, startDate, endDate, 'EXPENSE'), // Focus on expenses
         fetch(
-          `http://localhost:3001/reports/category-trend?startDate=${startDate}&endDate=${endDate}&granularity=daily`,
+          `${API_URL}/reports/category-trend?startDate=${startDate}&endDate=${endDate}&granularity=daily`,
           { headers: { Authorization: `Bearer ${token}` } }
         ).then((res) => res.json()),
         fetch(
-          `http://localhost:3001/reports/trends-comparison?startDate=${startDate}&endDate=${endDate}`,
+          `${API_URL}/reports/trends-comparison?startDate=${startDate}&endDate=${endDate}`,
           { headers: { Authorization: `Bearer ${token}` } }
         ).then((res) => res.json()),
         fetch(
-          `http://localhost:3001/reports/monthly-trend?months=6`,
+          `${API_URL}/reports/monthly-trend?months=6`,
           { headers: { Authorization: `Bearer ${token}` } }
         ).then((res) => res.json()),
       ]);

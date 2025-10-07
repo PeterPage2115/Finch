@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
+import { API_URL } from '@/lib/api/config';
 
 interface Transaction {
   id: string;
@@ -60,23 +61,42 @@ export default function CategoryDetailsModal({
 
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(
-          `http://localhost:3001/reports/category/${categoryId}/details?startDate=${startDate}&endDate=${endDate}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        if (!token) {
+          throw new Error('Brak tokenu autoryzacji. Zaloguj się ponownie.');
+        }
+
+        const url = `${API_URL}/reports/category/${categoryId}/details?startDate=${startDate}&endDate=${endDate}`;
+        console.log('Fetching category details:', { categoryId, startDate, endDate, url });
+
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Response status:', response.status, response.statusText);
 
         if (!response.ok) {
-          throw new Error('Nie udało się pobrać szczegółów kategorii');
+          // Try to get error message from backend
+          let errorMessage = 'Nie udało się pobrać szczegółów kategorii';
+          try {
+            const errorData = await response.json();
+            console.error('Backend error:', errorData);
+            errorMessage = errorData.message || errorData.error || errorMessage;
+          } catch (parseError) {
+            console.error('Could not parse error response:', parseError);
+          }
+          
+          throw new Error(`${errorMessage} (Status: ${response.status})`);
         }
 
         const result = await response.json();
+        console.log('Category details loaded:', result);
         setData(result);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Wystąpił błąd');
+        console.error('Error fetching category details:', err);
+        setError(err instanceof Error ? err.message : 'Wystąpił nieznany błąd');
       } finally {
         setIsLoading(false);
       }
