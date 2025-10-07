@@ -1,0 +1,5 @@
+Data,Kategoria,Opis,Kwota,Typ
+2025-10-06,Transport,"Test transaction 1 for pazdziernik",212,Wydatek
+2025-10-06,Wynagrodzenie,"Income 0 for pazdziernik",2237,Przychód
+2025-10-05,Transport,"Test transaction 0 for pazdziernik",420,Wydatek
+2025-10-03,Rachunki,"Test transaction 5 for pazdziernik",416,Wydatek
