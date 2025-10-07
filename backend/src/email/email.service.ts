@@ -2,6 +2,10 @@ import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import type { SentMessageInfo } from 'nodemailer';
 
+// ESLint disable dla nodemailer typów - SentMessageInfo jest typed jako 'any' w nodemailer
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+
 @Injectable()
 export class EmailService implements OnModuleInit {
   private transporter: nodemailer.Transporter | null = null;
