@@ -68,8 +68,8 @@ export function TrendsComparisonCards({ data }: TrendsComparisonCardsProps) {
       previous: data.previousPeriod.expenses,
       change: data.changes.expenses,
       isExpense: true,
-      bgColor: 'bg-red-50',
-      borderColor: 'border-red-200',
+      bgColor: 'bg-red-50 dark:bg-red-900/20',
+      borderColor: 'border-red-200 dark:border-red-800',
     },
     {
       title: 'Przychody',
@@ -77,8 +77,8 @@ export function TrendsComparisonCards({ data }: TrendsComparisonCardsProps) {
       previous: data.previousPeriod.income,
       change: data.changes.income,
       isExpense: false,
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-200',
+      bgColor: 'bg-green-50 dark:bg-green-900/20',
+      borderColor: 'border-green-200 dark:border-green-800',
     },
     {
       title: 'Bilans',
@@ -86,8 +86,8 @@ export function TrendsComparisonCards({ data }: TrendsComparisonCardsProps) {
       previous: data.previousPeriod.balance,
       change: data.changes.balance,
       isExpense: false,
-      bgColor: 'bg-blue-50',
-      borderColor: 'border-blue-200',
+      bgColor: 'bg-blue-50 dark:bg-blue-900/20',
+      borderColor: 'border-blue-200 dark:border-blue-800',
     },
   ];
 
