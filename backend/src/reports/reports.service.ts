@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
+import PDFDocument from 'pdfkit';
 
 @Injectable()
 export class ReportsService {
@@ -502,5 +503,207 @@ export class ReportsService {
       endDate: endDate.toISOString().split('T')[0],
       data: trendData,
     };
+  }
+
+  /**
+   * Export transactions to CSV format
+   */
+  async exportTransactionsToCSV(
+    userId: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<string> {
+    const transactions = await this.prisma.transaction.findMany({
+      where: {
+        userId,
+        date: { gte: startDate, lte: endDate },
+      },
+      include: {
+        category: true,
+      },
+      orderBy: { date: 'desc' },
+    });
+
+    // CSV headers
+    const headers = ['Data', 'Kategoria', 'Opis', 'Kwota', 'Typ'];
+    const csvRows = [headers.join(',')];
+
+    // Format each transaction
+    transactions.forEach((t) => {
+      const row = [
+        t.date.toISOString().split('T')[0],
+        t.category?.name || 'Brak kategorii',
+        `"${(t.description || '').replace(/"/g, '""')}"`, // Escape quotes
+        t.amount.toString(),
+        t.type === 'INCOME' ? 'Przychód' : 'Wydatek',
+      ];
+      csvRows.push(row.join(','));
+    });
+
+    return csvRows.join('\n');
+  }
+
+  /**
+   * Export transactions to PDF format
+   */
+  async exportTransactionsToPDF(
+    userId: string,
+    startDate: Date,
+    endDate: Date,
+  ): Promise<Buffer> {
+    const transactions = await this.prisma.transaction.findMany({
+      where: {
+        userId,
+        date: { gte: startDate, lte: endDate },
+      },
+      include: {
+        category: true,
+      },
+      orderBy: { date: 'desc' },
+    });
+
+    // Get summary for the period
+    const summary = await this.getSummary(userId, startDate, endDate);
+
+    return new Promise((resolve, reject) => {
+      try {
+        const doc = new PDFDocument({ margin: 50 });
+        const chunks: Buffer[] = [];
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        doc.on('data', (chunk) => chunks.push(chunk));
+        doc.on('end', () => resolve(Buffer.concat(chunks)));
+        doc.on('error', reject);
+
+        // Title
+        doc
+          .fontSize(20)
+          .font('Helvetica-Bold')
+          .text('Raport Finansowy', { align: 'center' });
+        doc.moveDown(0.5);
+
+        // Date range
+        doc
+          .fontSize(12)
+          .font('Helvetica')
+          .text(
+            `Okres: ${startDate.toLocaleDateString('pl-PL')} - ${endDate.toLocaleDateString('pl-PL')}`,
+            { align: 'center' },
+          );
+        doc.moveDown(1.5);
+
+        // Summary section
+        doc.fontSize(14).font('Helvetica-Bold').text('Podsumowanie');
+        doc.moveDown(0.5);
+
+        doc.fontSize(10).font('Helvetica');
+        doc.text(`Przychody: ${this.formatCurrency(summary.totalIncome)}`);
+        doc.text(`Wydatki: ${this.formatCurrency(summary.totalExpenses)}`);
+        doc.text(`Bilans: ${this.formatCurrency(summary.balance)}`);
+        doc.text(
+          `Liczba transakcji: ${summary.transactionCount.income + summary.transactionCount.expenses}`,
+        );
+        doc.moveDown(1.5);
+
+        // Transactions section
+        doc.fontSize(14).font('Helvetica-Bold').text('Lista Transakcji');
+        doc.moveDown(0.5);
+
+        // Table headers
+        doc.fontSize(9).font('Helvetica-Bold');
+        const tableTop = doc.y;
+        const colWidths = {
+          date: 70,
+          category: 100,
+          desc: 150,
+          amount: 80,
+          type: 70,
+        };
+        let currentY = tableTop;
+
+        doc.text('Data', 50, currentY, { width: colWidths.date });
+        doc.text('Kategoria', 120, currentY, { width: colWidths.category });
+        doc.text('Opis', 220, currentY, { width: colWidths.desc });
+        doc.text('Kwota', 370, currentY, {
+          width: colWidths.amount,
+          align: 'right',
+        });
+        doc.text('Typ', 450, currentY, { width: colWidths.type });
+
+        doc.moveDown(0.3);
+        doc.moveTo(50, doc.y).lineTo(520, doc.y).stroke();
+        doc.moveDown(0.3);
+
+        // Transaction rows
+        doc.fontSize(8).font('Helvetica');
+        transactions.forEach((t, index) => {
+          // Check if we need a new page
+          if (doc.y > 700) {
+            doc.addPage();
+            currentY = 50;
+            doc.y = currentY;
+          }
+
+          currentY = doc.y;
+          const date = t.date.toLocaleDateString('pl-PL', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          });
+          const category = t.category?.name || 'Brak';
+          const desc = (t.description || '').substring(0, 40);
+          const amount = this.formatCurrency(Number(t.amount));
+          const type = t.type === 'INCOME' ? 'Przychód' : 'Wydatek';
+
+          doc.text(date, 50, currentY, { width: colWidths.date });
+          doc.text(category, 120, currentY, { width: colWidths.category });
+          doc.text(desc, 220, currentY, { width: colWidths.desc });
+          doc.text(amount, 370, currentY, {
+            width: colWidths.amount,
+            align: 'right',
+          });
+          doc.text(type, 450, currentY, { width: colWidths.type });
+
+          doc.moveDown(0.5);
+
+          // Light separator line every 5 rows
+          if ((index + 1) % 5 === 0) {
+            doc
+              .strokeColor('#e0e0e0')
+              .moveTo(50, doc.y)
+              .lineTo(520, doc.y)
+              .stroke()
+              .strokeColor('#000000');
+            doc.moveDown(0.3);
+          }
+        });
+
+        // Footer
+        doc
+          .fontSize(8)
+          .text(
+            `Wygenerowano: ${new Date().toLocaleString('pl-PL')}`,
+            50,
+            doc.page.height - 50,
+            { align: 'center' },
+          );
+
+        doc.end();
+      } catch (error) {
+        reject(
+          error instanceof Error ? error : new Error('PDF generation failed'),
+        );
+      }
+    });
+  }
+
+  /**
+   * Helper: Format currency for display
+   */
+  private formatCurrency(amount: number): string {
+    return new Intl.NumberFormat('pl-PL', {
+      style: 'currency',
+      currency: 'PLN',
+    }).format(amount);
   }
 }

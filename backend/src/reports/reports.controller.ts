@@ -4,7 +4,10 @@ import {
   Query,
   UseGuards,
   Param,
+  Res,
+  Header,
 } from '@nestjs/common';
+import type { Response } from 'express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ReportsService } from './reports.service';
@@ -122,5 +125,55 @@ export class ReportsController {
   ) {
     const monthsCount = months ? parseInt(months, 10) : 6;
     return this.reportsService.getMonthlyTrend(userId, monthsCount);
+  }
+
+  /**
+   * GET /reports/export/csv
+   * Export transactions to CSV file
+   */
+  @Get('export/csv')
+  async exportCSV(
+    @CurrentUser('id') userId: string,
+    @Query() query: QueryReportDto,
+    @Res() res: Response,
+  ) {
+    const startDate = new Date(query.startDate);
+    const endDate = new Date(query.endDate);
+
+    const csv = await this.reportsService.exportTransactionsToCSV(
+      userId,
+      startDate,
+      endDate,
+    );
+
+    const filename = `transactions_${query.startDate}_${query.endDate}.csv`;
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(csv);
+  }
+
+  /**
+   * GET /reports/export/pdf
+   * Export transactions to PDF file
+   */
+  @Get('export/pdf')
+  @Header('Content-Type', 'application/pdf')
+  async exportPDF(
+    @CurrentUser('id') userId: string,
+    @Query() query: QueryReportDto,
+    @Res() res: Response,
+  ) {
+    const startDate = new Date(query.startDate);
+    const endDate = new Date(query.endDate);
+
+    const pdf = await this.reportsService.exportTransactionsToPDF(
+      userId,
+      startDate,
+      endDate,
+    );
+
+    const filename = `raport_${query.startDate}_${query.endDate}.pdf`;
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.send(pdf);
   }
 }
