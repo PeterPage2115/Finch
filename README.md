@@ -19,11 +19,13 @@ Tracker Kasy to nowoczesna aplikacja webowa zaprojektowana z myślą o prostocie
 
 ## 🛠️ Stack Technologiczny
 
-- **Frontend:** Next.js 14+, TypeScript, Tailwind CSS
+- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS v4
 - **Backend:** NestJS, TypeScript
-- **Baza Danych:** PostgreSQL
+- **Baza Danych:** PostgreSQL 17
 - **ORM:** Prisma
 - **Konteneryzacja:** Docker & Docker Compose
+
+📖 **Dokumentacja techniczna:** [docs/technical/](./docs/technical/)
 
 ## 🚀 Szybki Start
 
@@ -270,7 +272,22 @@ Chcesz pomóc w rozwoju projektu? Świetnie!
 4. Push'nij do branch'a (`git push origin feat/amazing-feature`)
 5. Otwórz Pull Request
 
-Więcej informacji w pliku [CONTRIBUTING.md](./CONTRIBUTING.md) *(wkrótce)*.
+Więcej informacji w pliku [CONTRIBUTING.md](./CONTRIBUTING.md).
+
+## 📚 Dokumentacja
+
+### Zarządzanie Projektem
+- 📋 [TODO - Current Sprint](./docs/project/TODO.md) - Aktualny sprint i priorytety
+- ✅ [Completed Milestones](./docs/project/COMPLETED.md) - Ostatnie 3 wersje
+- 🗺️ [Roadmap](./docs/project/ROADMAP.md) - Długoterminowa wizja (2025-2027)
+- 📝 [Changelog](./docs/project/CHANGELOG.md) - Pełna historia zmian
+
+### Dokumentacja Techniczna
+- 🛠️ [Tech Stack](./docs/technical/TECH_STACK.md) - Technologie i zależności
+- 🏗️ [Architecture](./docs/technical/ARCHITECTURE.md) - Architektura systemu
+- 🚀 [Development Guide](./docs/technical/DEVELOPMENT_GUIDE.md) - Setup i workflow
+- 🧪 [Testing Strategy](./docs/technical/TESTING_STRATEGY.md) - Wzorce testów i pokrycie
+- 📡 [API Reference](./docs/technical/API_REFERENCE.md) - Dokumentacja REST API
 
 ## 📝 Konwencje Commitów
 
