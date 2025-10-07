@@ -1,37 +1,33 @@
 ﻿# 📋 TODO - Current Sprint
 
-> **Current Version:** v0.7.0 Complete ✅  
-> **Next Priority:** v0.8.0-beta Password Reset
+> **Current Version:** v0.8.0 Complete ✅  
+> **Next Priority:** v0.9.0 Advanced Reports
 
 ---
 
 ## 🎯 In Progress
 
-- [ ] **v0.8.0-beta: Password Reset** - Email flow for password recovery
-  - Prisma schema: PasswordResetToken model
-  - Backend: forgot-password, reset-password endpoints
-  - Frontend: Password reset pages
+- [ ] **v0.9.0: Advanced Reports** - Date ranges, CSV/PDF export, custom filters
 
 ---
 
 ## ⏭️ Next Up (Prioritized)
 
 1. [x] **v0.8.0-alpha: Core Authentication** ✅ (Complete)
-   - Bcrypt password hashing
-   - Real JWT generation
-   - User profile endpoints (GET/PATCH)
-   - Change password endpoint
+   - User profile management (GET /auth/me, PATCH /auth/profile)
+   - Password change endpoint (PATCH /auth/change-password)
    - Frontend: Profile page + change password form
 
-2. [ ] **v0.8.0-beta: Password Reset** (0.5 day)
-   - Password reset tokens in Prisma schema
-   - Email flow: forgot-password → reset-password
-   - Frontend: Password reset pages
+2. [x] **v0.8.0-beta: Password Reset** ✅ (Complete)
+   - Prisma: PasswordResetToken model with expiration
+   - Backend: POST /auth/forgot-password, POST /auth/reset-password
+   - Frontend: /forgot-password and /reset-password/[token] pages
+   - Token-based password recovery flow
 
-3. [ ] **v0.8.0-rc: Email Service** (0.5 day)
-   - NodeMailer setup (SMTP)
-   - Email templates (password reset)
-   - Dev: ethereal.email (testing)
+3. [x] **v0.8.0-rc: Email Service** ✅ (Complete)
+   - NodeMailer integration with Ethereal.email (dev mode)
+   - HTML email templates for password reset
+   - Production-ready SMTP configuration
 
 ---
 
