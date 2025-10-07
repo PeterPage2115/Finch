@@ -291,9 +291,18 @@ e143cd4 - fix(frontend): add dark mode support to all Reports chart components
 
 # Commit 3: Documentation
 d892cc4 - docs: add comprehensive bug fix report for v0.9.0.1
+
+# Commit 4: TrendsComparisonCards dark mode backgrounds
+d42c3d9 - fix(frontend): add dark mode background and border colors to TrendsComparisonCards
+
+# Commit 5: Playwright screenshots verification
+27cd7ee - test: add Playwright screenshots after TrendsComparisonCards dark mode fix
+
+# Commit 6: Documentation update
+932c3f3 - docs: update BUGFIX v0.9.0.1 with chart components dark mode fixes
 ```
 
-**Total commits:** 3
+**Total commits:** 6 (3 fixes + 2 docs + 1 test)
 
 ---
 
@@ -306,8 +315,9 @@ d892cc4 - docs: add comprehensive bug fix report for v0.9.0.1
 | `EnhancedCategoryPieChart.tsx` | 15 | 10 | ~10 klas dark:, tooltip dark |
 | `CategoryTrendChart.tsx` | 8 | 6 | ~5 klas dark:, recharts tooltip |
 | `MonthlyTrendChart.tsx` | 8 | 6 | ~5 klas dark:, recharts tooltip |
-| `TrendsComparisonCards.tsx` | 3 | 3 | ~3 klas dark: |
-| **RAZEM** | **330** | **119** | **6 komponentów, ~73 klas dark:** |
+| `TrendsComparisonCards.tsx` (e143cd4) | 3 | 3 | ~3 klas dark: text |
+| `TrendsComparisonCards.tsx` (d42c3d9) | 6 | 6 | ~6 klas dark: bg + border |
+| **RAZEM** | **336** | **125** | **6 komponentów, ~79 klas dark:** |
 
 ---
 
@@ -320,11 +330,15 @@ d892cc4 - docs: add comprehensive bug fix report for v0.9.0.1
 ✅ Kategorie: Dark mode działa
 ✅ Profile: Dark mode działa, navbar widoczny
 ❌ Reports: Białe karty wykresów w dark mode (NAPRAWIONE w e143cd4)
+❌ Reports: Jasne karty porównawcze w dark mode (NAPRAWIONE w d42c3d9)
 
-Screenshoty:
+Screenshoty (przed fixem):
 - .playwright-mcp/reports-page-light-mode.png
-- .playwright-mcp/reports-page-dark-mode.png (przed fixem - identyczne!)
-- .playwright-mcp/profile-page-dark-mode.png (✅ działa)
+- .playwright-mcp/reports-page-dark-mode.png (identyczne - wykres biały!)
+
+Screenshoty (po fixie):
+- .playwright-mcp/reports-after-fix-dark-mode.png (wykresy + karty ciemne ✅)
+- .playwright-mcp/reports-after-fix-light-mode.png (wykresy + karty jasne ✅)
 ```
 
 ### API Endpoint Tests (wszystkie przeszły ✅):
@@ -400,6 +414,71 @@ GET /reports/export/pdf ✅
 
 ## 📝 Notatki Techniczne
 
+### Bug #5 - TrendsComparisonCards Brak Dark Mode dla Kolorowych Tła (2025-10-07)
+
+**Problem:**
+Po naprawieniu wykresów użytkownik zgłosił, że karty porównawcze ("Wydatki", "Przychody", "Bilans") nadal mają jasne tła w dark mode.
+
+**Screenshoty użytkownika pokazały:**
+- 3 karty na górze strony Reports miały bardzo jasne tła (niemal białe) w dark mode
+- Wykresy poniżej były już poprawione (ciemne tła)
+- Problem dotyczył tylko TrendsComparisonCards
+
+**Root Cause:**
+W commit e143cd4 zaktualizowano tylko TEKSTY (`dark:text-white`, `dark:text-gray-400`), ale pominięto TŁA i BORDERY kart.
+
+Karty używały:
+```tsx
+bgColor: 'bg-red-50'     // bardzo jasny czerwony - brak dark:
+bgColor: 'bg-green-50'   // bardzo jasny zielony - brak dark:
+bgColor: 'bg-blue-50'    // bardzo jasny niebieski - brak dark:
+```
+
+**Rozwiązanie (commit d42c3d9):**
+```tsx
+// PRZED:
+bgColor: 'bg-red-50',
+borderColor: 'border-red-200',
+
+// PO:
+bgColor: 'bg-red-50 dark:bg-red-900/20',
+borderColor: 'border-red-200 dark:border-red-800',
+```
+
+Pełne zmiany:
+- Wydatki: `bg-red-50 dark:bg-red-900/20` + `border-red-200 dark:border-red-800`
+- Przychody: `bg-green-50 dark:bg-green-900/20` + `border-green-200 dark:border-green-800`
+- Bilans: `bg-blue-50 dark:bg-blue-900/20` + `border-blue-200 dark:border-blue-800`
+
+**Weryfikacja Playwright:**
+- Screenshot przed: `reports-page-dark-mode.png` (jasne karty)
+- Screenshot po: `reports-after-fix-dark-mode.png` (ciemne karty z kolorowym odcieniem)
+- Screenshot light mode: `reports-after-fix-light-mode.png` (jasne kolorowe karty)
+
+**Pattern: Kolorowe tła z dark mode**
+```tsx
+// Light mode: jasne kolorowe tło (bg-*-50)
+// Dark mode: ciemne kolorowe tło z przezroczystością (dark:bg-*-900/20)
+
+bg-red-50 dark:bg-red-900/20       // czerwony
+bg-green-50 dark:bg-green-900/20   // zielony
+bg-blue-50 dark:bg-blue-900/20     // niebieski
+bg-yellow-50 dark:bg-yellow-900/20 // żółty
+bg-purple-50 dark:bg-purple-900/20 // fioletowy
+
+// Bordery
+border-red-200 dark:border-red-800
+border-green-200 dark:border-green-800
+border-blue-200 dark:border-blue-800
+```
+
+**Commit:** d42c3d9  
+**Plik zmieniony:** `frontend/components/reports/TrendsComparisonCards.tsx`  
+**Linie zmienione:** 6 insertions, 6 deletions  
+**Status:** ✅ NAPRAWIONE
+
+---
+
 ### Dark Mode Pattern (Tailwind CSS):
 ```tsx
 // Kontenery główne
@@ -440,6 +519,11 @@ text-red-700 dark:text-red-200
 bg-white dark:bg-gray-700
 border-gray-300 dark:border-gray-600
 text-gray-900 dark:text-white
+
+// Kolorowe tła z odcieniem (NOWE!)
+bg-red-50 dark:bg-red-900/20
+bg-green-50 dark:bg-green-900/20
+bg-blue-50 dark:bg-blue-900/20
 ```
 
 ### Icon Usage Pattern:
@@ -462,6 +546,6 @@ import { CategoryIcon } from '@/components/ui/CategoryIcon';
 ---
 
 **Dokument stworzony:** 2025-10-07  
-**Ostatnia aktualizacja:** 2025-10-07  
+**Ostatnia aktualizacja:** 2025-10-07 (dodano Bug #5 - TrendsComparisonCards)  
 **Autor:** AI Copilot  
 **Reviewer:** Użytkownik
