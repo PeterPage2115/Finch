@@ -13,6 +13,7 @@ import CategoryTrendChart from '@/components/reports/CategoryTrendChart';
 import CategoryDetailsModal from '@/components/reports/CategoryDetailsModal';
 import { TrendsComparisonCards } from '@/components/reports/TrendsComparisonCards';
 import { MonthlyTrendChart } from '@/components/reports/MonthlyTrendChart';
+import { ExportButtons } from '@/components/reports/ExportButtons';
 
 /**
  * Reports Page - view financial reports and analytics
@@ -139,6 +140,13 @@ export default function ReportsPage() {
             onDateChange={handleDateChange}
           />
         </div>
+
+        {/* Export Buttons */}
+        {token && (
+          <div className="mb-6 flex justify-end">
+            <ExportButtons startDate={startDate} endDate={endDate} token={token} />
+          </div>
+        )}
 
         {/* Summary Cards */}
         <div className="mb-6">
