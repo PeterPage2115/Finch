@@ -1,0 +1,307 @@
+'use client';
+
+import { useState } from 'react';
+import { useAuthStore } from '@/lib/stores/authStore';
+
+export default function ProfilePage() {
+  const { user } = useAuthStore();
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  // Profile form state
+  const [name, setName] = useState(user?.name || '');
+  const [email, setEmail] = useState(user?.email || '');
+  const [profileError, setProfileError] = useState('');
+  const [profileSuccess, setProfileSuccess] = useState('');
+
+  // Password form state
+  const [oldPassword, setOldPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [passwordSuccess, setPasswordSuccess] = useState('');
+
+  const handleProfileSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setProfileError('');
+    setProfileSuccess('');
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3001/auth/profile', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ name, email }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Nie udało się zaktualizować profilu');
+      }
+
+      const updatedUser = await response.json();
+      
+      // Update store
+      useAuthStore.setState({ user: updatedUser });
+
+      setProfileSuccess('Profil został pomyślnie zaktualizowany');
+      setIsEditingProfile(false);
+    } catch (err: unknown) {
+      setProfileError(err instanceof Error ? err.message : 'Wystąpił błąd');
+    }
+  };
+
+  const handlePasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setPasswordError('');
+    setPasswordSuccess('');
+
+    // Validation
+    if (newPassword !== confirmPassword) {
+      setPasswordError('Nowe hasła nie pasują do siebie');
+      return;
+    }
+
+    if (newPassword.length < 8) {
+      setPasswordError('Nowe hasło musi mieć co najmniej 8 znaków');
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:3001/auth/change-password', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ oldPassword, newPassword }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Nie udało się zmienić hasła');
+      }
+
+      setPasswordSuccess('Hasło zostało pomyślnie zmienione');
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+      setIsChangingPassword(false);
+    } catch (err: unknown) {
+      setPasswordError(err instanceof Error ? err.message : 'Wystąpił błąd');
+    }
+  };
+
+  if (!user) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <p>Ładowanie...</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container mx-auto px-4 py-8 max-w-2xl">
+      <h1 className="text-3xl font-bold mb-8">Profil użytkownika</h1>
+
+      {/* Profile Information Section */}
+      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Informacje o profilu</h2>
+          {!isEditingProfile && (
+            <button
+              onClick={() => setIsEditingProfile(true)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Edytuj
+            </button>
+          )}
+        </div>
+
+        {profileSuccess && (
+          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+            {profileSuccess}
+          </div>
+        )}
+
+        {profileError && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {profileError}
+          </div>
+        )}
+
+        {!isEditingProfile ? (
+          <div className="space-y-3">
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Imię</label>
+              <p className="mt-1 text-lg">{user.name || 'Nie podano'}</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Email</label>
+              <p className="mt-1 text-lg">{user.email}</p>
+            </div>
+          </div>
+        ) : (
+          <form onSubmit={handleProfileSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+                Imię
+              </label>
+              <input
+                type="text"
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                minLength={2}
+                maxLength={100}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                required
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Zapisz zmiany
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsEditingProfile(false);
+                  setName(user.name || '');
+                  setEmail(user.email);
+                  setProfileError('');
+                  setProfileSuccess('');
+                }}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+              >
+                Anuluj
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+
+      {/* Change Password Section */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold">Zmiana hasła</h2>
+          {!isChangingPassword && (
+            <button
+              onClick={() => setIsChangingPassword(true)}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+            >
+              Zmień hasło
+            </button>
+          )}
+        </div>
+
+        {passwordSuccess && (
+          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+            {passwordSuccess}
+          </div>
+        )}
+
+        {passwordError && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {passwordError}
+          </div>
+        )}
+
+        {isChangingPassword && (
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="oldPassword" className="block text-sm font-medium text-gray-700">
+                Obecne hasło
+              </label>
+              <input
+                type="password"
+                id="oldPassword"
+                value={oldPassword}
+                onChange={(e) => setOldPassword(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                required
+                minLength={1}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+                Nowe hasło
+              </label>
+              <input
+                type="password"
+                id="newPassword"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                required
+                minLength={8}
+              />
+              <p className="mt-1 text-sm text-gray-500">
+                Minimum 8 znaków, mała i wielka litera, cyfra
+              </p>
+            </div>
+
+            <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                Potwierdź nowe hasło
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                required
+                minLength={8}
+              />
+            </div>
+
+            <div className="flex gap-3">
+              <button
+                type="submit"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
+              >
+                Zmień hasło
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsChangingPassword(false);
+                  setOldPassword('');
+                  setNewPassword('');
+                  setConfirmPassword('');
+                  setPasswordError('');
+                  setPasswordSuccess('');
+                }}
+                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+              >
+                Anuluj
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}

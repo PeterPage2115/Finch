@@ -133,6 +133,18 @@ export default function AppNavbar() {
               >
                 Raporty
               </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push('/profile')}
+                className={`font-medium transition ${
+                  isActive('/profile')
+                    ? 'text-indigo-600 dark:text-indigo-400'
+                    : 'text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400'
+                }`}
+              >
+                Profil
+              </motion.button>
             </div>
           </div>
 
@@ -267,6 +279,18 @@ export default function AppNavbar() {
                   }`}
                 >
                   Raporty
+                </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => navigateTo('/profile')}
+                  className={`w-full text-left px-4 py-3 rounded-lg font-medium transition ${
+                    isActive('/profile')
+                      ? 'bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400'
+                      : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  }`}
+                >
+                  Profil
                 </motion.button>
               </nav>
 
