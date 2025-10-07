@@ -256,6 +256,35 @@
 
 ---
 
+## 🐛 Post-Release Bug Fixes (v0.9.0.1)
+
+Po pierwszych testach użytkownik zgłosił 4 problemy, które zostały naprawione w v0.9.0.1:
+
+### Bug #1: Ikony pokazują znaki zapytania (Icon Regression) ❌ → ✅
+- **Problem:** CategoryDetailsModal renderował emoji jako tekst zamiast używać CategoryIcon
+- **Fix:** Dodano import i użycie komponentu CategoryIcon
+- **Commit:** `1a9a7c9`
+
+### Bug #2: Brak Dark Mode w nowych komponentach ❌ → ✅
+- **Problem:** CategoryDetailsModal i Reports page nie miały klas dark:
+- **Fix:** Dodano ~20 klas dark: do CategoryDetailsModal (wszystkie teksty, tła, granice)
+- **Commit:** `1a9a7c9`
+
+### Bug #3: Strona Profile bez navbaru ❌ → ✅
+- **Problem:** Profile page nie miała AppNavbar i głównego kontenera
+- **Fix:** Dodano AppNavbar, min-h-screen container, ~30 klas dark:
+- **Commit:** `1a9a7c9`
+
+### Bug #4: Błędy logowania ⚠️ → ✅ (nie był to bug)
+- **Problem:** Użytkownik zgłosił 401 errors
+- **Diagnoza:** Próby logowania na nieistniejące konta (testapi@example.com, test@test.pl)
+- **Weryfikacja:** API działa poprawnie, demo@tracker.com loguje się bez problemu
+
+**Szczegółowy raport bugów:** Zobacz `docs/BUGFIX_v0.9.0.1.md`
+
+---
+
 **Tested by:** GitHub Copilot AI Assistant  
 **Reviewed by:** [Pending User Review]  
-**Status:** ✅ ALL TESTS PASSED
+**Status:** ✅ ALL TESTS PASSED (v0.9.0.1 fixes applied)
+
