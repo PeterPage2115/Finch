@@ -1,4 +1,10 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  UseGuards,
+  Param,
+} from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { ReportsService } from './reports.service';
@@ -41,6 +47,48 @@ export class ReportsController {
       startDate,
       endDate,
       query.type,
+    );
+  }
+
+  /**
+   * GET /reports/category-trend
+   * Get time-series data for category spending (for charts)
+   */
+  @Get('category-trend')
+  async getCategoryTrend(
+    @CurrentUser('id') userId: string,
+    @Query() query: QueryReportDto,
+  ) {
+    const startDate = new Date(query.startDate);
+    const endDate = new Date(query.endDate);
+
+    return this.reportsService.getCategoryTrend(
+      userId,
+      startDate,
+      endDate,
+      query.categoryId,
+      query.granularity || 'daily',
+    );
+  }
+
+  /**
+   * GET /reports/category/:categoryId/details
+   * Get detailed information about a specific category
+   */
+  @Get('category/:categoryId/details')
+  async getCategoryDetails(
+    @CurrentUser('id') userId: string,
+    @Param('categoryId') categoryId: string,
+    @Query() query: QueryReportDto,
+  ) {
+    const startDate = new Date(query.startDate);
+    const endDate = new Date(query.endDate);
+
+    return this.reportsService.getCategoryDetails(
+      userId,
+      categoryId,
+      startDate,
+      endDate,
     );
   }
 }

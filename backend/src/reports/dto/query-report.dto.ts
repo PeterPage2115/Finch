@@ -1,4 +1,4 @@
-import { IsDateString, IsOptional, IsEnum } from 'class-validator';
+import { IsDateString, IsOptional, IsEnum, IsString } from 'class-validator';
 
 export class QueryReportDto {
   @IsDateString()
@@ -10,4 +10,12 @@ export class QueryReportDto {
   @IsOptional()
   @IsEnum(['INCOME', 'EXPENSE'])
   type?: 'INCOME' | 'EXPENSE';
+
+  @IsOptional()
+  @IsString()
+  categoryId?: string;
+
+  @IsOptional()
+  @IsEnum(['daily', 'weekly', 'monthly'])
+  granularity?: 'daily' | 'weekly' | 'monthly';
 }
