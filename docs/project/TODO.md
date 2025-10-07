@@ -1,13 +1,19 @@
 ﻿# 📋 TODO - Current Sprint
 
-> **Current Version:** v0.8.0 Complete ✅  
-> **Next Priority:** v0.9.0 Advanced Reports
+> **Current Version:** v0.9.0-alpha Complete ✅  
+> **Next Priority:** v0.9.0-beta Trends Timeline
 
 ---
 
 ## 🎯 In Progress
 
-- [ ] **v0.9.0: Advanced Reports** - Date ranges, CSV/PDF export, custom filters
+- [x] **v0.9.0-alpha: Enhanced Category Analytics** ✅ (Complete)
+  - Backend: Category trend endpoint, category details endpoint
+  - Frontend: Enhanced Pie Chart, Bar Chart, Category Details Modal
+  - Interactive charts with click handlers and Polish locale
+
+- [ ] **v0.9.0-beta: Trends Timeline** - Month-to-month comparison charts
+- [ ] **v0.9.0-rc: Export Functionality** - CSV/PDF export
 
 ---
 
