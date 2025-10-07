@@ -1,7 +1,7 @@
 ﻿# 📋 TODO - Current Sprint
 
-> **Current Version:** v0.9.0-beta Complete ✅  
-> **Next Priority:** v0.9.0-rc Export Functionality
+> **Current Version:** v0.9.0 Complete ✅  
+> **Next Priority:** v1.0.0 Production Ready
 
 ---
 
@@ -19,33 +19,36 @@
   - Frontend: MonthlyTrendChart (line chart with 3 metrics)
   - Period-over-period analysis with percentage changes
 
-- [ ] **v0.9.0-rc: Export Functionality** - CSV/PDF export
+- [x] **v0.9.0-rc: Export Functionality** ✅ (Complete)
+  - Backend: CSV export endpoint (text/csv with proper escaping)
+  - Backend: PDF export endpoint (pdfkit with summary + transactions table)
+  - Frontend: ExportButtons component (CSV and PDF download)
+  - Automatic file download with proper filenames and headers
 
 ---
 
 ## ⏭️ Next Up (Prioritized)
 
-1. [x] **v0.8.0-alpha: Core Authentication** ✅ (Complete)
-   - User profile management (GET /auth/me, PATCH /auth/profile)
-   - Password change endpoint (PATCH /auth/change-password)
-   - Frontend: Profile page + change password form
+1. [x] **v0.8.0: Enhanced Authentication** ✅ (Complete)
+   - Profile management, password change, password reset
+   - Email service with NodeMailer
+   - Complete authentication flow
 
-2. [x] **v0.8.0-beta: Password Reset** ✅ (Complete)
-   - Prisma: PasswordResetToken model with expiration
-   - Backend: POST /auth/forgot-password, POST /auth/reset-password
-   - Frontend: /forgot-password and /reset-password/[token] pages
-   - Token-based password recovery flow
+2. [x] **v0.9.0: Advanced Reports** ✅ (Complete)
+   - Enhanced category analytics with interactive charts
+   - Period-over-period comparison (trends timeline)
+   - CSV/PDF export functionality
 
-3. [x] **v0.8.0-rc: Email Service** ✅ (Complete)
-   - NodeMailer integration with Ethereal.email (dev mode)
-   - HTML email templates for password reset
-   - Production-ready SMTP configuration
+3. [ ] **v1.0.0: Production Ready** - Next Sprint
+   - Security audit and hardening
+   - Performance optimization
+   - Monitoring and logging
+   - Production deployment guide
 
 ---
 
 ## 🔮 Future Sprints (Backlog)
 
-- [ ] **v0.9.0: Advanced Reports** - Date ranges, CSV/PDF export, custom filters
 - [ ] **v1.0: Production Ready** - Security audit, performance optimization, monitoring
 - [ ] **v1.1: Multi-currency** - Support for multiple currencies with real-time exchange rates
 - [ ] **v1.2: Recurring Transactions** - Auto-create monthly bills, subscriptions
