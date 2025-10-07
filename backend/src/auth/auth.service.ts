@@ -10,12 +10,14 @@ import { PrismaService } from '../prisma.service';
 import { RegisterDto, LoginDto } from './dto';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
+import { EmailService } from '../email/email.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
+    private emailService: EmailService,
   ) {}
 
   /**
@@ -311,10 +313,8 @@ export class AuthService {
       },
     });
 
-    // W trybie dev logujemy token do konsoli (w produkcji wyślemy email)
-    console.log(
-      `\n🔐 Password Reset Token for ${email}:\nhttp://localhost:3000/reset-password/${token}\n`,
-    );
+    // Wyślij email z linkiem resetowania
+    await this.emailService.sendPasswordResetEmail(email, token);
 
     return {
       message:
@@ -353,7 +353,8 @@ export class AuthService {
     });
 
     return {
-      message: 'Hasło zostało pomyślnie zresetowane. Możesz się teraz zalogować.',
+      message:
+        'Hasło zostało pomyślnie zresetowane. Możesz się teraz zalogować.',
     };
   }
 }
