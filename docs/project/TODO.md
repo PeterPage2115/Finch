@@ -1,25 +1,27 @@
 ﻿# 📋 TODO - Current Sprint
 
 > **Current Version:** v0.7.0 Complete ✅  
-> **Next Priority:** Technical Documentation + v0.8.0 Real Authentication
+> **Next Priority:** v0.8.0-beta Password Reset
 
 ---
 
 ## 🎯 In Progress
 
-- [ ] **Technical Documentation** - Create docs/technical/ structure (5 files)
-  - TECH_STACK.md, ARCHITECTURE.md, DEVELOPMENT_GUIDE.md, TESTING_STRATEGY.md, API_REFERENCE.md
+- [ ] **v0.8.0-beta: Password Reset** - Email flow for password recovery
+  - Prisma schema: PasswordResetToken model
+  - Backend: forgot-password, reset-password endpoints
+  - Frontend: Password reset pages
 
 ---
 
 ## ⏭️ Next Up (Prioritized)
 
-1. [ ] **v0.8.0-alpha: Core Authentication** (1 day)
+1. [x] **v0.8.0-alpha: Core Authentication** ✅ (Complete)
    - Bcrypt password hashing
-   - Real JWT generation (access + refresh tokens)
-   - User profile endpoints (GET/PATCH `/api/auth/profile`)
+   - Real JWT generation
+   - User profile endpoints (GET/PATCH)
    - Change password endpoint
-   - Frontend: Profile page + forms
+   - Frontend: Profile page + change password form
 
 2. [ ] **v0.8.0-beta: Password Reset** (0.5 day)
    - Password reset tokens in Prisma schema

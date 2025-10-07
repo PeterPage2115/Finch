@@ -29,7 +29,9 @@ Authorization: Bearer <your-jwt-token>
 |----------------|--------|---------------------------------|---------------|
 | **Auth**       | POST   | `/auth/register`                | No            |
 |                | POST   | `/auth/login`                   | No            |
-|                | GET    | `/auth/profile` *(v0.8.0)*      | Yes           |
+|                | GET    | `/auth/me`                      | Yes           |
+|                | PATCH  | `/auth/profile`                 | Yes           |
+|                | PATCH  | `/auth/change-password`         | Yes           |
 | **Transactions** | GET  | `/transactions`                 | Yes           |
 |                | GET    | `/transactions/:id`             | Yes           |
 |                | POST   | `/transactions`                 | Yes           |
@@ -116,9 +118,9 @@ Authorization: Bearer <your-jwt-token>
 
 ---
 
-### Get Profile *(Coming in v0.8.0)*
+### Get Profile
 
-**GET** `/api/auth/profile`
+**GET** `/api/auth/me`
 
 **Headers:**
 ```
@@ -128,12 +130,94 @@ Authorization: Bearer <jwt-token>
 **Response (200 OK):**
 ```json
 {
-  "id": 1,
+  "id": "550e8400-e29b-41d4-a716-446655440000",
   "email": "user@example.com",
   "name": "John Doe",
-  "createdAt": "2025-10-07T10:00:00.000Z"
+  "createdAt": "2025-10-07T10:00:00.000Z",
+  "updatedAt": "2025-10-07T10:00:00.000Z"
 }
 ```
+
+**Errors:**
+- `401 Unauthorized` - Invalid or missing JWT token
+
+---
+
+### Update Profile *(v0.8.0-alpha)*
+
+**PATCH** `/api/auth/profile`
+
+**Headers:**
+```
+Authorization: Bearer <jwt-token>
+Content-Type: application/json
+```
+
+**Request Body (all fields optional):**
+```json
+{
+  "name": "Jane Smith",
+  "email": "jane.smith@example.com"
+}
+```
+
+**Validation Rules:**
+- `name`: Optional, string, 2-100 characters
+- `email`: Optional, valid email format
+
+**Response (200 OK):**
+```json
+{
+  "id": "550e8400-e29b-41d4-a716-446655440000",
+  "email": "jane.smith@example.com",
+  "name": "Jane Smith",
+  "createdAt": "2025-10-07T10:00:00.000Z",
+  "updatedAt": "2025-10-07T15:30:00.000Z"
+}
+```
+
+**Errors:**
+- `400 Bad Request` - Validation error
+- `401 Unauthorized` - Invalid or missing JWT token
+- `409 Conflict` - Email already in use by another user
+
+---
+
+### Change Password *(v0.8.0-alpha)*
+
+**PATCH** `/api/auth/change-password`
+
+**Headers:**
+```
+Authorization: Bearer <jwt-token>
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "oldPassword": "currentPassword123",
+  "newPassword": "NewSecurePass123"
+}
+```
+
+**Validation Rules:**
+- `oldPassword`: Required, string
+- `newPassword`: Required, min 8 characters, must contain:
+  - At least one lowercase letter
+  - At least one uppercase letter
+  - At least one digit
+
+**Response (200 OK):**
+```json
+{
+  "message": "Hasło zostało pomyślnie zmienione"
+}
+```
+
+**Errors:**
+- `400 Bad Request` - Validation error (password too weak)
+- `401 Unauthorized` - Invalid or missing JWT token, or incorrect old password
 
 ---
 
