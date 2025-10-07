@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { authApi } from '@/lib/api/authClient';
+import { Wallet } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -61,9 +62,12 @@ export default function RegisterPage() {
         <div className="bg-white rounded-2xl shadow-xl p-8">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900">
-              💰 Tracker Kasy
-            </h2>
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <Wallet className="w-8 h-8 text-indigo-600" />
+              <h2 className="text-3xl font-bold text-gray-900">
+                Tracker Kasy
+              </h2>
+            </div>
             <p className="mt-2 text-sm text-gray-600">
               Utwórz konto i zacznij zarządzać swoimi finansami
             </p>

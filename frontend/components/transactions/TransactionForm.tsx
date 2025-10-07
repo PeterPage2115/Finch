@@ -9,6 +9,7 @@
 import { useState, useEffect } from 'react';
 import { Transaction, TransactionType, CreateTransactionDto } from '@/types/transaction';
 import { motion } from 'framer-motion';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 
 interface TransactionFormProps {
   transaction?: Transaction | null; // Jeśli podane, to tryb edycji
@@ -102,24 +103,26 @@ export default function TransactionForm({
             <button
               type="button"
               onClick={() => setFormData({ ...formData, type: TransactionType.INCOME })}
-              className={`px-4 py-2 rounded-lg border-2 transition ${
+              className={`px-4 py-2 rounded-lg border-2 transition flex items-center justify-center gap-2 ${
                 formData.type === TransactionType.INCOME
                   ? 'border-green-500 dark:border-green-400 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
                   : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
               }`}
             >
-              💰 Przychód
+              <TrendingUp size={18} />
+              Przychód
             </button>
             <button
               type="button"
               onClick={() => setFormData({ ...formData, type: TransactionType.EXPENSE })}
-              className={`px-4 py-2 rounded-lg border-2 transition ${
+              className={`px-4 py-2 rounded-lg border-2 transition flex items-center justify-center gap-2 ${
                 formData.type === TransactionType.EXPENSE
                   ? 'border-red-500 dark:border-red-400 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
                   : 'border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-500'
               }`}
             >
-              💸 Wydatek
+              <TrendingDown size={18} />
+              Wydatek
             </button>
           </div>
         </div>

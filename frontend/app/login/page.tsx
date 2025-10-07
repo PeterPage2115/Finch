@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { authApi } from '@/lib/api/authClient';
 import { useTheme } from '@/lib/providers/ThemeProvider';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Wallet } from 'lucide-react';
 
 export default function LoginPage() {
   const { setAuth, isAuthenticated } = useAuthStore();
@@ -104,9 +104,12 @@ export default function LoginPage() {
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
           {/* Header */}
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-              💰 Tracker Kasy
-            </h2>
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <Wallet className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
+                Tracker Kasy
+              </h2>
+            </div>
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
               Zaloguj się do swojego konta
             </p>

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+import { Info } from 'lucide-react';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -167,8 +168,9 @@ export default function EnhancedCategoryPieChart({
         </PieChart>
       </ResponsiveContainer>
       {onCategoryClick && (
-        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
-          💡 Kliknij na segment aby zobaczyć szczegóły
+        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
+          <Info size={14} />
+          Kliknij na segment aby zobaczyć szczegóły
         </p>
       )}
     </div>

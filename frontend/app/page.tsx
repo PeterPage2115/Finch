@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '../lib/stores/authStore';
+import { Wallet } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
@@ -19,9 +20,12 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
       <main className="max-w-4xl mx-auto text-center">
-        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-          💰 Tracker Kasy
-        </h1>
+        <div className="flex items-center justify-center gap-4 mb-6">
+          <Wallet className="w-16 h-16 md:w-20 md:h-20 text-indigo-600 dark:text-indigo-400" />
+          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white">
+            Tracker Kasy
+          </h1>
+        </div>
         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8">
           Zarządzaj swoimi finansami w prosty sposób
         </p>
