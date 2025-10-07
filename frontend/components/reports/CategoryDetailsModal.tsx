@@ -1,0 +1,226 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { X } from 'lucide-react';
+
+interface Transaction {
+  id: string;
+  amount: number;
+  description: string | null;
+  date: string;
+  type: 'INCOME' | 'EXPENSE';
+}
+
+interface CategoryDetailsData {
+  category: {
+    id: string;
+    name: string;
+    icon: string | null;
+    color: string | null;
+    type: 'INCOME' | 'EXPENSE';
+  };
+  summary: {
+    totalAmount: number;
+    transactionCount: number;
+    averageAmount: number;
+  };
+  transactions: Transaction[];
+  period: {
+    startDate: string;
+    endDate: string;
+  };
+}
+
+interface CategoryDetailsModalProps {
+  categoryId: string;
+  isOpen: boolean;
+  onClose: () => void;
+  startDate: string;
+  endDate: string;
+}
+
+export default function CategoryDetailsModal({
+  categoryId,
+  isOpen,
+  onClose,
+  startDate,
+  endDate,
+}: CategoryDetailsModalProps) {
+  const [data, setData] = useState<CategoryDetailsData | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!isOpen || !categoryId) return;
+
+    const fetchDetails = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(
+          `http://localhost:3001/reports/category/${categoryId}/details?startDate=${startDate}&endDate=${endDate}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error('Nie udało się pobrać szczegółów kategorii');
+        }
+
+        const result = await response.json();
+        setData(result);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Wystąpił błąd');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchDetails();
+  }, [categoryId, isOpen, startDate, endDate]);
+
+  if (!isOpen) return null;
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('pl-PL', {
+      style: 'currency',
+      currency: 'PLN',
+      minimumFractionDigits: 2,
+    }).format(value);
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('pl-PL', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-hidden rounded-lg bg-white shadow-xl">
+        {/* Header */}
+        <div
+          className="flex items-center justify-between border-b border-gray-200 p-6"
+          style={{ borderTopColor: data?.category.color || undefined }}
+        >
+          <div className="flex items-center gap-3">
+            {data?.category.icon && (
+              <div
+                className="flex h-12 w-12 items-center justify-center rounded-lg text-2xl"
+                style={{ backgroundColor: data.category.color || '#9ca3af' }}
+              >
+                {data.category.icon}
+              </div>
+            )}
+            <div>
+              <h2 className="text-xl font-semibold text-gray-900">
+                {data?.category.name || 'Kategoria'}
+              </h2>
+              <p className="text-sm text-gray-500">
+                {data?.period.startDate} - {data?.period.endDate}
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="rounded-lg p-2 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+            aria-label="Zamknij"
+          >
+            <X className="h-5 w-5" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="max-h-[calc(90vh-80px)] overflow-y-auto p-6">
+          {isLoading && (
+            <div className="flex justify-center py-12">
+              <div className="h-8 w-8 animate-spin rounded-full border-4 border-indigo-600 border-t-transparent"></div>
+            </div>
+          )}
+
+          {error && (
+            <div className="rounded-lg bg-red-50 p-4 text-red-700">
+              {error}
+            </div>
+          )}
+
+          {data && !isLoading && !error && (
+            <>
+              {/* Summary Cards */}
+              <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                  <p className="text-sm text-gray-600">Suma</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {formatCurrency(data.summary.totalAmount)}
+                  </p>
+                </div>
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                  <p className="text-sm text-gray-600">Średnia</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {formatCurrency(data.summary.averageAmount)}
+                  </p>
+                </div>
+                <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                  <p className="text-sm text-gray-600">Transakcje</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {data.summary.transactionCount}
+                  </p>
+                </div>
+              </div>
+
+              {/* Transactions List */}
+              <div>
+                <h3 className="mb-4 text-lg font-semibold text-gray-900">
+                  Lista transakcji
+                </h3>
+                {data.transactions.length === 0 ? (
+                  <p className="text-center text-gray-500 py-8">
+                    Brak transakcji w tym okresie
+                  </p>
+                ) : (
+                  <div className="space-y-2">
+                    {data.transactions.map((transaction) => (
+                      <div
+                        key={transaction.id}
+                        className="flex items-center justify-between rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:bg-gray-50"
+                      >
+                        <div className="flex-1">
+                          <p className="font-medium text-gray-900">
+                            {transaction.description || 'Bez opisu'}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            {formatDate(transaction.date)}
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p
+                            className={`text-lg font-semibold ${
+                              transaction.type === 'INCOME'
+                                ? 'text-green-600'
+                                : 'text-red-600'
+                            }`}
+                          >
+                            {transaction.type === 'INCOME' ? '+' : '-'}
+                            {formatCurrency(transaction.amount)}
+                          </p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

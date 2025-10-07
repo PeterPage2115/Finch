@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -7,7 +8,9 @@ import { fetchSummary, fetchByCategoryReport, ReportSummary, CategoryReport } fr
 import AppNavbar from '@/components/layout/AppNavbar';
 import DateRangePicker from '@/components/reports/DateRangePicker';
 import SummaryCards from '@/components/reports/SummaryCards';
-import CategoryPieChart from '@/components/reports/CategoryPieChart';
+import EnhancedCategoryPieChart from '@/components/reports/EnhancedCategoryPieChart';
+import CategoryTrendChart from '@/components/reports/CategoryTrendChart';
+import CategoryDetailsModal from '@/components/reports/CategoryDetailsModal';
 
 /**
  * Reports Page - view financial reports and analytics
@@ -26,8 +29,11 @@ export default function ReportsPage() {
   const [endDate, setEndDate] = useState(defaultEnd);
   const [summary, setSummary] = useState<ReportSummary | null>(null);
   const [categoryReport, setCategoryReport] = useState<CategoryReport | null>(null);
+  const [trendData, setTrendData] = useState<{ data: any[]; granularity: string } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Wait for hydration before checking auth
   useEffect(() => {
@@ -39,7 +45,8 @@ export default function ReportsPage() {
     }
 
     fetchReports();
-  }, [token, hasHydrated, router, startDate, endDate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token, hasHydrated, startDate, endDate]);
 
   const fetchReports = async () => {
     if (!token) return;
@@ -49,16 +56,21 @@ export default function ReportsPage() {
       setError(null);
 
       // Fetch both reports in parallel
-      const [summaryData, categoryData] = await Promise.all([
+      const [summaryData, categoryData, trendDataResult] = await Promise.all([
         fetchSummary(token, startDate, endDate),
         fetchByCategoryReport(token, startDate, endDate, 'EXPENSE'), // Focus on expenses
+        fetch(
+          `http://localhost:3001/reports/category-trend?startDate=${startDate}&endDate=${endDate}&granularity=daily`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        ).then((res) => res.json()),
       ]);
 
       setSummary(summaryData);
       setCategoryReport(categoryData);
-    } catch (err: any) {
+      setTrendData(trendDataResult);
+    } catch (err) {
       console.error('Error fetching reports:', err);
-      setError(err.message || 'Błąd podczas pobierania raportów');
+      setError(err instanceof Error ? err.message : 'Błąd podczas pobierania raportów');
     } finally {
       setIsLoading(false);
     }
@@ -67,6 +79,16 @@ export default function ReportsPage() {
   const handleDateChange = (newStartDate: string, newEndDate: string) => {
     setStartDate(newStartDate);
     setEndDate(newEndDate);
+  };
+
+  const handleCategoryClick = (categoryId: string) => {
+    setSelectedCategoryId(categoryId);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedCategoryId(null);
   };
 
   // Redirect if not authenticated
@@ -124,12 +146,34 @@ export default function ReportsPage() {
         </div>
 
         {/* Category Breakdown */}
-        <div className="mb-6">
-          <CategoryPieChart
+        <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+          {/* Enhanced Pie Chart */}
+          <EnhancedCategoryPieChart
             categories={categoryReport?.categories || []}
-            isLoading={isLoading}
+            onCategoryClick={handleCategoryClick}
           />
+
+          {/* Trend Chart */}
+          {trendData?.data && (
+            <CategoryTrendChart
+              data={trendData.data}
+              granularity={
+                (trendData.granularity as 'daily' | 'weekly' | 'monthly') || 'daily'
+              }
+            />
+          )}
         </div>
+
+        {/* Category Details Modal */}
+        {selectedCategoryId && (
+          <CategoryDetailsModal
+            categoryId={selectedCategoryId}
+            isOpen={isModalOpen}
+            onClose={handleCloseModal}
+            startDate={startDate}
+            endDate={endDate}
+          />
+        )}
       </div>
     </div>
   );
