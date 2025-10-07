@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuthStore } from '../lib/stores/authStore';
-import { Wallet } from 'lucide-react';
+import { Wallet, BarChart2, Briefcase, Lock } from 'lucide-react';
 
 export default function Home() {
   const router = useRouter();
@@ -47,7 +47,9 @@ export default function Home() {
         {/* Features */}
         <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-            <div className="text-3xl mb-3">📊</div>
+            <div className="flex items-center justify-center w-12 h-12 mb-3 rounded-lg bg-indigo-100 dark:bg-indigo-900">
+              <BarChart2 size={28} className="text-indigo-600 dark:text-indigo-400" />
+            </div>
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
               Śledź transakcje
             </h3>
@@ -57,7 +59,9 @@ export default function Home() {
           </div>
 
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-            <div className="text-3xl mb-3">💼</div>
+            <div className="flex items-center justify-center w-12 h-12 mb-3 rounded-lg bg-indigo-100 dark:bg-indigo-900">
+              <Briefcase size={28} className="text-indigo-600 dark:text-indigo-400" />
+            </div>
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
               Zarządzaj budżetem
             </h3>
@@ -67,7 +71,9 @@ export default function Home() {
           </div>
 
           <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-lg">
-            <div className="text-3xl mb-3">🔒</div>
+            <div className="flex items-center justify-center w-12 h-12 mb-3 rounded-lg bg-indigo-100 dark:bg-indigo-900">
+              <Lock size={28} className="text-indigo-600 dark:text-indigo-400" />
+            </div>
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
               Prywatność przede wszystkim
             </h3>

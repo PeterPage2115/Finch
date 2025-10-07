@@ -11,7 +11,7 @@
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useTheme } from '@/lib/providers/ThemeProvider';
-import { Wallet, Menu, X } from 'lucide-react';
+import { Wallet, Menu, X, Sun, Moon } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 // TODO: Add focus trap for accessibility (v0.6.1)
@@ -169,7 +169,7 @@ export default function AppNavbar() {
               title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
               aria-label="Toggle dark mode"
             >
-              {theme === 'dark' ? '☀️' : '🌙'}
+              {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
             </motion.button>
             <div className="text-sm hidden sm:block">
               <p className="text-gray-700 dark:text-gray-200 font-medium">{user?.name || 'Użytkownik'}</p>
