@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* 
+ * Tailwind v4 Dark Mode Configuration
+ * Enable class-based dark mode strategy (.dark) instead of prefers-color-scheme
+ * This allows manual toggle via ThemeProvider
+ */
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
