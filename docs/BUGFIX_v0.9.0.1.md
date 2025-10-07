@@ -6,7 +6,31 @@
 
 ## Podsumowanie
 
-Po przetestowaniu wersji v0.9.0 (w tym testach Playwright przez przeglądarkę), użytkownik zgłosił 4 krytyczne problemy związane z UI. Wszystkie zostały zdiagnozowane i naprawione w ramach tego patcha.
+Po przetestowaniu wersji v0.9.0 (w tym testach Playwright przez przeglądarkę), użytkownik zgłosił 6 krytycznych problemów związanych z UI i systemem ikon. Wszystkie zostały zdiagnozowane i naprawione w ramach tego patcha.
+
+**Naprawione komponenty:**
+1. CategoryDetailsModal (ikony kategorii)
+2. Profile page (tryb ciemny)
+3. Komponenty wykresów Reports (5 komponentów - tryb ciemny)
+4. TrendsComparisonCards (kolorowe tła w dark mode)
+5. CategoryIcon (globalne mapowanie emoji → Lucide)
+
+**Statystyki:**
+- **Commity:** 7
+- **Zmienione pliki:** 8
+- **Dodane linie:** ~421
+- **Usunięte linie:** ~127
+- **Dodane dark: klasy:** ~79
+- **Emoji mappings:** 30+
+
+**Wszystkie commity:**
+1. `1a9a7c9` - fix: CategoryDetailsModal + Profile dark mode
+2. `e143cd4` - fix: add dark mode support to chart components
+3. `932c3f3` - docs: add chart components to BUGFIX report
+4. `d42c3d9` - fix(frontend): add dark mode support to TrendsComparisonCards
+5. `27cd7ee` - docs: add Playwright verification screenshots for TrendsComparisonCards fix
+6. `3d53a57` - docs: add Bug #5 to BUGFIX report
+7. `398c6c7` - fix(frontend): add emoji to Lucide icon mapping for backward compatibility
 
 ---
 
@@ -545,7 +569,121 @@ import { CategoryIcon } from '@/components/ui/CategoryIcon';
 
 ---
 
+### 6. ❌ Globalne wyświetlanie znaków zapytania zamiast ikon kategorii
+
+**Priorytet:** 🔴 KRYTYCZNY  
+**Status:** ✅ NAPRAWIONE
+
+**Opis problemu:**
+Użytkownik zgłosił poprzez 5 screenshotów, że **na wszystkich stronach aplikacji** ikony kategorii wyświetlają się jako znaki zapytania (❔):
+- **Dashboard:** Kolumna kategorii w tabeli transakcji
+- **Kategorie:** Wszystkie karty kategorii
+- **Budżety:** Ikony na kartach budżetów
+- **Raporty:** Legenda wykresów
+
+**Root Cause - Analiza z Sequential Thinking:**
+
+1. Sprawdzono komponent `CategoryIcon` - działa poprawnie
+2. Sprawdzono `iconMap.ts` - wszystkie ikony Lucide prawidłowo zmapowane
+3. **Odkryto niezgodność w plikach seed:**
+   - `backend/prisma/seed.ts` (użytkownik `test@example.com`): Używa **prawidłowych nazw Lucide** (`'Car'`, `'UtensilsCrossed'`, `'Wallet'`)
+   - `backend/prisma/seed-existing-users.sql` (użytkownik `demo@tracker.com`): Używa **emoji** (`'🚗'`, `'🍔'`, `'💰'`)
+
+4. **Konkluzja:** 
+   - `CategoryIcon` oczekuje nazw Lucide (np. `'Car'`)
+   - Baza danych zawiera emoji (np. `'🚗'`)
+   - Gdy emoji nie zostanie znaleziona w `iconMap`, zwracany jest `HelpCircle` (❔)
+
+**Rozwiązanie - Backward Compatibility Mapping:**
+
+Zamiast migracji bazy danych, zaimplementowano **mapowanie emoji → Lucide** w komponencie `CategoryIcon.tsx`:
+
+```typescript
+// Nowe mapowanie 30+ emoji na nazwy Lucide
+const emojiToLucideMap: Record<string, string> = {
+  // Food & Drinks
+  '🍔': 'UtensilsCrossed',
+  '🍕': 'Pizza',
+  '☕': 'Coffee',
+  '🍺': 'Beer',
+  
+  // Transportation
+  '🚗': 'Car',
+  '🚌': 'Bus',
+  '🚆': 'Train',
+  '✈️': 'Plane',
+  '🚲': 'Bike',
+  
+  // Finance
+  '💰': 'Wallet',
+  '💵': 'DollarSign',
+  '💳': 'CreditCard',
+  
+  // Health
+  '❤️': 'Heart',
+  '⚕️': 'Heart',
+  '💊': 'Pill',
+  
+  // Entertainment
+  '🎮': 'Gamepad2',
+  '🎬': 'Film',
+  '🎵': 'Music',
+  
+  // Home & Utilities
+  '🏠': 'Home',
+  '⚡': 'Zap',
+  '📄': 'Receipt',
+  
+  // ... i więcej
+};
+
+// Funkcja konwersji
+function getIconNameFromEmojiOrString(iconNameOrEmoji: string): string {
+  // Jeśli to emoji, zwróć nazwę Lucide
+  if (emojiToLucideMap[iconNameOrEmoji]) {
+    return emojiToLucideMap[iconNameOrEmoji];
+  }
+  // Jeśli to już nazwa Lucide, zwróć bez zmian
+  return iconNameOrEmoji;
+}
+
+// Wykorzystanie w komponencie
+export function CategoryIcon({ iconName, color, size = 20, className = '' }: CategoryIconProps) {
+  const lucideIconName = getIconNameFromEmojiOrString(iconName);
+  const IconComponent = iconMap[lucideIconName] || HelpCircle;
+  
+  return <IconComponent size={size} style={{ color }} className={className} />;
+}
+```
+
+**Zalety tego rozwiązania:**
+- ✅ **Backward compatibility:** Obsługuje zarówno emoji (legacy) jak i nazwy Lucide (nowe)
+- ✅ **Brak migracji:** Nie wymaga zmiany danych w bazie
+- ✅ **Przyszłościowe:** Nowe kategorie mogą używać nazw Lucide bezpośrednio
+- ✅ **Prosty maintenance:** Łatwo dodać nowe mapowania emoji
+
+**Zmienione pliki:**
+- `frontend/components/ui/CategoryIcon.tsx`
+  - Dodano `emojiToLucideMap` Record z 30+ mapowaniami
+  - Dodano funkcję `getIconNameFromEmojiOrString()`
+  - Zaktualizowano komponent do używania konwertera
+  - Zaktualizowano JSDoc z dokumentacją dual-format support
+
+**Weryfikacja z Playwright:**
+Po deploymencie (restart frontend container), wykonano testy z Playwright i zrobiono screenshoty:
+- ✅ `dashboard-icons-fixed-after-emoji-mapping.png` - ikony kategorii w tabeli transakcji
+- ✅ `categories-icons-fixed.png` - wszystkie karty kategorii z poprawnymi ikonami Lucide
+- ✅ `budgets-icons-fixed.png` - ikona na karcie budżetu Rachunki
+- ✅ `reports-icons-fixed.png` - ikony w legendzie wykresów
+
+**Wszystkie strony potwierdzają:** Ikony Lucide wyświetlają się poprawnie zamiast znaków zapytania!
+
+**Commit:** `398c6c7` - fix(frontend): add emoji to Lucide icon mapping for backward compatibility
+
+---
+
 **Dokument stworzony:** 2025-10-07  
-**Ostatnia aktualizacja:** 2025-10-07 (dodano Bug #5 - TrendsComparisonCards)  
+**Ostatnia aktualizacja:** 2025-10-07 (dodano Bug #6 - Globalne wyświetlanie ikon)  
 **Autor:** AI Copilot  
 **Reviewer:** Użytkownik
+
