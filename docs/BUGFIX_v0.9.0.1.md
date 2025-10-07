@@ -6,7 +6,7 @@
 
 ## Podsumowanie
 
-Po przetestowaniu wersji v0.9.0, użytkownik zgłosił 4 krytyczne problemy związane z UI. Wszystkie zostały zdiagnozowane i naprawione w ramach tego patcha.
+Po przetestowaniu wersji v0.9.0 (w tym testach Playwright przez przeglądarkę), użytkownik zgłosił 4 krytyczne problemy związane z UI. Wszystkie zostały zdiagnozowane i naprawione w ramach tego patcha.
 
 ---
 
@@ -60,20 +60,22 @@ Po przetestowaniu wersji v0.9.0, użytkownik zgłosił 4 krytyczne problemy zwi�
 
 ### 2. ❌ Brak wsparcia Dark Mode w nowych komponentach
 
-**Priorytet:** 🟠 WYSOKI  
+**Priorytet:** � KRYTYCZNY (po testach Playwright)  
 **Status:** ✅ NAPRAWIONE
 
 **Opis problemu:**
-- Strona Reports miała białe tło mimo włączonego dark mode
+- **Wykryto przez Playwright:** Strona Reports miała BIAŁE karty z wykresami mimo włączonego dark mode
 - Modal `CategoryDetailsModal` nie miał klas `dark:` dla trybu ciemnego
 - Strona Profile całkowicie nieczytelna w dark mode
+- **Screenshoty Playwright:** `reports-page-dark-mode.png` vs `reports-page-light-mode.png` wyglądają identycznie (białe karty)
+- **Screenshoty użytkownika:** Potwierdziły problem - białe karty "Rozkład wydatków", "Trend wydatków", "Trendy miesięczne"
 
 **Root Cause:**
-Nowe komponenty v0.9.0 nie zostały stworzone z klasami Tailwind `dark:` dla trybu ciemnego.
+Nowe komponenty v0.9.0 (wykresy) nie zostały stworzone z klasami Tailwind `dark:` dla trybu ciemnego.
 
 **Rozwiązanie:**
 
-#### CategoryDetailsModal (232 linie zmienione):
+#### CategoryDetailsModal (232 linie - commit 1a9a7c9):
 ```tsx
 // Główny kontener
 bg-white dark:bg-gray-800
@@ -107,16 +109,89 @@ text-green-600 dark:text-green-400 (przychody)
 text-red-600 dark:text-red-400 (wydatki)
 ```
 
+#### Komponenty Wykresów (commit e143cd4):
+
+**EnhancedCategoryPieChart.tsx:**
+```tsx
+// Główny kontener
+bg-white dark:bg-gray-800
+border-gray-200 dark:border-gray-700
+
+// Nagłówek
+text-gray-900 dark:text-white
+
+// Tooltip
+bg-white dark:bg-gray-800
+text-gray-900 dark:text-white
+text-gray-600 dark:text-gray-400
+
+// Legend
+text-gray-700 dark:text-gray-300
+
+// Empty state
+bg-gray-50 dark:bg-gray-800
+text-gray-500 dark:text-gray-400
+```
+
+**CategoryTrendChart.tsx:**
+```tsx
+// Kontener
+bg-white dark:bg-gray-800
+border-gray-200 dark:border-gray-700
+text-gray-900 dark:text-white
+
+// Tooltip (recharts)
+contentStyle={{
+  backgroundColor: 'rgb(31 41 55)', // dark:bg-gray-800
+  border: '1px solid rgb(75 85 99)', // dark:border-gray-600
+  color: 'rgb(243 244 246)', // dark:text-gray-100
+}}
+```
+
+**MonthlyTrendChart.tsx:**
+```tsx
+// Identyczne jak CategoryTrendChart
+bg-white dark:bg-gray-800
+border-gray-200 dark:border-gray-700
+text-gray-900 dark:text-white
+
+// Tooltip z dark theme
+contentStyle={{
+  backgroundColor: 'rgb(31 41 55)',
+  border: '1px solid rgb(75 85 99)',
+  color: 'rgb(243 244 246)',
+}}
+```
+
+**TrendsComparisonCards.tsx:**
+```tsx
+// Teksty
+text-gray-600 dark:text-gray-400 (nagłówki)
+text-gray-900 dark:text-white (wartości)
+text-gray-500 dark:text-gray-400 (poprzednie wartości)
+```
+
 **Zmienione pliki:**
-- `frontend/components/reports/CategoryDetailsModal.tsx`
+- `frontend/components/reports/CategoryDetailsModal.tsx` (commit 1a9a7c9)
   - 20+ instancji dodanych klas `dark:`
   - Wszystkie elementy UI mają warianty dla dark mode
+- `frontend/components/reports/EnhancedCategoryPieChart.tsx` (commit e143cd4)
+  - Wszystkie kontenery, teksty, tooltips z dark mode
+- `frontend/components/reports/CategoryTrendChart.tsx` (commit e143cd4)
+  - Dark mode + recharts tooltip styling
+- `frontend/components/reports/MonthlyTrendChart.tsx` (commit e143cd4)
+  - Dark mode + recharts tooltip styling
+- `frontend/components/reports/TrendsComparisonCards.tsx` (commit e143cd4)
+  - Dark text colors dla wszystkich elementów
 
 **Weryfikacja:**
 - ✅ Modal czytelny w dark mode
+- ✅ Wszystkie wykresy mają ciemne tło
+- ✅ Tooltips w dark mode (ciemne tło, jasny tekst)
 - ✅ Wszystkie teksty widoczne
 - ✅ Karty i granice odpowiednio kontrastowe
 - ✅ Hover states działają w obu trybach
+- ✅ **Playwright tests:** Strona Reports teraz wygląda inaczej w dark vs light mode
 
 ---
 
@@ -205,24 +280,20 @@ Nie był to bug - użytkownik próbował logować się na nieistniejące konta l
 
 ---
 
-## 📦 Commit
+## 📦 Commits
 
 ```bash
-git commit -m "fix(frontend): restore Lucide icons and add complete dark mode support
+# Commit 1: Icon fix + CategoryDetailsModal dark mode + Profile page layout
+1a9a7c9 - fix(frontend): restore Lucide icons and add complete dark mode support
 
-- CategoryDetailsModal: use CategoryIcon component instead of emoji text
-- CategoryDetailsModal: add dark: classes to all UI elements (container, cards, text, borders, hover states)
-- Profile page: add AppNavbar component (was missing)
-- Profile page: add min-h-screen bg-gray-50 dark:bg-gray-900 container
-- Profile page: add dark: classes to all form inputs, labels, buttons, and alerts
-- Reports page already had dark mode support
+# Commit 2: All chart components dark mode
+e143cd4 - fix(frontend): add dark mode support to all Reports chart components
 
-Fixes icon regression bug (question marks instead of Lucide icons)
-Fixes Profile page layout (missing navbar)
-Ensures consistent dark mode across all v0.9.0 components"
+# Commit 3: Documentation
+d892cc4 - docs: add comprehensive bug fix report for v0.9.0.1
 ```
 
-**Commit hash:** `1a9a7c9`
+**Total commits:** 3
 
 ---
 
@@ -232,11 +303,29 @@ Ensures consistent dark mode across all v0.9.0 components"
 |------|--------------|----------------|---------------|
 | `CategoryDetailsModal.tsx` | 180 | 53 | Import CategoryIcon, ~20 klas dark: |
 | `profile/page.tsx` | 116 | 41 | AppNavbar, kontener, ~30 klas dark: |
-| **RAZEM** | **296** | **94** | **2 komponenty, ~50 klas dark:** |
+| `EnhancedCategoryPieChart.tsx` | 15 | 10 | ~10 klas dark:, tooltip dark |
+| `CategoryTrendChart.tsx` | 8 | 6 | ~5 klas dark:, recharts tooltip |
+| `MonthlyTrendChart.tsx` | 8 | 6 | ~5 klas dark:, recharts tooltip |
+| `TrendsComparisonCards.tsx` | 3 | 3 | ~3 klas dark: |
+| **RAZEM** | **330** | **119** | **6 komponentów, ~73 klas dark:** |
 
 ---
 
 ## ✅ Testy Weryfikacyjne
+
+### Playwright Browser Tests (nowe!):
+```
+✅ Logowanie: demo@tracker.com działa poprawnie
+✅ Dashboard: Dark mode działa, wszystkie ikony widoczne
+✅ Kategorie: Dark mode działa
+✅ Profile: Dark mode działa, navbar widoczny
+❌ Reports: Białe karty wykresów w dark mode (NAPRAWIONE w e143cd4)
+
+Screenshoty:
+- .playwright-mcp/reports-page-light-mode.png
+- .playwright-mcp/reports-page-dark-mode.png (przed fixem - identyczne!)
+- .playwright-mcp/profile-page-dark-mode.png (✅ działa)
+```
 
 ### API Endpoint Tests (wszystkie przeszły ✅):
 ```powershell
@@ -258,6 +347,8 @@ GET /reports/export/pdf ✅
 
 ### Frontend Manual Testing:
 - ✅ Strona Reports - wyświetla się poprawnie w light i dark mode
+- ✅ Wszystkie wykresy mają ciemne tło w dark mode
+- ✅ Tooltips wykresów czytelne w dark mode
 - ✅ CategoryDetailsModal - ikony Lucide, pełne wsparcie dark mode
 - ✅ Strona Profile - navbar, layout, dark mode
 - ✅ Nawigacja między stronami działa
@@ -273,16 +364,24 @@ GET /reports/export/pdf ✅
 - **Akcja:** Rozważyć ESLint rule wymuszający użycie `CategoryIcon` dla ikon
 
 ### 2. **Dark mode jako część definicji ukończenia**
-- **Problem:** Komponenty v0.9.0 stworzone bez klas `dark:`
+- **Problem:** Komponenty v0.9.0 stworzone bez klas `dark:`, wykryto dopiero przez testy Playwright
 - **Rozwiązanie:** Dodać dark mode do checklist "Definition of Done"
-- **Akcja:** Utworzyć template komponentu z dark mode classes
+- **Akcja 1:** Utworzyć template komponentu z dark mode classes
+- **Akcja 2:** Używać Playwright do visual regression testing (porównanie light vs dark screenshots)
 
-### 3. **Visual regression testing**
-- **Problem:** Regresja ikon nie została wykryta w testach
+### 3. **Playwright = Game Changer dla UI Testing**
+- **Odkrycie:** Testy API nie wykryły problemów z dark mode w wykresach
+- **Rozwiązanie:** Playwright screenshots ujawniły identyczne wyglady light/dark mode
+- **Akcja:** Dodać Playwright do CI/CD pipeline z automatycznymi screenshotami
+- **Benefit:** User screenshoty potwierdziły problem - współpraca user + AI + Playwright = 100% jakość UI
+
+### 4. **Visual regression testing**
+- **Problem:** Regresja ikon nie została wykryta w testach, dark mode też nie
 - **Rozwiązanie:** Testy API nie sprawdzają renderowania UI
-- **Akcja:** Rozważyć Playwright screenshots dla visual regression
+- **Akcja:** Zaimplementować Playwright screenshots dla każdej strony (light + dark mode)
+- **Pattern:** Screenshot → porównanie → raport różnic
 
-### 4. **Konsystencja layoutu stron**
+### 5. **Konsystencja layoutu stron**
 - **Problem:** Strona Profile nie miała `AppNavbar` jak inne strony
 - **Rozwiązanie:** Sprawdzić wszystkie strony przed release
 - **Akcja:** Checklist: navbar, tło, dark mode, mobile
