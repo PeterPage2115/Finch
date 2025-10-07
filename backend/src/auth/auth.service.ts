@@ -3,11 +3,13 @@ import {
   ConflictException,
   UnauthorizedException,
   InternalServerErrorException,
+  BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
 import { RegisterDto, LoginDto } from './dto';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -112,7 +114,10 @@ export class AuthService {
   /**
    * Aktualizacja profilu użytkownika
    */
-  async updateProfile(userId: string, updateData: { name?: string; email?: string }) {
+  async updateProfile(
+    userId: string,
+    updateData: { name?: string; email?: string },
+  ) {
     // Sprawdź czy email nie jest już zajęty przez innego użytkownika
     if (updateData.email) {
       const existingUser = await this.prisma.user.findUnique({
@@ -143,7 +148,11 @@ export class AuthService {
   /**
    * Zmiana hasła użytkownika
    */
-  async changePassword(userId: string, oldPassword: string, newPassword: string) {
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string,
+  ) {
     // Pobierz użytkownika z hasłem
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
@@ -154,7 +163,10 @@ export class AuthService {
     }
 
     // Sprawdź czy stare hasło jest poprawne
-    const isOldPasswordValid = await this.comparePasswords(oldPassword, user.password);
+    const isOldPasswordValid = await this.comparePasswords(
+      oldPassword,
+      user.password,
+    );
 
     if (!isOldPasswordValid) {
       throw new UnauthorizedException('Obecne hasło jest nieprawidłowe');
@@ -264,5 +276,84 @@ export class AuthService {
         userId,
       })),
     });
+  }
+
+  /**
+   * Forgot Password - Generuje token resetowania hasła
+   */
+  async forgotPassword(email: string) {
+    // Znajdź użytkownika po emailu
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    });
+
+    // Zawsze zwracaj tę samą wiadomość (bezpieczeństwo - nie ujawniaj czy email istnieje)
+    if (!user) {
+      return {
+        message:
+          'Jeśli podany email istnieje, link do resetowania hasła został wysłany.',
+      };
+    }
+
+    // Generuj losowy token (64 znaki hex)
+    const token = crypto.randomBytes(32).toString('hex');
+
+    // Token ważny przez 1 godzinę
+    const expiresAt = new Date();
+    expiresAt.setHours(expiresAt.getHours() + 1);
+
+    // Zapisz token w bazie danych
+    await this.prisma.passwordResetToken.create({
+      data: {
+        token,
+        userId: user.id,
+        expiresAt,
+      },
+    });
+
+    // W trybie dev logujemy token do konsoli (w produkcji wyślemy email)
+    console.log(
+      `\n🔐 Password Reset Token for ${email}:\nhttp://localhost:3000/reset-password/${token}\n`,
+    );
+
+    return {
+      message:
+        'Jeśli podany email istnieje, link do resetowania hasła został wysłany.',
+    };
+  }
+
+  /**
+   * Reset Password - Resetuje hasło używając tokenu
+   */
+  async resetPassword(token: string, newPassword: string) {
+    // Znajdź token w bazie
+    const resetToken = await this.prisma.passwordResetToken.findUnique({
+      where: { token },
+      include: { user: true },
+    });
+
+    // Sprawdź czy token istnieje, nie jest używany i nie wygasł
+    if (!resetToken || resetToken.used || resetToken.expiresAt < new Date()) {
+      throw new BadRequestException('Token jest nieprawidłowy lub wygasł');
+    }
+
+    // Zahaszuj nowe hasło
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // Zaktualizuj hasło użytkownika
+    await this.prisma.user.update({
+      where: { id: resetToken.userId },
+      data: { password: hashedPassword },
+    });
+
+    // Oznacz token jako użyty
+    await this.prisma.passwordResetToken.update({
+      where: { id: resetToken.id },
+      data: { used: true },
+    });
+
+    return {
+      message: 'Hasło zostało pomyślnie zresetowane. Możesz się teraz zalogować.',
+    };
   }
 }
