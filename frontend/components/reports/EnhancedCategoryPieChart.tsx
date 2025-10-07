@@ -156,11 +156,16 @@ export default function EnhancedCategoryPieChart({
           <Tooltip content={<CustomTooltip />} />
           <Legend
             verticalAlign="bottom"
-            height={36}
+            height={60}
             iconType="circle"
-            wrapperStyle={{ paddingTop: '20px' }}
+            wrapperStyle={{ 
+              paddingTop: '20px',
+              lineHeight: '24px'
+            }}
+            layout="horizontal"
+            align="center"
             formatter={(value, entry: any) => (
-              <span className="text-sm text-gray-700 dark:text-gray-300">
+              <span className="text-sm text-gray-700 dark:text-gray-300 inline-block px-2 py-1">
                 {value} ({entry.payload.percentage.toFixed(1)}%)
               </span>
             )}
