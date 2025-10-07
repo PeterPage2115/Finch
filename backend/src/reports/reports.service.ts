@@ -313,4 +313,194 @@ export class ReportsService {
     const yearStart = new Date(d.getFullYear(), 0, 1);
     return Math.ceil(((d.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
   }
+
+  /**
+   * Get trends comparison (current period vs previous period)
+   * Useful for "This Month vs Last Month" type comparisons
+   */
+  async getTrendsComparison(
+    userId: string,
+    currentStart: Date,
+    currentEnd: Date,
+  ) {
+    // Calculate previous period (same length as current)
+    const periodLength = currentEnd.getTime() - currentStart.getTime();
+    const previousEnd = new Date(currentStart.getTime() - 1); // Day before current start
+    const previousStart = new Date(previousEnd.getTime() - periodLength);
+
+    // Get current period summary
+    const currentIncome = await this.prisma.transaction.aggregate({
+      where: {
+        userId,
+        type: 'INCOME',
+        date: { gte: currentStart, lte: currentEnd },
+      },
+      _sum: { amount: true },
+      _count: true,
+    });
+
+    const currentExpense = await this.prisma.transaction.aggregate({
+      where: {
+        userId,
+        type: 'EXPENSE',
+        date: { gte: currentStart, lte: currentEnd },
+      },
+      _sum: { amount: true },
+      _count: true,
+    });
+
+    // Get previous period summary
+    const previousIncome = await this.prisma.transaction.aggregate({
+      where: {
+        userId,
+        type: 'INCOME',
+        date: { gte: previousStart, lte: previousEnd },
+      },
+      _sum: { amount: true },
+      _count: true,
+    });
+
+    const previousExpense = await this.prisma.transaction.aggregate({
+      where: {
+        userId,
+        type: 'EXPENSE',
+        date: { gte: previousStart, lte: previousEnd },
+      },
+      _sum: { amount: true },
+      _count: true,
+    });
+
+    // Calculate totals
+    const currentIncomeTotal = Number(currentIncome._sum.amount || 0);
+    const currentExpenseTotal = Number(currentExpense._sum.amount || 0);
+    const previousIncomeTotal = Number(previousIncome._sum.amount || 0);
+    const previousExpenseTotal = Number(previousExpense._sum.amount || 0);
+
+    const currentBalance = currentIncomeTotal - currentExpenseTotal;
+    const previousBalance = previousIncomeTotal - previousExpenseTotal;
+
+    // Calculate changes and percentages
+    const incomeChange = currentIncomeTotal - previousIncomeTotal;
+    const expenseChange = currentExpenseTotal - previousExpenseTotal;
+    const balanceChange = currentBalance - previousBalance;
+
+    const incomePercentage =
+      previousIncomeTotal > 0
+        ? ((incomeChange / previousIncomeTotal) * 100).toFixed(1)
+        : currentIncomeTotal > 0
+          ? '100.0'
+          : '0.0';
+
+    const expensePercentage =
+      previousExpenseTotal > 0
+        ? ((expenseChange / previousExpenseTotal) * 100).toFixed(1)
+        : currentExpenseTotal > 0
+          ? '100.0'
+          : '0.0';
+
+    const balancePercentage =
+      Math.abs(previousBalance) > 0
+        ? ((balanceChange / Math.abs(previousBalance)) * 100).toFixed(1)
+        : currentBalance !== 0
+          ? '100.0'
+          : '0.0';
+
+    return {
+      currentPeriod: {
+        startDate: currentStart.toISOString().split('T')[0],
+        endDate: currentEnd.toISOString().split('T')[0],
+        income: currentIncomeTotal,
+        expenses: currentExpenseTotal,
+        balance: currentBalance,
+        transactionCount: currentIncome._count + currentExpense._count,
+      },
+      previousPeriod: {
+        startDate: previousStart.toISOString().split('T')[0],
+        endDate: previousEnd.toISOString().split('T')[0],
+        income: previousIncomeTotal,
+        expenses: previousExpenseTotal,
+        balance: previousBalance,
+        transactionCount: previousIncome._count + previousExpense._count,
+      },
+      changes: {
+        income: {
+          absolute: incomeChange,
+          percentage: parseFloat(incomePercentage),
+        },
+        expenses: {
+          absolute: expenseChange,
+          percentage: parseFloat(expensePercentage),
+        },
+        balance: {
+          absolute: balanceChange,
+          percentage: parseFloat(balancePercentage),
+        },
+      },
+    };
+  }
+
+  /**
+   * Get monthly trend for last N months
+   * Shows spending patterns over multiple months
+   */
+  async getMonthlyTrend(userId: string, monthsCount: number = 6) {
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setMonth(startDate.getMonth() - monthsCount);
+    startDate.setDate(1); // First day of the month
+
+    const transactions = await this.prisma.transaction.findMany({
+      where: {
+        userId,
+        date: { gte: startDate, lte: endDate },
+      },
+      orderBy: { date: 'asc' },
+      select: {
+        date: true,
+        amount: true,
+        type: true,
+      },
+    });
+
+    // Group by month
+    const monthlyData: Record<
+      string,
+      { month: string; income: number; expenses: number; balance: number }
+    > = {};
+
+    transactions.forEach((t) => {
+      const date = new Date(t.date);
+      const monthKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+
+      if (!monthlyData[monthKey]) {
+        monthlyData[monthKey] = {
+          month: monthKey,
+          income: 0,
+          expenses: 0,
+          balance: 0,
+        };
+      }
+
+      if (t.type === 'INCOME') {
+        monthlyData[monthKey].income += Number(t.amount);
+      } else {
+        monthlyData[monthKey].expenses += Number(t.amount);
+      }
+    });
+
+    // Calculate balance for each month
+    const trendData = Object.values(monthlyData)
+      .map((data) => ({
+        ...data,
+        balance: data.income - data.expenses,
+      }))
+      .sort((a, b) => a.month.localeCompare(b.month));
+
+    return {
+      monthsCount,
+      startDate: startDate.toISOString().split('T')[0],
+      endDate: endDate.toISOString().split('T')[0],
+      data: trendData,
+    };
+  }
 }

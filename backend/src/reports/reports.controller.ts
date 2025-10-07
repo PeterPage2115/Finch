@@ -91,4 +91,36 @@ export class ReportsController {
       endDate,
     );
   }
+
+  /**
+   * GET /reports/trends-comparison
+   * Compare current period with previous period of the same length
+   */
+  @Get('trends-comparison')
+  async getTrendsComparison(
+    @CurrentUser('id') userId: string,
+    @Query() query: QueryReportDto,
+  ) {
+    const currentStart = new Date(query.startDate);
+    const currentEnd = new Date(query.endDate);
+
+    return this.reportsService.getTrendsComparison(
+      userId,
+      currentStart,
+      currentEnd,
+    );
+  }
+
+  /**
+   * GET /reports/monthly-trend
+   * Get monthly income/expense trends for last N months
+   */
+  @Get('monthly-trend')
+  async getMonthlyTrend(
+    @CurrentUser('id') userId: string,
+    @Query('months') months?: string,
+  ) {
+    const monthsCount = months ? parseInt(months, 10) : 6;
+    return this.reportsService.getMonthlyTrend(userId, monthsCount);
+  }
 }
