@@ -98,17 +98,17 @@ export function TrendsComparisonCards({ data }: TrendsComparisonCardsProps) {
           key={card.title}
           className={`rounded-lg border ${card.borderColor} ${card.bgColor} p-6 shadow-sm transition-shadow hover:shadow-md`}
         >
-          <h3 className="text-sm font-medium text-gray-600 mb-2">
+          <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
             {card.title}
           </h3>
           
           {/* Current Amount */}
-          <div className="text-2xl font-bold text-gray-900 mb-1">
+          <div className="text-2xl font-bold text-gray-900 dark:text-white mb-1">
             {formatCurrency(card.current)}
           </div>
 
           {/* Previous Amount */}
-          <div className="text-xs text-gray-500 mb-3">
+          <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">
             Poprzednio: {formatCurrency(card.previous)}
           </div>
 

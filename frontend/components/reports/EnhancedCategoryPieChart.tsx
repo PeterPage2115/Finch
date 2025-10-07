@@ -59,8 +59,8 @@ export default function EnhancedCategoryPieChart({
 
   if (!categories || categories.length === 0) {
     return (
-      <div className="flex h-[400px] items-center justify-center rounded-lg border border-gray-200 bg-gray-50">
-        <p className="text-gray-500">Brak danych do wyświetlenia</p>
+      <div className="flex h-[400px] items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+        <p className="text-gray-500 dark:text-gray-400">Brak danych do wyświetlenia</p>
       </div>
     );
   }
@@ -69,15 +69,15 @@ export default function EnhancedCategoryPieChart({
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
-        <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-lg">
-          <p className="font-semibold text-gray-900">{data.name}</p>
-          <p className="text-sm text-gray-600">
+        <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 shadow-lg">
+          <p className="font-semibold text-gray-900 dark:text-white">{data.name}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Kwota: <span className="font-medium">{formatCurrency(data.value)}</span>
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Procent: <span className="font-medium">{data.percentage.toFixed(1)}%</span>
           </p>
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400">
             Transakcje: <span className="font-medium">{data.count}</span>
           </p>
         </div>
@@ -116,8 +116,8 @@ export default function EnhancedCategoryPieChart({
   };
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4">
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">
+    <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+      <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
         Rozkład wydatków według kategorii
       </h3>
       <ResponsiveContainer width="100%" height={400}>
@@ -159,7 +159,7 @@ export default function EnhancedCategoryPieChart({
             iconType="circle"
             wrapperStyle={{ paddingTop: '20px' }}
             formatter={(value, entry: any) => (
-              <span className="text-sm text-gray-700">
+              <span className="text-sm text-gray-700 dark:text-gray-300">
                 {value} ({entry.payload.percentage.toFixed(1)}%)
               </span>
             )}
@@ -167,7 +167,7 @@ export default function EnhancedCategoryPieChart({
         </PieChart>
       </ResponsiveContainer>
       {onCategoryClick && (
-        <p className="mt-4 text-center text-xs text-gray-500">
+        <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400">
           💡 Kliknij na segment aby zobaczyć szczegóły
         </p>
       )}

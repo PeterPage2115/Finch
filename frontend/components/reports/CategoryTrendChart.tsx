@@ -64,15 +64,15 @@ export default function CategoryTrendChart({
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex h-[300px] items-center justify-center rounded-lg border border-gray-200 bg-gray-50">
-        <p className="text-gray-500">Brak danych do wyświetlenia</p>
+      <div className="flex h-[300px] items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+        <p className="text-gray-500 dark:text-gray-400">Brak danych do wyświetlenia</p>
       </div>
     );
   }
 
   return (
-    <div className="rounded-lg border border-gray-200 bg-white p-4">
-      <h3 className="mb-4 text-lg font-semibold text-gray-900">
+    <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
+      <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
         Trend wydatków i przychodów
       </h3>
       <ResponsiveContainer width="100%" height={300}>
@@ -95,9 +95,10 @@ export default function CategoryTrendChart({
               name,
             ]}
             contentStyle={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e5e7eb',
+              backgroundColor: 'rgb(31 41 55)',
+              border: '1px solid rgb(75 85 99)',
               borderRadius: '8px',
+              color: 'rgb(243 244 246)',
             }}
           />
           <Legend
