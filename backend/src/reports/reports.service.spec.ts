@@ -73,7 +73,12 @@ describe('ReportsService', () => {
       userId: mockUserId,
       createdAt: new Date('2025-10-01'),
       updatedAt: new Date('2025-10-01'),
-      category: { id: 'category-salary', name: 'Wynagrodzenie', icon: 'DollarSign', color: '#10B981' },
+      category: {
+        id: 'category-salary',
+        name: 'Wynagrodzenie',
+        icon: 'DollarSign',
+        color: '#10B981',
+      },
     },
   ];
 
@@ -163,7 +168,10 @@ describe('ReportsService', () => {
       jest
         .spyOn(prismaService.transaction, 'aggregate')
         .mockResolvedValueOnce({ _sum: { amount: null }, _count: 0 } as any)
-        .mockResolvedValueOnce({ _sum: { amount: new Decimal(500) }, _count: 2 } as any);
+        .mockResolvedValueOnce({
+          _sum: { amount: new Decimal(500) },
+          _count: 2,
+        } as any);
 
       // Act
       const result = await service.getSummary(mockUserId, startDate, endDate);
@@ -178,7 +186,10 @@ describe('ReportsService', () => {
       // Arrange
       jest
         .spyOn(prismaService.transaction, 'aggregate')
-        .mockResolvedValueOnce({ _sum: { amount: new Decimal(3000) }, _count: 1 } as any)
+        .mockResolvedValueOnce({
+          _sum: { amount: new Decimal(3000) },
+          _count: 1,
+        } as any)
         .mockResolvedValueOnce({ _sum: { amount: null }, _count: 0 } as any);
 
       // Act
@@ -225,12 +236,18 @@ describe('ReportsService', () => {
   describe('getByCategoryReport', () => {
     it('should return category breakdown for all transactions', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(
-        mockTransactions.filter((t) => t.type === 'EXPENSE'),
-      );
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(
+          mockTransactions.filter((t) => t.type === 'EXPENSE'),
+        );
 
       // Act
-      const result = await service.getByCategoryReport(mockUserId, startDate, endDate);
+      const result = await service.getByCategoryReport(
+        mockUserId,
+        startDate,
+        endDate,
+      );
 
       // Assert
       expect(result.startDate).toBe('2025-10-01');
@@ -238,7 +255,7 @@ describe('ReportsService', () => {
       expect(result.type).toBe('ALL');
       expect(result.totalAmount).toBe(1000); // 500 + 300 + 200
       expect(result.categories).toHaveLength(2);
-      
+
       // Jedzenie (700) should be first (sorted DESC)
       expect(result.categories[0]).toEqual({
         categoryId: 'category-food',
@@ -264,8 +281,12 @@ describe('ReportsService', () => {
 
     it('should filter by EXPENSE type', async () => {
       // Arrange
-      const expenseTransactions = mockTransactions.filter((t) => t.type === 'EXPENSE');
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(expenseTransactions);
+      const expenseTransactions = mockTransactions.filter(
+        (t) => t.type === 'EXPENSE',
+      );
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(expenseTransactions);
 
       // Act
       const result = await service.getByCategoryReport(
@@ -293,8 +314,12 @@ describe('ReportsService', () => {
 
     it('should filter by INCOME type', async () => {
       // Arrange
-      const incomeTransactions = mockTransactions.filter((t) => t.type === 'INCOME');
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(incomeTransactions);
+      const incomeTransactions = mockTransactions.filter(
+        (t) => t.type === 'INCOME',
+      );
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(incomeTransactions);
 
       // Act
       const result = await service.getByCategoryReport(
@@ -316,7 +341,11 @@ describe('ReportsService', () => {
       jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue([]);
 
       // Act
-      const result = await service.getByCategoryReport(mockUserId, startDate, endDate);
+      const result = await service.getByCategoryReport(
+        mockUserId,
+        startDate,
+        endDate,
+      );
 
       // Assert
       expect(result.categories).toEqual([]);
@@ -364,10 +393,16 @@ describe('ReportsService', () => {
         },
       ];
 
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(testTransactions);
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(testTransactions);
 
       // Act
-      const result = await service.getByCategoryReport(mockUserId, startDate, endDate);
+      const result = await service.getByCategoryReport(
+        mockUserId,
+        startDate,
+        endDate,
+      );
 
       // Assert
       expect(result.totalAmount).toBe(600);
@@ -378,15 +413,23 @@ describe('ReportsService', () => {
 
     it('should sort categories by total DESC', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(
-        mockTransactions.filter((t) => t.type === 'EXPENSE'),
-      );
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(
+          mockTransactions.filter((t) => t.type === 'EXPENSE'),
+        );
 
       // Act
-      const result = await service.getByCategoryReport(mockUserId, startDate, endDate);
+      const result = await service.getByCategoryReport(
+        mockUserId,
+        startDate,
+        endDate,
+      );
 
       // Assert
-      expect(result.categories[0].total).toBeGreaterThan(result.categories[1].total);
+      expect(result.categories[0].total).toBeGreaterThan(
+        result.categories[1].total,
+      );
       expect(result.categories[0].categoryName).toBe('Jedzenie'); // 700
       expect(result.categories[1].categoryName).toBe('Transport'); // 300
     });
@@ -408,10 +451,16 @@ describe('ReportsService', () => {
         },
       ];
 
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(transactionWithNullCategory);
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(transactionWithNullCategory);
 
       // Act
-      const result = await service.getByCategoryReport(mockUserId, startDate, endDate);
+      const result = await service.getByCategoryReport(
+        mockUserId,
+        startDate,
+        endDate,
+      );
 
       // Assert
       expect(result.categories[0].categoryIcon).toBeNull();

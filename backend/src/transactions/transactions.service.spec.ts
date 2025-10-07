@@ -29,7 +29,7 @@ describe('TransactionsService', () => {
 
   const mockTransaction = {
     id: mockTransactionId,
-    amount: new Decimal(100.50),
+    amount: new Decimal(100.5),
     description: 'Zakupy spożywcze',
     date: new Date('2025-10-01'),
     type: 'EXPENSE' as const,
@@ -76,7 +76,7 @@ describe('TransactionsService', () => {
 
   describe('create', () => {
     const createTransactionDto: CreateTransactionDto = {
-      amount: 100.50,
+      amount: 100.5,
       description: 'Zakupy spożywcze',
       date: '2025-10-01',
       type: 'EXPENSE',
@@ -85,8 +85,12 @@ describe('TransactionsService', () => {
 
     it('should successfully create a transaction', async () => {
       // Arrange
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(mockCategory);
-      jest.spyOn(prismaService.transaction, 'create').mockResolvedValue(mockTransaction);
+      jest
+        .spyOn(prismaService.category, 'findFirst')
+        .mockResolvedValue(mockCategory);
+      jest
+        .spyOn(prismaService.transaction, 'create')
+        .mockResolvedValue(mockTransaction);
 
       // Act
       const result = await service.create(mockUserId, createTransactionDto);
@@ -114,10 +118,12 @@ describe('TransactionsService', () => {
       jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.create(mockUserId, createTransactionDto)).rejects.toThrow(
-        NotFoundException,
-      );
-      await expect(service.create(mockUserId, createTransactionDto)).rejects.toThrow(
+      await expect(
+        service.create(mockUserId, createTransactionDto),
+      ).rejects.toThrow(NotFoundException);
+      await expect(
+        service.create(mockUserId, createTransactionDto),
+      ).rejects.toThrow(
         `Category with ID ${mockCategoryId} not found or does not belong to user`,
       );
       expect(prismaService.transaction.create).not.toHaveBeenCalled();
@@ -129,9 +135,9 @@ describe('TransactionsService', () => {
       jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.create(mockUserId, createTransactionDto)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.create(mockUserId, createTransactionDto),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -141,7 +147,9 @@ describe('TransactionsService', () => {
     it('should return paginated transactions with default pagination', async () => {
       // Arrange
       const query: QueryTransactionDto = {};
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(mockTransactions);
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(mockTransactions);
       jest.spyOn(prismaService.transaction, 'count').mockResolvedValue(1);
 
       // Act
@@ -169,7 +177,9 @@ describe('TransactionsService', () => {
     it('should filter transactions by type', async () => {
       // Arrange
       const query: QueryTransactionDto = { type: 'EXPENSE' };
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(mockTransactions);
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(mockTransactions);
       jest.spyOn(prismaService.transaction, 'count').mockResolvedValue(1);
 
       // Act
@@ -186,7 +196,9 @@ describe('TransactionsService', () => {
     it('should filter transactions by categoryId', async () => {
       // Arrange
       const query: QueryTransactionDto = { categoryId: mockCategoryId };
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(mockTransactions);
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(mockTransactions);
       jest.spyOn(prismaService.transaction, 'count').mockResolvedValue(1);
 
       // Act
@@ -206,7 +218,9 @@ describe('TransactionsService', () => {
         startDate: '2025-10-01',
         endDate: '2025-10-31',
       };
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(mockTransactions);
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(mockTransactions);
       jest.spyOn(prismaService.transaction, 'count').mockResolvedValue(1);
 
       // Act
@@ -229,7 +243,9 @@ describe('TransactionsService', () => {
     it('should handle pagination correctly', async () => {
       // Arrange
       const query: QueryTransactionDto = { page: 2, limit: 5 };
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue(mockTransactions);
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(mockTransactions);
       jest.spyOn(prismaService.transaction, 'count').mockResolvedValue(15);
 
       // Act
@@ -254,7 +270,9 @@ describe('TransactionsService', () => {
   describe('findOne', () => {
     it('should return a single transaction by id', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(mockTransaction);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(mockTransaction);
 
       // Act
       const result = await service.findOne(mockTransactionId, mockUserId);
@@ -269,7 +287,9 @@ describe('TransactionsService', () => {
 
     it('should throw NotFoundException if transaction does not exist', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(null);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(null);
 
       // Act & Assert
       await expect(service.findOne('non-existent', mockUserId)).rejects.toThrow(
@@ -279,12 +299,14 @@ describe('TransactionsService', () => {
 
     it('should throw ForbiddenException if transaction belongs to another user', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(null);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.findOne(mockTransactionId, 'other-user')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.findOne(mockTransactionId, 'other-user'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -296,12 +318,24 @@ describe('TransactionsService', () => {
 
     it('should successfully update a transaction', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(mockTransaction);
-      const updatedTransaction = { ...mockTransaction, amount: new Decimal(150.75), description: 'Zaktualizowane zakupy' };
-      jest.spyOn(prismaService.transaction, 'update').mockResolvedValue(updatedTransaction);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(mockTransaction);
+      const updatedTransaction = {
+        ...mockTransaction,
+        amount: new Decimal(150.75),
+        description: 'Zaktualizowane zakupy',
+      };
+      jest
+        .spyOn(prismaService.transaction, 'update')
+        .mockResolvedValue(updatedTransaction);
 
       // Act
-      const result = await service.update(mockTransactionId, mockUserId, updateTransactionDto);
+      const result = await service.update(
+        mockTransactionId,
+        mockUserId,
+        updateTransactionDto,
+      );
 
       // Assert
       expect(result).toEqual(updatedTransaction);
@@ -314,7 +348,9 @@ describe('TransactionsService', () => {
 
     it('should throw NotFoundException if transaction does not exist', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(null);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(null);
 
       // Act & Assert
       await expect(
@@ -323,9 +359,11 @@ describe('TransactionsService', () => {
       expect(prismaService.transaction.update).not.toHaveBeenCalled();
     });
 
-    it('should throw ForbiddenException if updating another user\'s transaction', async () => {
+    it("should throw ForbiddenException if updating another user's transaction", async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(null);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(null);
 
       // Act & Assert
       await expect(
@@ -338,15 +376,23 @@ describe('TransactionsService', () => {
       const updateWithNewCategory: UpdateTransactionDto = {
         categoryId: 'new-category-id',
       };
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(mockTransaction);
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(mockCategory);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(mockTransaction);
+      jest
+        .spyOn(prismaService.category, 'findFirst')
+        .mockResolvedValue(mockCategory);
       jest.spyOn(prismaService.transaction, 'update').mockResolvedValue({
         ...mockTransaction,
         categoryId: 'new-category-id',
       });
 
       // Act
-      await service.update(mockTransactionId, mockUserId, updateWithNewCategory);
+      await service.update(
+        mockTransactionId,
+        mockUserId,
+        updateWithNewCategory,
+      );
 
       // Assert
       expect(prismaService.category.findFirst).toHaveBeenCalledWith({
@@ -358,8 +404,12 @@ describe('TransactionsService', () => {
   describe('remove', () => {
     it('should successfully delete a transaction', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(mockTransaction);
-      jest.spyOn(prismaService.transaction, 'delete').mockResolvedValue(mockTransaction);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(mockTransaction);
+      jest
+        .spyOn(prismaService.transaction, 'delete')
+        .mockResolvedValue(mockTransaction);
 
       // Act
       const result = await service.remove(mockTransactionId, mockUserId);
@@ -373,7 +423,9 @@ describe('TransactionsService', () => {
 
     it('should throw NotFoundException if transaction does not exist', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(null);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(null);
 
       // Act & Assert
       await expect(service.remove('non-existent', mockUserId)).rejects.toThrow(
@@ -382,14 +434,16 @@ describe('TransactionsService', () => {
       expect(prismaService.transaction.delete).not.toHaveBeenCalled();
     });
 
-    it('should throw ForbiddenException if deleting another user\'s transaction', async () => {
+    it("should throw ForbiddenException if deleting another user's transaction", async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findFirst').mockResolvedValue(null);
+      jest
+        .spyOn(prismaService.transaction, 'findFirst')
+        .mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.remove(mockTransactionId, 'other-user')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.remove(mockTransactionId, 'other-user'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

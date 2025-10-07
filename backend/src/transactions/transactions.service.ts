@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
@@ -7,7 +11,7 @@ import { Prisma } from '@prisma/client';
 
 /**
  * Service obsługujący logikę biznesową dla transakcji
- * 
+ *
  * Funkcjonalności:
  * - CRUD operations z user-scoped access
  * - Filtrowanie po typie, kategorii, zakresie dat
@@ -19,7 +23,7 @@ export class TransactionsService {
 
   /**
    * Tworzy nową transakcję dla użytkownika
-   * 
+   *
    * @param userId - ID zalogowanego użytkownika
    * @param createTransactionDto - dane transakcji
    * @returns utworzona transakcja
@@ -57,13 +61,20 @@ export class TransactionsService {
 
   /**
    * Pobiera wszystkie transakcje użytkownika z filtrami i paginacją
-   * 
+   *
    * @param userId - ID zalogowanego użytkownika
    * @param query - parametry filtrowania i paginacji
    * @returns paginowana lista transakcji z metadanymi
    */
   async findAll(userId: string, query: QueryTransactionDto) {
-    const { type, categoryId, startDate, endDate, page = 1, limit = 10 } = query;
+    const {
+      type,
+      categoryId,
+      startDate,
+      endDate,
+      page = 1,
+      limit = 10,
+    } = query;
 
     // Budujemy warunki WHERE dla Prisma
     const where: Prisma.TransactionWhereInput = {
@@ -111,7 +122,7 @@ export class TransactionsService {
 
   /**
    * Pobiera pojedynczą transakcję po ID
-   * 
+   *
    * @param id - ID transakcji
    * @param userId - ID zalogowanego użytkownika
    * @returns transakcja z kategorią
@@ -136,7 +147,7 @@ export class TransactionsService {
 
   /**
    * Aktualizuje transakcję
-   * 
+   *
    * @param id - ID transakcji
    * @param userId - ID zalogowanego użytkownika
    * @param updateTransactionDto - dane do aktualizacji
@@ -194,7 +205,7 @@ export class TransactionsService {
 
   /**
    * Usuwa transakcję
-   * 
+   *
    * @param id - ID transakcji
    * @param userId - ID zalogowanego użytkownika
    * @throws NotFoundException jeśli transakcja nie istnieje

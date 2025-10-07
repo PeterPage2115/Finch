@@ -12,11 +12,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { BudgetsService } from './budgets.service';
-import {
-  CreateBudgetDto,
-  UpdateBudgetDto,
-  QueryBudgetDto,
-} from './dto';
+import { CreateBudgetDto, UpdateBudgetDto, QueryBudgetDto } from './dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
@@ -54,10 +50,7 @@ export class BudgetsController {
    * Returns: Array of budgets with category details
    */
   @Get()
-  findAll(
-    @CurrentUser('id') userId: string,
-    @Query() query: QueryBudgetDto,
-  ) {
+  findAll(@CurrentUser('id') userId: string, @Query() query: QueryBudgetDto) {
     return this.budgetsService.findAll(userId, query);
   }
 
@@ -68,10 +61,7 @@ export class BudgetsController {
    * Returns: Budget with progress (spent, limit, percentage, remaining, alerts)
    */
   @Get(':id')
-  findOne(
-    @Param('id') id: string,
-    @CurrentUser('id') userId: string,
-  ) {
+  findOne(@Param('id') id: string, @CurrentUser('id') userId: string) {
     return this.budgetsService.findOne(id, userId);
   }
 
@@ -82,10 +72,7 @@ export class BudgetsController {
    * Returns: Progress object (spent, limit, percentage, remaining, alerts)
    */
   @Get(':id/progress')
-  getProgress(
-    @Param('id') id: string,
-    @CurrentUser('id') userId: string,
-  ) {
+  getProgress(@Param('id') id: string, @CurrentUser('id') userId: string) {
     return this.budgetsService.calculateProgress(id);
   }
 
@@ -113,10 +100,7 @@ export class BudgetsController {
    */
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  remove(
-    @Param('id') id: string,
-    @CurrentUser('id') userId: string,
-  ) {
+  remove(@Param('id') id: string, @CurrentUser('id') userId: string) {
     return this.budgetsService.remove(id, userId);
   }
 }

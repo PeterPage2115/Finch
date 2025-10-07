@@ -4,11 +4,11 @@ import { TransactionType } from '@prisma/client';
 
 /**
  * DTO dla query parameters w GET /transactions
- * 
+ *
  * Umożliwia:
  * - Filtrowanie po typie, kategorii, zakresie dat
  * - Paginację (page, limit)
- * 
+ *
  * Wszystkie pola są opcjonalne
  */
 export class QueryTransactionDto {

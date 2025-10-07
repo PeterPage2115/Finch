@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma.service';
 
 /**
  * Moduł transakcji
- * 
+ *
  * Zawiera:
  * - TransactionsController: REST API endpoints
  * - TransactionsService: logika biznesowa

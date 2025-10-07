@@ -82,8 +82,12 @@ describe('CategoriesService', () => {
   describe('findAll', () => {
     it('should return all categories for user', async () => {
       // Arrange
-      const categoriesWithoutUpdatedAt = mockCategories.map(({ updatedAt, ...rest }) => rest);
-      jest.spyOn(prismaService.category, 'findMany').mockResolvedValue(categoriesWithoutUpdatedAt as any);
+      const categoriesWithoutUpdatedAt = mockCategories.map(
+        ({ updatedAt, ...rest }) => rest,
+      );
+      jest
+        .spyOn(prismaService.category, 'findMany')
+        .mockResolvedValue(categoriesWithoutUpdatedAt as any);
 
       // Act
       const result = await service.findAll(mockUserId);
@@ -117,7 +121,9 @@ describe('CategoriesService', () => {
 
     it('should order categories by type then name', async () => {
       // Arrange
-      jest.spyOn(prismaService.category, 'findMany').mockResolvedValue(mockCategories as any);
+      jest
+        .spyOn(prismaService.category, 'findMany')
+        .mockResolvedValue(mockCategories as any);
 
       // Act
       await service.findAll(mockUserId);
@@ -134,7 +140,9 @@ describe('CategoriesService', () => {
   describe('findOne', () => {
     it('should return a single category by id', async () => {
       // Arrange
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(mockCategory);
+      jest
+        .spyOn(prismaService.category, 'findFirst')
+        .mockResolvedValue(mockCategory);
 
       // Act
       const result = await service.findOne(mockCategoryId, mockUserId);
@@ -164,9 +172,9 @@ describe('CategoriesService', () => {
       jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.findOne(mockCategoryId, 'other-user')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.findOne(mockCategoryId, 'other-user'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -187,7 +195,9 @@ describe('CategoriesService', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      jest.spyOn(prismaService.category, 'create').mockResolvedValue(newCategory);
+      jest
+        .spyOn(prismaService.category, 'create')
+        .mockResolvedValue(newCategory);
 
       // Act
       const result = await service.create(mockUserId, createCategoryDto);
@@ -211,7 +221,9 @@ describe('CategoriesService', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      jest.spyOn(prismaService.category, 'create').mockResolvedValue(newCategory);
+      jest
+        .spyOn(prismaService.category, 'create')
+        .mockResolvedValue(newCategory);
 
       // Act
       await service.create(mockUserId, createCategoryDto);
@@ -235,12 +247,20 @@ describe('CategoriesService', () => {
 
     it('should successfully update a category', async () => {
       // Arrange
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(mockCategory);
+      jest
+        .spyOn(prismaService.category, 'findFirst')
+        .mockResolvedValue(mockCategory);
       const updatedCategory = { ...mockCategory, ...updateCategoryDto };
-      jest.spyOn(prismaService.category, 'update').mockResolvedValue(updatedCategory);
+      jest
+        .spyOn(prismaService.category, 'update')
+        .mockResolvedValue(updatedCategory);
 
       // Act
-      const result = await service.update(mockCategoryId, mockUserId, updateCategoryDto);
+      const result = await service.update(
+        mockCategoryId,
+        mockUserId,
+        updateCategoryDto,
+      );
 
       // Assert
       expect(result).toEqual(updatedCategory);
@@ -261,7 +281,7 @@ describe('CategoriesService', () => {
       expect(prismaService.category.update).not.toHaveBeenCalled();
     });
 
-    it('should throw NotFoundException if updating another user\'s category', async () => {
+    it("should throw NotFoundException if updating another user's category", async () => {
       // Arrange
       jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
 
@@ -275,9 +295,13 @@ describe('CategoriesService', () => {
   describe('remove', () => {
     it('should successfully delete a category with no transactions', async () => {
       // Arrange
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(mockCategory);
+      jest
+        .spyOn(prismaService.category, 'findFirst')
+        .mockResolvedValue(mockCategory);
       jest.spyOn(prismaService.transaction, 'count').mockResolvedValue(0);
-      jest.spyOn(prismaService.category, 'delete').mockResolvedValue(mockCategory);
+      jest
+        .spyOn(prismaService.category, 'delete')
+        .mockResolvedValue(mockCategory);
 
       // Act
       const result = await service.remove(mockCategoryId, mockUserId);
@@ -306,7 +330,9 @@ describe('CategoriesService', () => {
 
     it('should throw ConflictException if category has related transactions', async () => {
       // Arrange
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(mockCategory);
+      jest
+        .spyOn(prismaService.category, 'findFirst')
+        .mockResolvedValue(mockCategory);
       jest.spyOn(prismaService.transaction, 'count').mockResolvedValue(5);
 
       // Act & Assert
@@ -319,14 +345,14 @@ describe('CategoriesService', () => {
       expect(prismaService.category.delete).not.toHaveBeenCalled();
     });
 
-    it('should throw NotFoundException if deleting another user\'s category', async () => {
+    it("should throw NotFoundException if deleting another user's category", async () => {
       // Arrange
       jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
 
       // Act & Assert
-      await expect(service.remove(mockCategoryId, 'other-user')).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(
+        service.remove(mockCategoryId, 'other-user'),
+      ).rejects.toThrow(NotFoundException);
     });
   });
 });

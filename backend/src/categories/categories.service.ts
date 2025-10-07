@@ -41,7 +41,9 @@ export class CategoriesService {
     });
 
     if (!category) {
-      throw new NotFoundException(`Kategoria o ID ${id} nie została znaleziona`);
+      throw new NotFoundException(
+        `Kategoria o ID ${id} nie została znaleziona`,
+      );
     }
 
     return category;

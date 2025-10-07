@@ -1,10 +1,18 @@
-import { IsEnum, IsISO8601, IsNumber, IsOptional, IsString, IsUUID, Min } from 'class-validator';
+import {
+  IsEnum,
+  IsISO8601,
+  IsNumber,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Min,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 import { TransactionType } from '@prisma/client';
 
 /**
  * DTO dla tworzenia nowej transakcji
- * 
+ *
  * Walidacja:
  * - amount: dodatnia liczba (Decimal w Prisma)
  * - description: opcjonalny string

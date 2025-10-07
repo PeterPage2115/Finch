@@ -48,10 +48,7 @@ export class CategoriesController {
    * Zwraca szczegóły pojedynczej kategorii
    */
   @Get(':id')
-  async findOne(
-    @Param('id') id: string,
-    @CurrentUser('id') userId: string,
-  ) {
+  async findOne(@Param('id') id: string, @CurrentUser('id') userId: string) {
     return this.categoriesService.findOne(id, userId);
   }
 
@@ -73,10 +70,7 @@ export class CategoriesController {
    * Usuwa kategorię (tylko jeśli nie ma powiązanych transakcji)
    */
   @Delete(':id')
-  async remove(
-    @Param('id') id: string,
-    @CurrentUser('id') userId: string,
-  ) {
+  async remove(@Param('id') id: string, @CurrentUser('id') userId: string) {
     return this.categoriesService.remove(id, userId);
   }
 }

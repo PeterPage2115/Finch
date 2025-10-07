@@ -5,11 +5,7 @@ import {
   ConflictException,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
-import {
-  CreateBudgetDto,
-  UpdateBudgetDto,
-  QueryBudgetDto,
-} from './dto';
+import { CreateBudgetDto, UpdateBudgetDto, QueryBudgetDto } from './dto';
 import { BudgetPeriod } from '@prisma/client';
 
 /**
@@ -107,7 +103,9 @@ export class BudgetsService {
     });
 
     if (!category) {
-      throw new BadRequestException('Category not found or does not belong to user');
+      throw new BadRequestException(
+        'Category not found or does not belong to user',
+      );
     }
 
     // Auto-calculate endDate if not CUSTOM period
@@ -191,7 +189,9 @@ export class BudgetsService {
       });
 
       if (!category) {
-        throw new BadRequestException('Category not found or does not belong to user');
+        throw new BadRequestException(
+          'Category not found or does not belong to user',
+        );
       }
     }
 

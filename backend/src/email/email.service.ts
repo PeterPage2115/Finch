@@ -1,5 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import type { SentMessageInfo } from 'nodemailer';
 
 @Injectable()
 export class EmailService implements OnModuleInit {
@@ -149,7 +150,7 @@ export class EmailService implements OnModuleInit {
 </html>
     `;
 
-    const info = await this.transporter.sendMail({
+    const info: SentMessageInfo = await this.transporter.sendMail({
       from: '"Tracker Kasy" <noreply@trackerkasy.com>',
       to: email,
       subject: 'Reset hasła - Tracker Kasy',

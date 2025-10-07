@@ -20,6 +20,15 @@ import {
 import { JwtAuthGuard } from './guards';
 import { CurrentUser } from './decorators';
 
+// Interface dla user z JWT tokenu
+interface JwtUser {
+  id: string;
+  email: string;
+  name: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -46,13 +55,13 @@ export class AuthController {
 
   /**
    * GET /auth/me
-   * Pobranie profilu zalogowanego użytkownika
+   * Zwraca profil zalogowanego użytkownika
    * Wymaga tokenu JWT w nagłówku Authorization
    */
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  async getProfile(@CurrentUser() user: any) {
+  getProfile(@CurrentUser() user: JwtUser) {
     return {
       id: user.id,
       email: user.email,
@@ -71,7 +80,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   async updateProfile(
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtUser,
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
     return this.authService.updateProfile(user.id, updateProfileDto);
@@ -86,7 +95,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   async changePassword(
-    @CurrentUser() user: any,
+    @CurrentUser() user: JwtUser,
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(
