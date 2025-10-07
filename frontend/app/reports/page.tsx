@@ -11,6 +11,8 @@ import SummaryCards from '@/components/reports/SummaryCards';
 import EnhancedCategoryPieChart from '@/components/reports/EnhancedCategoryPieChart';
 import CategoryTrendChart from '@/components/reports/CategoryTrendChart';
 import CategoryDetailsModal from '@/components/reports/CategoryDetailsModal';
+import { TrendsComparisonCards } from '@/components/reports/TrendsComparisonCards';
+import { MonthlyTrendChart } from '@/components/reports/MonthlyTrendChart';
 
 /**
  * Reports Page - view financial reports and analytics
@@ -30,6 +32,8 @@ export default function ReportsPage() {
   const [summary, setSummary] = useState<ReportSummary | null>(null);
   const [categoryReport, setCategoryReport] = useState<CategoryReport | null>(null);
   const [trendData, setTrendData] = useState<{ data: any[]; granularity: string } | null>(null);
+  const [trendsComparison, setTrendsComparison] = useState<any>(null);
+  const [monthlyTrend, setMonthlyTrend] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(null);
@@ -55,12 +59,20 @@ export default function ReportsPage() {
       setIsLoading(true);
       setError(null);
 
-      // Fetch both reports in parallel
-      const [summaryData, categoryData, trendDataResult] = await Promise.all([
+      // Fetch all reports in parallel
+      const [summaryData, categoryData, trendDataResult, comparisonData, monthlyData] = await Promise.all([
         fetchSummary(token, startDate, endDate),
         fetchByCategoryReport(token, startDate, endDate, 'EXPENSE'), // Focus on expenses
         fetch(
           `http://localhost:3001/reports/category-trend?startDate=${startDate}&endDate=${endDate}&granularity=daily`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        ).then((res) => res.json()),
+        fetch(
+          `http://localhost:3001/reports/trends-comparison?startDate=${startDate}&endDate=${endDate}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        ).then((res) => res.json()),
+        fetch(
+          `http://localhost:3001/reports/monthly-trend?months=6`,
           { headers: { Authorization: `Bearer ${token}` } }
         ).then((res) => res.json()),
       ]);
@@ -68,6 +80,8 @@ export default function ReportsPage() {
       setSummary(summaryData);
       setCategoryReport(categoryData);
       setTrendData(trendDataResult);
+      setTrendsComparison(comparisonData);
+      setMonthlyTrend(monthlyData);
     } catch (err) {
       console.error('Error fetching reports:', err);
       setError(err instanceof Error ? err.message : 'Błąd podczas pobierania raportów');
@@ -145,6 +159,16 @@ export default function ReportsPage() {
           )}
         </div>
 
+        {/* Trends Comparison Cards */}
+        {trendsComparison && (
+          <div className="mb-6">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+              Porównanie okresów
+            </h2>
+            <TrendsComparisonCards data={trendsComparison} />
+          </div>
+        )}
+
         {/* Category Breakdown */}
         <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Enhanced Pie Chart */}
@@ -163,6 +187,13 @@ export default function ReportsPage() {
             />
           )}
         </div>
+
+        {/* Monthly Trend Chart */}
+        {monthlyTrend?.data && (
+          <div className="mb-6">
+            <MonthlyTrendChart data={monthlyTrend.data} />
+          </div>
+        )}
 
         {/* Category Details Modal */}
         {selectedCategoryId && (
