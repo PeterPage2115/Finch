@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuthStore } from '@/lib/stores/authStore';
+import AppNavbar from '@/components/layout/AppNavbar';
 
 export default function ProfilePage() {
   const { user } = useAuthStore();
@@ -98,20 +99,25 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <p>Ładowanie...</p>
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+        <AppNavbar />
+        <div className="container mx-auto px-4 py-8">
+          <p className="text-gray-900 dark:text-white">Ładowanie...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-2xl">
-      <h1 className="text-3xl font-bold mb-8">Profil użytkownika</h1>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      <AppNavbar />
+      <div className="container mx-auto px-4 py-8 max-w-2xl mt-8">
+        <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Profil użytkownika</h1>
 
       {/* Profile Information Section */}
-      <div className="bg-white rounded-lg shadow-md p-6 mb-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Informacje o profilu</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Informacje o profilu</h2>
           {!isEditingProfile && (
             <button
               onClick={() => setIsEditingProfile(true)}
@@ -123,13 +129,13 @@ export default function ProfilePage() {
         </div>
 
         {profileSuccess && (
-          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+          <div className="mb-4 p-3 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-300 rounded">
             {profileSuccess}
           </div>
         )}
 
         {profileError && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 rounded">
             {profileError}
           </div>
         )}
@@ -137,18 +143,18 @@ export default function ProfilePage() {
         {!isEditingProfile ? (
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700">Imię</label>
-              <p className="mt-1 text-lg">{user.name || 'Nie podano'}</p>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Imię</label>
+              <p className="mt-1 text-lg text-gray-900 dark:text-white">{user.name || 'Nie podano'}</p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <p className="mt-1 text-lg">{user.email}</p>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+              <p className="mt-1 text-lg text-gray-900 dark:text-white">{user.email}</p>
             </div>
           </div>
         ) : (
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Imię
               </label>
               <input
@@ -156,14 +162,14 @@ export default function ProfilePage() {
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 minLength={2}
                 maxLength={100}
               />
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Email
               </label>
               <input
@@ -171,7 +177,7 @@ export default function ProfilePage() {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 required
               />
             </div>
@@ -192,7 +198,7 @@ export default function ProfilePage() {
                   setProfileError('');
                   setProfileSuccess('');
                 }}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+                className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
               >
                 Anuluj
               </button>
@@ -202,9 +208,9 @@ export default function ProfilePage() {
       </div>
 
       {/* Change Password Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold">Zmiana hasła</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Zmiana hasła</h2>
           {!isChangingPassword && (
             <button
               onClick={() => setIsChangingPassword(true)}
@@ -216,13 +222,13 @@ export default function ProfilePage() {
         </div>
 
         {passwordSuccess && (
-          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+          <div className="mb-4 p-3 bg-green-100 dark:bg-green-900/30 border border-green-400 dark:border-green-700 text-green-700 dark:text-green-300 rounded">
             {passwordSuccess}
           </div>
         )}
 
         {passwordError && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+          <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-300 rounded">
             {passwordError}
           </div>
         )}
@@ -230,7 +236,7 @@ export default function ProfilePage() {
         {isChangingPassword && (
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
-              <label htmlFor="oldPassword" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="oldPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Obecne hasło
               </label>
               <input
@@ -238,14 +244,14 @@ export default function ProfilePage() {
                 id="oldPassword"
                 value={oldPassword}
                 onChange={(e) => setOldPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 required
                 minLength={1}
               />
             </div>
 
             <div>
-              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Nowe hasło
               </label>
               <input
@@ -253,17 +259,17 @@ export default function ProfilePage() {
                 id="newPassword"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 required
                 minLength={8}
               />
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
                 Minimum 8 znaków, mała i wielka litera, cyfra
               </p>
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Potwierdź nowe hasło
               </label>
               <input
@@ -271,7 +277,7 @@ export default function ProfilePage() {
                 id="confirmPassword"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md shadow-sm bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 required
                 minLength={8}
               />
@@ -294,7 +300,7 @@ export default function ProfilePage() {
                   setPasswordError('');
                   setPasswordSuccess('');
                 }}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400 transition-colors"
+                className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
               >
                 Anuluj
               </button>
@@ -302,6 +308,7 @@ export default function ProfilePage() {
           </form>
         )}
       </div>
+    </div>
     </div>
   );
 }
