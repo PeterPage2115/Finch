@@ -2,13 +2,7 @@
 
 > 💡 **Note:** UI is currently in Polish. English internationalization (i18n) coming in v1.1
 
-**Open-source, self-hosted web application for personal finance management**ch - Personal Finance Tracker
-
-> 📢 **English version coming soon!** | Full internationalization (i18n) support planned for v1.1
->
-> **English Documentation (WIP):** This is a Polish financial tracking application. English UI and documentation are currently in development. See [docs/i18n/](./docs/i18n/) for progress.
-
-**Open-source web application for personal finance management**
+**Open-source, self-hosted web application for personal finance management**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
@@ -222,15 +216,15 @@ Finch/
 ```
 </details>
 
-## 📚 Dokumentacja
+## 📚 Documentation
 
-Szczegółowa dokumentacja dostępna w folderze [`docs/`](./docs/):
+Comprehensive documentation available in [`docs/`](./docs/) folder:
 
-- [**API Reference**](./docs/API.md) - Kompletna dokumentacja endpointów REST API (Auth, Users, Transactions, etc.)
-- [**Schemat Bazy Danych**](./docs/DATABASE.md) - Modele, relacje, migracje, przykładowe zapytania
-- [**Docker & Orkiestracja**](./docs/DOCKER.md) - Szczegółowy przewodnik po konfiguracji Docker
-- [Architektura aplikacji](./docs/architecture.md) *(wkrótce)*
-- [Przewodnik developera](./docs/developer-guide.md) *(wkrótce)*
+- [**API Reference**](./docs/API.md) - Complete REST API endpoints documentation
+- [**Database Schema**](./docs/DATABASE.md) - Models, relations, migrations, sample queries
+- [**Docker & Orchestration**](./docs/DOCKER.md) - Detailed Docker configuration guide
+- [Application Architecture](./docs/architecture.md) *(coming soon)*
+- [Developer Guide](./docs/developer-guide.md) *(coming soon)*
 
 <details>
 <summary>🔌 Ports & Access</summary>
@@ -317,15 +311,15 @@ npm run test:e2e
 </details>
 
 <details>
-<summary>🔒 Bezpieczeństwo</summary>
+<summary>🔒 Security</summary>
 
-- 🔐 **JWT Authentication** - Bezpieczne tokeny sesji
-- 🛡️ **Password Hashing** - bcrypt z salt rounds
+- 🔐 **JWT Authentication** - Secure session tokens
+- 🛡️ **Password Hashing** - bcrypt with salt rounds
 - 🚫 **SQL Injection Protection** - Prisma ORM
 - 🔍 **Input Validation** - class-validator DTOs
 - 🧹 **XSS Protection** - Next.js auto-escaping
 - 📦 **Dependency Audit** - 0 vulnerabilities (npm audit)
-- 🎯 **User-scoped queries** - Każdy endpoint weryfikuje userId
+- 🎯 **User-scoped queries** - Every endpoint verifies userId
 </details>
 
 ## 🤝 Contributing
@@ -339,36 +333,6 @@ Want to help improve Finch? Great!
 5. Open Pull Request
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
-
-<details>
-<summary>📚 More Documentation</summary>
-
-### Project Management
-- 📋 [TODO - Current Sprint](./docs/project/TODO.md) - Current priorities
-- ✅ [Completed Milestones](./docs/project/COMPLETED.md) - Recent releases
-- 🗺️ [Roadmap](./docs/project/ROADMAP.md) - Long-term vision (2025-2027)
-- 📝 [Changelog](./docs/project/CHANGELOG.md) - Full change history
-
-### Technical Documentation
-- 🛠️ [Tech Stack](./docs/technical/TECH_STACK.md) - Technologies & dependencies
-- 🏗️ [Architecture](./docs/technical/ARCHITECTURE.md) - System architecture
-- 🚀 [Development Guide](./docs/technical/DEVELOPMENT_GUIDE.md) - Setup & workflow
-- 🧪 [Testing Strategy](./docs/technical/TESTING_STRATEGY.md) - Test patterns & coverage
-- 📡 [API Reference](./docs/technical/API_REFERENCE.md) - REST API documentation
-</details>
-
-<details>
-<summary>📝 Commit Conventions</summary>
-
-Project uses [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat:` - new feature
-- `fix:` - bug fix
-- `docs:` - documentation changes
-- `test:` - add or modify tests
-- `refactor:` - code refactoring
-- `chore:` - tooling, config changes
-</details>
 
 ## 📄 License
 
