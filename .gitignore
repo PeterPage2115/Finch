@@ -70,3 +70,6 @@ seed-test-data.*
 
 # Keep only .env.example files in git
 .env.example.backup
+
+# AI Assistant private instructions
+.github/copilot-instructions.md
