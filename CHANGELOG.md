@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Screenshots in README (homepage and dashboard)
+
 ### Changed
 - Rebranded from "Tracker Kasy" to "Finch"
 - Translated README and documentation to English
