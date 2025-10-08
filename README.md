@@ -24,7 +24,17 @@
 
 📖 **Full changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
-## 📋 About The Project
+## � Screenshots
+
+<div align="center">
+  <img src="screenshots/homepage.png" alt="Homepage" width="800"/>
+  <p><em>Clean landing page with key features</em></p>
+  
+  <img src="screenshots/dashboard.png" alt="Dashboard" width="800"/>
+  <p><em>Overview dashboard with statistics and recent transactions</em></p>
+</div>
+
+## �📋 About The Project
 
 Finch is a modern web application designed for simplicity and easy self-hosting. Track income, expenses, categorize transactions, set budgets, and generate financial reports.
 
