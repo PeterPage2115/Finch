@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { X } from 'lucide-react';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { API_URL } from '@/lib/api/config';
+import { useAuthStore } from '@/lib/stores/authStore';
 
 interface Transaction {
   id: string;
@@ -48,25 +49,21 @@ export default function CategoryDetailsModal({
   startDate,
   endDate,
 }: CategoryDetailsModalProps) {
+  const token = useAuthStore((state) => state.token);
   const [data, setData] = useState<CategoryDetailsData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isOpen || !categoryId) return;
+    if (!isOpen || !categoryId || !token) return;
 
     const fetchDetails = async () => {
       setIsLoading(true);
       setError(null);
 
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          throw new Error('Brak tokenu autoryzacji. Zaloguj się ponownie.');
-        }
-
         const url = `${API_URL}/reports/category/${categoryId}/details?startDate=${startDate}&endDate=${endDate}`;
-        console.log('Fetching category details:', { categoryId, startDate, endDate, url });
+        console.log('Fetching category details:', { categoryId, startDate, endDate, url, hasToken: !!token });
 
         const response = await fetch(url, {
           headers: {
@@ -103,7 +100,7 @@ export default function CategoryDetailsModal({
     };
 
     fetchDetails();
-  }, [categoryId, isOpen, startDate, endDate]);
+  }, [categoryId, isOpen, startDate, endDate, token]);
 
   if (!isOpen) return null;
 
