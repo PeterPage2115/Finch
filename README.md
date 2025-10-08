@@ -1,23 +1,4 @@
-# Finch - Personal Finance## 📸 Screenshots
-
-<div align="center">
-  <img src="screenshots/homepage.png" alt="Homepage" width="800"/>
-  <p><em>Landing page showcasing main features</em></p>
-  
-  <img src="screenshots/dashboard.png" alt="Dashboard" width="800"/>
-  <p><em>Dashboard with financial overview and transaction history</em></p>
-  
-  <img src="screenshots/categories.png" alt="Categories" width="800"/>
-  <p><em>Category management with custom icons and colors</em></p>
-  
-  <img src="screenshots/budgets.png" alt="Budgets" width="800"/>
-  <p><em>Budget tracking with progress indicators and alerts</em></p>
-  
-  <img src="screenshots/reports.png" alt="Reports" width="800"/>
-  <p><em>Interactive financial reports with charts and analytics</em></p>
-</div>
-
-> 💡 **Note:** UI is currently in Polish. English internationalization (i18n) coming in v1.1
+# Finch - Personal Finance Tracker
 
 **Open-source, self-hosted web application for personal finance management**
 
@@ -27,6 +8,8 @@
 [![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
+> 💡 **Note:** UI is currently in Polish. English internationalization (i18n) coming in v1.1
 
 ## 🎉 What's New in v1.0 (January 2025)
 
@@ -41,17 +24,34 @@
 
 📖 **Full changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
-## � Screenshots
+<details>
+<summary>📸 <strong>Screenshots</strong> (click to expand)</summary>
 
 <div align="center">
+  <h3>Landing Page</h3>
   <img src="screenshots/homepage.png" alt="Homepage" width="800"/>
-  <p><em>Clean landing page with key features</em></p>
+  <p><em>Clean landing page showcasing main features</em></p>
   
+  <h3>Dashboard</h3>
   <img src="screenshots/dashboard.png" alt="Dashboard" width="800"/>
-  <p><em>Overview dashboard with statistics and recent transactions</em></p>
+  <p><em>Financial overview with statistics and transaction history</em></p>
+  
+  <h3>Categories</h3>
+  <img src="screenshots/categories.png" alt="Categories" width="800"/>
+  <p><em>Category management with custom Lucide icons and colors</em></p>
+  
+  <h3>Budgets</h3>
+  <img src="screenshots/budgets.png" alt="Budgets" width="800"/>
+  <p><em>Budget tracking with progress indicators and alerts</em></p>
+  
+  <h3>Reports</h3>
+  <img src="screenshots/reports.png" alt="Reports" width="800"/>
+  <p><em>Interactive financial reports with charts and analytics</em></p>
 </div>
 
-## �📋 About The Project
+</details>
+
+## 📋 About The Project
 
 Finch is a modern web application designed for simplicity and easy self-hosting. Track income, expenses, categorize transactions, set budgets, and generate financial reports.
 
