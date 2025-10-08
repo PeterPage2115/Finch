@@ -68,6 +68,11 @@ seed-test-data.*
 *.pdf
 .playwright-mcp/
 
+# Seed files (development only - developers can create locally)
+backend/prisma/seed.ts
+backend/prisma/seed*.sql
+backend/.env.test
+
 # Keep only .env.example files in git
 .env.example.backup
 

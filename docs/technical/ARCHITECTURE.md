@@ -175,8 +175,7 @@ backend/
 │
 ├── prisma/
 │   ├── schema.prisma        # Database schema
-│   ├── migrations/          # Migration history
-│   └── seed.ts              # Database seeding
+│   └── migrations/          # Migration history
 │
 └── test/
     ├── app.e2e-spec.ts      # End-to-end tests

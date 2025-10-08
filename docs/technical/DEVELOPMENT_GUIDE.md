@@ -50,7 +50,6 @@ This command will:
 - Build frontend and backend Docker images
 - Start PostgreSQL database
 - Run Prisma migrations
-- Seed database with test data
 - Start frontend on `http://localhost:3000`
 - Start backend on `http://localhost:3001`
 
@@ -83,7 +82,9 @@ npm install
 
 # Setup database
 npx prisma migrate dev
-npx prisma db seed
+
+# Optional: Create seed.ts locally for test data (see docs/DATABASE.md)
+# npx prisma db seed
 
 # Start development server
 npm run start:dev  # Hot reload enabled

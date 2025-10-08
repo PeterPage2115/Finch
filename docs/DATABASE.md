@@ -198,28 +198,68 @@ npx prisma migrate dev
 
 ---
 
-## 🌱 Dane Testowe (Seed)
+## 🌱 Dane Testowe (Seed) - Opcjonalne
 
-Plik `backend/prisma/seed.ts` zawiera przykładowe dane:
+> **Note:** Seed files are not included in the repository (development only).  
+> You can create your own `backend/prisma/seed.ts` locally for testing purposes.
 
-- **1 użytkownik:** `test@example.com` / `password123`
-- **4 kategorie:**
-  - 🍔 Jedzenie (EXPENSE)
-  - 🚗 Transport (EXPENSE)
-  - 🎮 Rozrywka (EXPENSE)
-  - 💰 Wynagrodzenie (INCOME)
-- **4 transakcje:** Wypłata, zakupy, tankowanie, bilety do kina
-- **1 budżet:** Limit 500 zł na jedzenie (miesięczny)
+### Example Seed Structure
 
-### Uruchamianie seed
+If you want to create test data locally, create `backend/prisma/seed.ts`:
 
-**Lokalnie:**
+```typescript
+import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+
+const prisma = new PrismaClient();
+
+async function main() {
+  // Create test user
+  const hashedPassword = await bcrypt.hash('password123', 10);
+  const user = await prisma.user.upsert({
+    where: { email: 'test@example.com' },
+    update: {},
+    create: {
+      email: 'test@example.com',
+      password: hashedPassword,
+      name: 'Test User',
+    },
+  });
+
+  // Create categories
+  await prisma.category.create({
+    data: {
+      userId: user.id,
+      name: 'Jedzenie',
+      type: 'EXPENSE',
+      icon: 'UtensilsCrossed',
+      color: '#ef4444',
+    },
+  });
+
+  // Add more seed data as needed...
+  console.log('✅ Database seeded successfully');
+}
+
+main()
+  .catch((e) => {
+    console.error('❌ Error during seed:', e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+```
+
+### Running Seed (if created locally)
+
+**Locally:**
 ```bash
 cd backend
 DATABASE_URL="postgresql://tracker_user:tracker_password@localhost:5432/tracker_kasy?schema=public" npx prisma db seed
 ```
 
-**W kontenerze:**
+**In Docker container:**
 ```bash
 docker-compose exec backend npx prisma db seed
 ```
