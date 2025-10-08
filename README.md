@@ -1,4 +1,21 @@
-# Finch - Personal Finance Tracker
+# Finch - Personal Finance## 📸 Screenshots
+
+<div align="center">
+  <img src="screenshots/homepage.png" alt="Homepage" width="800"/>
+  <p><em>Landing page showcasing main features</em></p>
+  
+  <img src="screenshots/dashboard.png" alt="Dashboard" width="800"/>
+  <p><em>Dashboard with financial overview and transaction history</em></p>
+  
+  <img src="screenshots/categories.png" alt="Categories" width="800"/>
+  <p><em>Category management with custom icons and colors</em></p>
+  
+  <img src="screenshots/budgets.png" alt="Budgets" width="800"/>
+  <p><em>Budget tracking with progress indicators and alerts</em></p>
+  
+  <img src="screenshots/reports.png" alt="Reports" width="800"/>
+  <p><em>Interactive financial reports with charts and analytics</em></p>
+</div>
 
 > 💡 **Note:** UI is currently in Polish. English internationalization (i18n) coming in v1.1
 
