@@ -15,6 +15,18 @@ interface CategoryPieChartProps {
  * Optimized with React.memo + useMemo for expensive Recharts rendering
  */
 function CategoryPieChart({ categories, isLoading }: CategoryPieChartProps) {
+  // Prepare data for Recharts (memoized) - MUST be defined before early returns
+  const chartData = useMemo(
+    () =>
+      categories.map((cat) => ({
+        name: cat.categoryName,
+        value: cat.total,
+        percentage: cat.percentage,
+        color: cat.categoryColor,
+      })),
+    [categories]
+  );
+
   if (isLoading) {
     return (
       <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm">
@@ -37,18 +49,8 @@ function CategoryPieChart({ categories, isLoading }: CategoryPieChartProps) {
     );
   }
 
-  // Prepare data for Recharts (memoized to avoid recalculation)
-  const chartData = useMemo(
-    () =>
-      categories.map((cat) => ({
-        name: cat.categoryName,
-        value: cat.total,
-        percentage: cat.percentage,
-        color: cat.categoryColor,
-      })),
-    [categories]
-  );
-
+  // Recharts components have complex internal types - any is acceptable here
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
@@ -64,6 +66,7 @@ function CategoryPieChart({ categories, isLoading }: CategoryPieChartProps) {
     return null;
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderLabel = ({ name, percentage }: any) => {
     return `${name} (${percentage.toFixed(1)}%)`;
   };
@@ -97,6 +100,7 @@ function CategoryPieChart({ categories, isLoading }: CategoryPieChartProps) {
           <Legend
             verticalAlign="bottom"
             height={36}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             formatter={(value: string, entry: any) => (
               <span className="text-gray-700 dark:text-gray-300">
                 {value} ({entry.payload.percentage.toFixed(1)}%)

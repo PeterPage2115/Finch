@@ -38,7 +38,7 @@ export default function BudgetForm({
     }
 
     const start = new Date(formData.startDate);
-    let end = new Date(start);
+    const end = new Date(start);
 
     switch (formData.period) {
       case 'DAILY':
@@ -84,8 +84,9 @@ export default function BudgetForm({
 
     try {
       await onSubmit(formData);
-    } catch (err: any) {
-      setError(err.message || 'Wystąpił błąd');
+    } catch (err) {
+      const error = err as Error;
+      setError(error.message || 'Wystąpił błąd');
     } finally {
       setIsSubmitting(false);
     }
