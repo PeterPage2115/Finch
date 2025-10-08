@@ -74,5 +74,8 @@ seed-test-data.*
 # AI Assistant private instructions
 .github/copilot-instructions.md
 
-# Wiki files (maintained separately)
+# Wiki files (maintained separately in GitHub Wiki)
 wiki/
+
+# Old/archived documentation
+README_OLD.md
