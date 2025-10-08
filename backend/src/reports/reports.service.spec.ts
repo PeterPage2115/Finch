@@ -93,6 +93,9 @@ describe('ReportsService', () => {
               aggregate: jest.fn(),
               findMany: jest.fn(),
             },
+            category: {
+              findFirst: jest.fn(),
+            },
           },
         },
       ],
@@ -465,6 +468,128 @@ describe('ReportsService', () => {
       // Assert
       expect(result.categories[0].categoryIcon).toBeNull();
       expect(result.categories[0].categoryColor).toBeNull();
+    });
+  });
+
+  describe('getCategoryDetails', () => {
+    it('should return category details with transactions', async () => {
+      // Arrange
+      const categoryId = 'category-food';
+      const mockTransactionsForCategory = [
+        {
+          id: 'trans-1',
+          amount: new Decimal(500),
+          description: 'Zakupy',
+          date: new Date('2025-10-05'),
+          type: 'EXPENSE' as const,
+        },
+        {
+          id: 'trans-2',
+          amount: new Decimal(300),
+          description: 'Restauracja',
+          date: new Date('2025-10-10'),
+          type: 'EXPENSE' as const,
+        },
+      ];
+
+      jest
+        .spyOn(prismaService.category, 'findFirst')
+        .mockResolvedValue(mockCategory1 as any);
+      jest
+        .spyOn(prismaService.transaction, 'findMany')
+        .mockResolvedValue(mockTransactionsForCategory as any);
+
+      // Act
+      const result = await service.getCategoryDetails(
+        mockUserId,
+        categoryId,
+        startDate,
+        endDate,
+      );
+
+      // Assert
+      expect(result).toBeDefined();
+      expect(result.category.id).toBe(categoryId);
+      expect(result.category.name).toBe('Jedzenie');
+      expect(result.summary.totalAmount).toBe(800);
+      expect(result.summary.transactionCount).toBe(2);
+      expect(result.summary.averageAmount).toBe(400);
+      expect(result.transactions).toHaveLength(2);
+      expect(result.period.startDate).toBe('2025-10-01');
+      expect(result.period.endDate).toBe('2025-10-31');
+
+      // Verify Prisma calls
+      expect(prismaService.category.findFirst).toHaveBeenCalledWith({
+        where: { id: categoryId, userId: mockUserId },
+      });
+      expect(prismaService.transaction.findMany).toHaveBeenCalledWith({
+        where: {
+          userId: mockUserId,
+          categoryId,
+          date: {
+            gte: startDate,
+            lte: endDate,
+          },
+        },
+        orderBy: { date: 'desc' },
+        select: {
+          id: true,
+          amount: true,
+          description: true,
+          date: true,
+          type: true,
+        },
+      });
+    });
+
+    it('should throw error if category not found', async () => {
+      // Arrange
+      const categoryId = 'non-existent';
+      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
+
+      // Act & Assert
+      await expect(
+        service.getCategoryDetails(mockUserId, categoryId, startDate, endDate),
+      ).rejects.toThrow('Category not found');
+    });
+
+    it('should return zero values when no transactions', async () => {
+      // Arrange
+      const categoryId = 'category-empty';
+      jest
+        .spyOn(prismaService.category, 'findFirst')
+        .mockResolvedValue(mockCategory1 as any);
+      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue([]);
+
+      // Act
+      const result = await service.getCategoryDetails(
+        mockUserId,
+        categoryId,
+        startDate,
+        endDate,
+      );
+
+      // Assert
+      expect(result.summary.totalAmount).toBe(0);
+      expect(result.summary.transactionCount).toBe(0);
+      expect(result.summary.averageAmount).toBe(0);
+      expect(result.transactions).toHaveLength(0);
+    });
+
+    it('should handle category not belonging to user', async () => {
+      // Arrange
+      const categoryId = 'other-user-category';
+      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null); // Category doesn't exist for this user
+
+      // Act & Assert
+      await expect(
+        service.getCategoryDetails(mockUserId, categoryId, startDate, endDate),
+      ).rejects.toThrow('Category not found');
+
+      // Verify correct where clause was used
+      expect(prismaService.category.findFirst).toHaveBeenCalledWith({
+        where: { id: categoryId, userId: mockUserId },
+      });
     });
   });
 });
