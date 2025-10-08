@@ -107,7 +107,8 @@ Po uruchomieniu aplikacji:
 3. Zaloguj się do aplikacji
 4. Gotowe! Możesz zacząć dodawać transakcje
 
-### Zatrzymanie aplikacji
+<details>
+<summary>🛑 Zatrzymanie aplikacji</summary>
 
 ```bash
 # Zatrzymanie kontenerów (dane pozostają)
@@ -119,8 +120,10 @@ docker-compose down
 # UWAGA: To usunie WSZYSTKIE dane!
 docker-compose down -v
 ```
+</details>
 
-### Logi i Debugowanie
+<details>
+<summary>📋 Logi i Debugowanie</summary>
 
 ```bash
 # Wszystkie logi
@@ -134,8 +137,10 @@ docker-compose logs -f db
 # Sprawdzenie statusu health checks
 docker-compose ps
 ```
+</details>
 
-### Aktualizacja
+<details>
+<summary>🔄 Aktualizacja</summary>
 
 ```bash
 # Pobierz najnowsze zmiany
@@ -144,10 +149,12 @@ git pull
 # Przebuduj i uruchom ponownie
 docker-compose up -d --build
 ```
+</details>
 
 ## 🏗️ Architektura
 
-### Komponenty Systemu
+<details>
+<summary>📊 Komponenty Systemu</summary>
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -181,8 +188,10 @@ docker-compose up -d --build
 │  - Transakcje, Kategorie, Budżety                        │
 └──────────────────────────────────────────────────────────┘
 ```
+</details>
 
-### Struktura Projektu
+<details>
+<summary>📁 Struktura Projektu</summary>
 
 ```
 Tracker_kasy/
@@ -209,6 +218,7 @@ Tracker_kasy/
 ├── docker-compose.yml    # Orkiestracja Docker
 └── README.md
 ```
+</details>
 
 ## 📚 Dokumentacja
 
@@ -219,6 +229,9 @@ Szczegółowa dokumentacja dostępna w folderze [`docs/`](./docs/):
 - [**Docker & Orkiestracja**](./docs/DOCKER.md) - Szczegółowy przewodnik po konfiguracji Docker
 - [Architektura aplikacji](./docs/architecture.md) *(wkrótce)*
 - [Przewodnik developera](./docs/developer-guide.md) *(wkrótce)*
+
+<details>
+<summary>🔌 Porty i Dostęp</summary>
 
 ### Porty i Dostęp
 
@@ -236,8 +249,10 @@ Po uruchomieniu aplikacji dostępne są następujące porty:
 - Database: `tracker_kasy`
 - User: `tracker_user`
 - Password: `tracker_password`
+</details>
 
-### Docker Volumes i Dane
+<details>
+<summary>💾 Docker Volumes i Dane</summary>
 
 Dane aplikacji są przechowywane w Docker volume `tracker_kasy_pgdata`. Nawet po zatrzymaniu kontenerów (`docker-compose down`), dane pozostają bezpieczne.
 
@@ -250,8 +265,12 @@ docker-compose exec db pg_dump -U tracker_user tracker_kasy > backup.sql
 ```bash
 docker-compose exec -T db psql -U tracker_user tracker_kasy < backup.sql
 ```
+</details>
 
 ## 🧪 Rozwój Lokalny
+
+<details>
+<summary>⚙️ Setup bez Dockera</summary>
 
 Jeśli chcesz rozwijać aplikację bez Dockera:
 
@@ -270,8 +289,10 @@ cd frontend
 npm install
 npm run dev
 ```
+</details>
 
-### Uruchamianie Testów
+<details>
+<summary>🧪 Uruchamianie Testów</summary>
 
 ```bash
 # Backend - Unit Tests
@@ -295,8 +316,10 @@ npm run test:e2e
 - `categories.service.spec.ts` - Categories management (18 tests)
 - `budgets.service.spec.ts` - Budgets & progress (21 tests)
 - `reports.service.spec.ts` - Reports & analytics (17 tests)
+</details>
 
-## 🔒 Bezpieczeństwo
+<details>
+<summary>🔒 Bezpieczeństwo</summary>
 
 - 🔐 **JWT Authentication** - Bezpieczne tokeny sesji
 - 🛡️ **Password Hashing** - bcrypt z salt rounds
@@ -305,6 +328,7 @@ npm run test:e2e
 - 🧹 **XSS Protection** - Next.js auto-escaping
 - 📦 **Dependency Audit** - 0 vulnerabilities (npm audit)
 - 🎯 **User-scoped queries** - Każdy endpoint weryfikuje userId
+</details>
 
 ## 🤝 Współpraca
 
@@ -318,7 +342,8 @@ Chcesz pomóc w rozwoju projektu? Świetnie!
 
 Więcej informacji w pliku [CONTRIBUTING.md](./CONTRIBUTING.md).
 
-## 📚 Dokumentacja
+<details>
+<summary>📚 Więcej Dokumentacji</summary>
 
 ### Zarządzanie Projektem
 - 📋 [TODO - Current Sprint](./docs/project/TODO.md) - Aktualny sprint i priorytety
@@ -332,6 +357,10 @@ Więcej informacji w pliku [CONTRIBUTING.md](./CONTRIBUTING.md).
 - 🚀 [Development Guide](./docs/technical/DEVELOPMENT_GUIDE.md) - Setup i workflow
 - 🧪 [Testing Strategy](./docs/technical/TESTING_STRATEGY.md) - Wzorce testów i pokrycie
 - 📡 [API Reference](./docs/technical/API_REFERENCE.md) - Dokumentacja REST API
+</details>
+
+<details>
+<summary>📝 Konwencje Commitów</summary>
 
 ## 📝 Konwencje Commitów
 
@@ -343,6 +372,7 @@ Projekt używa [Conventional Commits](https://www.conventionalcommits.org/):
 - `test:` - dodanie lub modyfikacja testów
 - `refactor:` - refaktoryzacja kodu
 - `chore:` - zmiany w toolingu, konfiguracji
+</details>
 
 ## 📄 Licencja
 

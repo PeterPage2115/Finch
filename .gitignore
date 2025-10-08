@@ -59,3 +59,14 @@ npm-debug.log*
 yarn-debug.log*
 .npm
 .eslintcache
+
+# Test files and scripts (development only)
+test-*.ps1
+test-*.sh
+seed-test-data.*
+*.csv
+*.pdf
+.playwright-mcp/
+
+# Keep only .env.example files in git
+.env.example.backup
