@@ -540,7 +540,9 @@ export class ReportsService {
       csvRows.push(row.join(','));
     });
 
-    return csvRows.join('\n');
+    // Add UTF-8 BOM for proper Excel encoding of Polish characters
+    const BOM = '\uFEFF';
+    return BOM + csvRows.join('\n');
   }
 
   /**
@@ -575,17 +577,15 @@ export class ReportsService {
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', reject);
 
-        // Title
+        // Title (using default font which supports Polish characters)
         doc
           .fontSize(20)
-          .font('Helvetica-Bold')
           .text('Raport Finansowy', { align: 'center' });
         doc.moveDown(0.5);
 
         // Date range
         doc
           .fontSize(12)
-          .font('Helvetica')
           .text(
             `Okres: ${startDate.toLocaleDateString('pl-PL')} - ${endDate.toLocaleDateString('pl-PL')}`,
             { align: 'center' },
@@ -593,10 +593,10 @@ export class ReportsService {
         doc.moveDown(1.5);
 
         // Summary section
-        doc.fontSize(14).font('Helvetica-Bold').text('Podsumowanie');
+        doc.fontSize(14).text('Podsumowanie');
         doc.moveDown(0.5);
 
-        doc.fontSize(10).font('Helvetica');
+        doc.fontSize(10);
         doc.text(`Przychody: ${this.formatCurrency(summary.totalIncome)}`);
         doc.text(`Wydatki: ${this.formatCurrency(summary.totalExpenses)}`);
         doc.text(`Bilans: ${this.formatCurrency(summary.balance)}`);
@@ -606,11 +606,11 @@ export class ReportsService {
         doc.moveDown(1.5);
 
         // Transactions section
-        doc.fontSize(14).font('Helvetica-Bold').text('Lista Transakcji');
+        doc.fontSize(14).text('Lista Transakcji');
         doc.moveDown(0.5);
 
         // Table headers
-        doc.fontSize(9).font('Helvetica-Bold');
+        doc.fontSize(9);
         const tableTop = doc.y;
         const colWidths = {
           date: 70,
@@ -635,7 +635,7 @@ export class ReportsService {
         doc.moveDown(0.3);
 
         // Transaction rows
-        doc.fontSize(8).font('Helvetica');
+        doc.fontSize(8);
         transactions.forEach((t, index) => {
           // Check if we need a new page
           if (doc.y > 700) {

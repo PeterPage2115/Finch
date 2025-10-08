@@ -11,6 +11,7 @@ import { Category } from '@/lib/api/categoriesClient';
 import { TransactionType } from '@/types/transaction';
 import { motion } from 'framer-motion';
 import { IconPicker } from '@/components/ui/IconPicker';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 
 interface CategoryFormProps {
   category?: Category; // undefined = create mode, defined = edit mode
@@ -108,7 +109,7 @@ export default function CategoryForm({
               onClick={() =>
                 setFormData({ ...formData, type: TransactionType.EXPENSE })
               }
-              className={`flex-1 py-2 px-4 rounded-md border-2 transition-colors
+              className={`flex-1 py-2 px-4 rounded-md border-2 transition-colors flex items-center justify-center gap-2
                 ${
                   formData.type === TransactionType.EXPENSE
                     ? 'border-red-500 bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300'
@@ -116,14 +117,15 @@ export default function CategoryForm({
                 }`}
               disabled={isSubmitting}
             >
-              💸 Wydatek
+              <TrendingDown size={18} />
+              Wydatek
             </button>
             <button
               type="button"
               onClick={() =>
                 setFormData({ ...formData, type: TransactionType.INCOME })
               }
-              className={`flex-1 py-2 px-4 rounded-md border-2 transition-colors
+              className={`flex-1 py-2 px-4 rounded-md border-2 transition-colors flex items-center justify-center gap-2
                 ${
                   formData.type === TransactionType.INCOME
                     ? 'border-green-500 bg-green-50 dark:bg-green-900/30 text-green-700 dark:text-green-300'
@@ -131,7 +133,8 @@ export default function CategoryForm({
                 }`}
               disabled={isSubmitting}
             >
-              💰 Przychód
+              <TrendingUp size={18} />
+              Przychód
             </button>
           </div>
         </div>

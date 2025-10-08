@@ -38,6 +38,12 @@ export default function BudgetForm({
     }
 
     const start = new Date(formData.startDate);
+    
+    // Validate start date before proceeding
+    if (isNaN(start.getTime())) {
+      return; // Skip calculation if date is invalid
+    }
+
     const end = new Date(start);
 
     switch (formData.period) {
@@ -55,10 +61,13 @@ export default function BudgetForm({
         break;
     }
 
-    setFormData((prev) => ({
-      ...prev,
-      endDate: end.toISOString().split('T')[0],
-    }));
+    // Validate end date before converting to ISO string
+    if (!isNaN(end.getTime())) {
+      setFormData((prev) => ({
+        ...prev,
+        endDate: end.toISOString().split('T')[0],
+      }));
+    }
   }, [formData.period, formData.startDate]);
 
   const handleSubmit = async (e: React.FormEvent) => {

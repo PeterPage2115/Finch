@@ -139,6 +139,12 @@ export default function TransactionForm({
             min="0.01"
             value={formData.amount}
             onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
+            onFocus={(e) => {
+              // Select all text when focusing on zero value for better UX
+              if (formData.amount === 0) {
+                e.target.select();
+              }
+            }}
             className={`w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-indigo-500 focus:border-transparent ${
               errors.amount ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'
             }`}
