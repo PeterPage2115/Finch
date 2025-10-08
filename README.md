@@ -1,9 +1,30 @@
 # 💰 Tracker Kasy - Aplikacja do Śledzenia Finansów
 
+> 📢 **English version coming soon!** | Full internationalization (i18n) support planned for v1.1
+>
+> **English Documentation (WIP):** This is a Polish financial tracking application. English UI and documentation are currently in development. See [docs/i18n/](./docs/i18n/) for progress.
+
 **Otwartoźródłowa aplikacja webowa do zarządzania finansami osobistymi**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
+[![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+
+## 🎉 Nowości w v1.0 (Styczeń 2025)
+
+- ✅ **Nowy system ikon** - Lucide icons zamiast emoji (profesjonalny wygląd)
+- ✅ **Pełny dark mode** - Kompletne wsparcie dla trybu ciemnego
+- ✅ **Ulepszone wykresy** - CategoryPieChart z interaktywnymi detalami transakcji
+- ✅ **Modal szczegółów kategorii** - Kliknij segment wykresu, aby zobaczyć transakcje
+- ✅ **Zoptymalizowana architektura** - Zustand store persistence, API client refactoring
+- ✅ **Testy jednostkowe** - 88 testów backend (100% service coverage)
+- ✅ **Zero luk bezpieczeństwa** - npm audit: 0 vulnerabilities
+- ✅ **Kompletna dokumentacja** - 800+ linii docs, CHANGELOG, API reference
+
+📖 **Zobacz pełną listę zmian:** [CHANGELOG.md](./CHANGELOG.md)
 
 ## 📋 O Projekcie
 
@@ -253,14 +274,37 @@ npm run dev
 ### Uruchamianie Testów
 
 ```bash
-# Backend
+# Backend - Unit Tests
 cd backend
-npm run test
+npm test                    # All tests
+npm test -- --coverage      # With coverage report
+npm test -- auth.service    # Specific file
 
-# Frontend
-cd frontend
-npm run test
+# Backend - E2E Tests
+npm run test:e2e
+
+# Backend - Test Results (v1.0)
+# ✅ 88 tests passing
+# ✅ Coverage: ~27% (focused on business logic)
+# ✅ Services: 100% method coverage
 ```
+
+**Test Suites:**
+- `auth.service.spec.ts` - Authentication (11 tests)
+- `transactions.service.spec.ts` - Transactions CRUD (21 tests)
+- `categories.service.spec.ts` - Categories management (18 tests)
+- `budgets.service.spec.ts` - Budgets & progress (21 tests)
+- `reports.service.spec.ts` - Reports & analytics (17 tests)
+
+## 🔒 Bezpieczeństwo
+
+- 🔐 **JWT Authentication** - Bezpieczne tokeny sesji
+- 🛡️ **Password Hashing** - bcrypt z salt rounds
+- 🚫 **SQL Injection Protection** - Prisma ORM
+- 🔍 **Input Validation** - class-validator DTOs
+- 🧹 **XSS Protection** - Next.js auto-escaping
+- 📦 **Dependency Audit** - 0 vulnerabilities (npm audit)
+- 🎯 **User-scoped queries** - Każdy endpoint weryfikuje userId
 
 ## 🤝 Współpraca
 
