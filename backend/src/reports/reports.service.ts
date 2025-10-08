@@ -572,12 +572,16 @@ export class ReportsService {
         const doc = new PDFDocument({ margin: 50 });
         const chunks: Buffer[] = [];
 
+        // Use Liberation Sans font for proper Polish character support
+        // This TTF font is installed in the Docker container via ttf-liberation package
+        doc.font('/usr/share/fonts/liberation/LiberationSans-Regular.ttf');
+
         // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         doc.on('data', (chunk) => chunks.push(chunk));
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', reject);
 
-        // Title (using default font which supports Polish characters)
+        // Title
         doc.fontSize(20).text('Raport Finansowy', { align: 'center' });
         doc.moveDown(0.5);
 
