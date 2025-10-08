@@ -578,9 +578,7 @@ export class ReportsService {
         doc.on('error', reject);
 
         // Title (using default font which supports Polish characters)
-        doc
-          .fontSize(20)
-          .text('Raport Finansowy', { align: 'center' });
+        doc.fontSize(20).text('Raport Finansowy', { align: 'center' });
         doc.moveDown(0.5);
 
         // Date range
