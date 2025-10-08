@@ -1,4 +1,4 @@
-# Finch - Personal Finance Tracker
+# Finch - Personal Finance Tracker 🐦
 
 **Open-source, self-hosted web application for personal finance management**
 
@@ -9,375 +9,157 @@
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-> 💡 **Note:** UI is currently in Polish. English internationalization (i18n) coming in v1.1
+> 💡 **UI is currently in Polish.** English i18n coming in v1.1
 
-## 🎉 What's New in v1.0 (January 2025)
+---
 
-- ✅ **Modern icon system** - Lucide icons for professional look
-- ✅ **Full dark mode** - Complete dark theme support
-- ✅ **Enhanced charts** - Interactive CategoryPieChart with transaction details
-- ✅ **Category details modal** - Click chart segments to view transactions
-- ✅ **Optimized architecture** - Zustand store persistence, API client refactoring
-- ✅ **Unit tests** - 88 backend tests (100% service coverage)
-- ✅ **Zero vulnerabilities** - npm audit clean
-- ✅ **Complete documentation** - 800+ lines of docs, CHANGELOG, API reference
+## 📚 Documentation
 
-📖 **Full changelog:** [CHANGELOG.md](./CHANGELOG.md)
+**📖 [Visit the Wiki](https://github.com/PeterPage2115/Finch/wiki)** for complete documentation:
+
+- **[Home](https://github.com/PeterPage2115/Finch/wiki/Home)** - Documentation overview
+- **[Installation Guide](https://github.com/PeterPage2115/Finch/wiki/Installation-Guide)** - Complete setup instructions
+- **[FAQ](https://github.com/PeterPage2115/Finch/wiki/FAQ)** - Frequently asked questions
+
+> More pages coming soon! Check the wiki for the latest documentation.
+
+---
+
+## 🚀 Quick Start (TL;DR)
+
+```bash
+# Clone repository
+git clone https://github.com/PeterPage2115/Finch.git
+cd Finch
+
+# Configure (optional - has sensible defaults)
+cp .env.example .env
+# Edit .env and change JWT_SECRET!
+
+# Start application
+docker-compose up -d
+
+# Access at http://localhost:3000
+```
+
+**That's it!** 🎉
+
+For detailed instructions, see the [📖 Wiki](https://github.com/PeterPage2115/Finch/wiki).
+
+---
+
+## ✨ Features
+
+- 🔒 **Privacy First** - Self-hosted, your data stays with you
+- 🐳 **Easy Deployment** - One command with Docker Compose
+- 📊 **Modern UI** - Clean dashboard with interactive charts
+- 💼 **Budget Tracking** - Set limits and monitor spending
+- 📈 **Financial Reports** - Analyze income, expenses, and trends
+- 🎨 **Dark Mode** - Full dark theme support
+- 🔐 **Secure** - JWT authentication, bcrypt passwords
+- 📱 **Responsive** - Works on desktop and mobile
+
+---
+
+## 📸 Screenshots
 
 <details>
-<summary>📸 <strong>Screenshots</strong> (click to expand)</summary>
+<summary><strong>Click to view screenshots</strong></summary>
 
 <div align="center">
-  <h3>Landing Page</h3>
-  <img src="screenshots/homepage.png" alt="Homepage" width="800"/>
-  <p><em>Clean landing page showcasing main features</em></p>
   
-  <h3>Dashboard</h3>
-  <img src="screenshots/dashboard.png" alt="Dashboard" width="800"/>
-  <p><em>Financial overview with statistics and transaction history</em></p>
-  
-  <h3>Categories</h3>
-  <img src="screenshots/categories.png" alt="Categories" width="800"/>
-  <p><em>Category management with custom Lucide icons and colors</em></p>
-  
-  <h3>Budgets</h3>
-  <img src="screenshots/budgets.png" alt="Budgets" width="800"/>
-  <p><em>Budget tracking with progress indicators and alerts</em></p>
-  
-  <h3>Reports</h3>
-  <img src="screenshots/reports.png" alt="Reports" width="800"/>
-  <p><em>Interactive financial reports with charts and analytics</em></p>
+### Landing Page
+<img src="screenshots/homepage.png" alt="Homepage" width="800"/>
+
+### Dashboard
+<img src="screenshots/dashboard.png" alt="Dashboard" width="800"/>
+
+### Categories Management
+<img src="screenshots/categories.png" alt="Categories" width="800"/>
+
+### Budget Tracking
+<img src="screenshots/budgets.png" alt="Budgets" width="800"/>
+
+### Financial Reports
+<img src="screenshots/reports.png" alt="Reports" width="800"/>
+
 </div>
 
 </details>
 
-## 📋 About The Project
-
-Finch is a modern web application designed for simplicity and easy self-hosting. Track income, expenses, categorize transactions, set budgets, and generate financial reports.
-
-### ✨ Key Features
-
-- 🔒 **Privacy** - Your data stays with you (self-hosted)
-- 🐳 **Easy deployment** - One command: `docker-compose up`
-- 📊 **Intuitive interface** - Clean dashboard with charts
-- 💼 **Budget management** - Set limits and monitor expenses
-- 📈 **Reports** - Analyze your finances over time
+---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS v4
-- **Backend:** NestJS, TypeScript
-- **Database:** PostgreSQL 17
-- **ORM:** Prisma
-- **Deployment:** Docker & Docker Compose
-
-📖 **Technical documentation:** [docs/technical/](./docs/technical/)
-
-## 🚀 Quick Start
-
-### Requirements
-
-- Docker 20.10+
-- Docker Compose 2.0+
-- Git
-
-### Installation
-
-1. **Clone repository:**
-   ```bash
-   git clone https://github.com/PeterPage2115/Finch.git
-   cd Finch
-   ```
-
-2. **Configure environment (optional):**
-   ```bash
-   # Copy example env file
-   cp .env.example .env
-   
-   # IMPORTANT: Change JWT_SECRET in production!
-   # Generate with: openssl rand -base64 32
-   ```
-
-3. **Start application:**
-   ```bash
-   docker-compose up -d
-   ```
-
-   First run will:
-   - Pull PostgreSQL image
-   - Build frontend & backend images
-   - Start all containers
-   - Run database migrations automatically
-
-   **Takes 2-5 minutes on first run.**
-
-4. **Check status:**
-   ```bash
-   docker-compose ps
-   ```
-
-   All services should be `healthy` or `running`.
-
-5. **Open in browser:**
-   - **Frontend:** [http://localhost:3000](http://localhost:3000)
-   - **Backend API:** [http://localhost:3001](http://localhost:3001)
-   - **Database:** `localhost:5432`
-
-### First Setup
-
-1. Open [http://localhost:3000](http://localhost:3000)
-2. Click "Register" and create account
-3. Log in to the application
-4. Start tracking your finances!
-
-<details>
-<summary>🛑 Stopping Application</summary>
-
-```bash
-# Stop containers (data persists)
-docker-compose stop
-
-# Stop and remove containers (data persists in volume)
-docker-compose down
-
-# WARNING: This will DELETE ALL DATA!
-docker-compose down -v
-```
-</details>
-
-<details>
-<summary>📋 Logs & Debugging</summary>
-
-```bash
-# All logs
-docker-compose logs -f
-
-# Specific service logs
-docker-compose logs -f backend
-docker-compose logs -f frontend
-docker-compose logs -f db
-
-# Check health status
-docker-compose ps
-```
-</details>
-
-<details>
-<summary>🔄 Updates</summary>
-
-```bash
-# Pull latest changes
-git pull
-
-# Rebuild and restart
-docker-compose up -d --build
-```
-</details>
-
-## 🏗️ Architecture
-
-<details>
-<summary>📊 System Components</summary>
-
-```
-┌─────────────────────────────────────────────────────────┐
-│                        User                              │
-│                      (Browser)                           │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     │ HTTP (port 3000)
-                     │
-┌────────────────────▼────────────────────────────────────┐
-│                  Frontend (Next.js)                      │
-│  - Server-Side Rendering                                 │
-│  - Tailwind CSS, Zustand                                 │
-│  - React Hook Form, Recharts                             │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     │ REST API (port 3001)
-                     │
-┌────────────────────▼────────────────────────────────────┐
-│                  Backend (NestJS)                        │
-│  - RESTful API                                           │
-│  - JWT Authentication                                    │
-│  - Prisma ORM                                            │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     │ PostgreSQL Protocol (port 5432)
-                     │
-┌────────────────────▼────────────────────────────────────┐
-│                Database (PostgreSQL)                     │
-│  - Users, Transactions                                   │
-│  - Categories, Budgets                                   │
-└──────────────────────────────────────────────────────────┘
-```
-</details>
-
-<details>
-<summary>📁 Project Structure</summary>
-
-```
-Finch/
-├── backend/              # Backend (NestJS)
-│   ├── src/
-│   │   ├── auth/         # Authentication module
-│   │   ├── users/        # User management
-│   │   ├── transactions/ # Financial transactions
-│   │   ├── categories/   # Categories
-│   │   ├── budgets/      # Budgets
-│   │   └── prisma.service.ts
-│   ├── prisma/
-│   │   └── schema.prisma # Database schema
-│   └── Dockerfile
-│
-├── frontend/             # Frontend (Next.js)
-│   ├── app/              # App Router (Next.js 15)
-│   ├── components/       # React components
-│   ├── lib/              # Utilities & stores
-│   ├── types/            # TypeScript types
-│   └── Dockerfile
-│
-├── docs/                 # Documentation
-├── docker-compose.yml    # Docker orchestration
-└── README.md
-```
-</details>
-
-## 📚 Documentation
-
-Comprehensive documentation available in [`docs/`](./docs/) folder:
-
-- [**API Reference**](./docs/API.md) - Complete REST API endpoints documentation
-- [**Database Schema**](./docs/DATABASE.md) - Models, relations, migrations, sample queries
-- [**Docker & Orchestration**](./docs/DOCKER.md) - Detailed Docker configuration guide
-- [Application Architecture](./docs/architecture.md) *(coming soon)*
-- [Developer Guide](./docs/developer-guide.md) *(coming soon)*
-
-<details>
-<summary>🔌 Ports & Access</summary>
-
-| Service    | Port  | URL                          | Description                   |
-|------------|-------|------------------------------|-------------------------------|
-| Frontend   | 3000  | http://localhost:3000        | User interface                |
-| Backend    | 3001  | http://localhost:3001        | REST API                      |
-| PostgreSQL | 5432  | localhost:5432               | Database                      |
-
-**Default database credentials:**
-- Host: `localhost` (or `db` inside Docker network)
-- Port: `5432`
-- Database: `tracker_kasy`
-- User: `tracker_user`
-- Password: `tracker_password`
-</details>
-
-<details>
-<summary>💾 Docker Volumes & Data</summary>
-
-Application data is stored in Docker volume `tracker_kasy_pgdata`. Data persists even after `docker-compose down`.
-
-**Database backup:**
-```bash
-docker-compose exec db pg_dump -U tracker_user tracker_kasy > backup.sql
-```
-
-**Database restore:**
-```bash
-docker-compose exec -T db psql -U tracker_user tracker_kasy < backup.sql
-```
-</details>
-
-## 🧪 Local Development
-
-<details>
-<summary>⚙️ Setup without Docker</summary>
-
-If you want to develop without Docker:
-
-### Backend (NestJS)
-
-```bash
-cd backend
-npm install
-npm run start:dev
-```
-
-### Frontend (Next.js)
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-</details>
-
-<details>
-<summary>🧪 Running Tests</summary>
-
-```bash
-# Backend - Unit Tests
-cd backend
-npm test                    # All tests
-npm test -- --coverage      # With coverage report
-npm test -- auth.service    # Specific file
-
-# Backend - E2E Tests
-npm run test:e2e
-
-# Backend - Test Results (v1.0)
-# ✅ 88 tests passing
-# ✅ Coverage: ~27% (focused on business logic)
-# ✅ Services: 100% method coverage
-```
-
-**Test Suites:**
-- `auth.service.spec.ts` - Authentication (11 tests)
-- `transactions.service.spec.ts` - Transactions CRUD (21 tests)
-- `categories.service.spec.ts` - Categories management (18 tests)
-- `budgets.service.spec.ts` - Budgets & progress (21 tests)
-- `reports.service.spec.ts` - Reports & analytics (17 tests)
-</details>
-
-<details>
-<summary>🔒 Security</summary>
-
-- 🔐 **JWT Authentication** - Secure session tokens
-- 🛡️ **Password Hashing** - bcrypt with salt rounds
-- 🚫 **SQL Injection Protection** - Prisma ORM
-- 🔍 **Input Validation** - class-validator DTOs
-- 🧹 **XSS Protection** - Next.js auto-escaping
-- 📦 **Dependency Audit** - 0 vulnerabilities (npm audit)
-- 🎯 **User-scoped queries** - Every endpoint verifies userId
-</details>
-
-## 🤝 Contributing
-
-Want to help improve Finch? Great! 
-
-1. Fork the repository
-2. Create feature branch (`git checkout -b feat/amazing-feature`)
-3. Commit changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to branch (`git push origin feat/amazing-feature`)
-5. Open Pull Request
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
-
-## 📄 License
-
-This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
-
-## 🙏 Acknowledgments
-
-Built with these amazing open-source technologies:
-- [Next.js](https://nextjs.org/)
-- [NestJS](https://nestjs.com/)
-- [Prisma](https://www.prisma.io/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Tailwind CSS](https://tailwindcss.com/)
-
-## 📧 Contact
-
-Questions? Suggestions? Open an [Issue](https://github.com/PeterPage2115/Finch/issues)!
+| Layer | Technology |
+|-------|-----------|
+| **Frontend** | Next.js 15, React 19, TypeScript, Tailwind CSS v4 |
+| **Backend** | NestJS, TypeScript, Prisma ORM |
+| **Database** | PostgreSQL 17 |
+| **Deployment** | Docker & Docker Compose |
+| **Testing** | Jest, Vitest, React Testing Library |
 
 ---
 
-**Built with ❤️ for the open-source community**
+## 📖 Documentation Links
+
+### For Users
+- [📖 Wiki Home](https://github.com/PeterPage2115/Finch/wiki)
+- [Installation Guide](https://github.com/PeterPage2115/Finch/wiki/Installation-Guide)
+- [FAQ](https://github.com/PeterPage2115/Finch/wiki/FAQ)
+
+### For Developers
+- [Contributing Guide](CONTRIBUTING.md)
+- [Technical Documentation](./docs/technical/)
+
+### Project Info
+- [Changelog](CHANGELOG.md) - Version history
+- [Security Policy](SECURITY.md) - Report vulnerabilities
+- [License](LICENSE) - MIT License
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
+
+**Ways to contribute:**
+- 🐛 Report bugs
+- 💡 Suggest features
+- 📝 Improve documentation
+- 🌍 Translate to other languages
+- 🔧 Submit pull requests
+
+---
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🌟 Support
+
+If you find Finch useful, please consider:
+- ⭐ Starring this repository
+- 🐦 Sharing with others
+- 🐛 Reporting bugs
+- 📖 Improving documentation
+
+---
+
+## 📞 Contact & Support
+
+- **Issues:** [GitHub Issues](https://github.com/PeterPage2115/Finch/issues)
+- **Security:** [Security Policy](SECURITY.md)
+- **Email:** piotr.paz04@gmail.com
+
+---
+
+<div align="center">
+
+**Made with ❤️ for financial freedom**
+
+[Documentation](https://github.com/PeterPage2115/Finch/wiki) • [Report Bug](https://github.com/PeterPage2115/Finch/issues) • [Request Feature](https://github.com/PeterPage2115/Finch/issues)
+
+</div>
