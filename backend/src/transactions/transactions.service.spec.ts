@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TransactionsService } from './transactions.service';
 import { PrismaService } from '../prisma.service';
-import { NotFoundException, ForbiddenException } from '@nestjs/common';
+import { NotFoundException } from '@nestjs/common';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { QueryTransactionDto } from './dto/query-transaction.dto';
@@ -131,7 +131,6 @@ describe('TransactionsService', () => {
 
     it('should throw NotFoundException if category belongs to another user', async () => {
       // Arrange
-      const otherUserCategory = { ...mockCategory, userId: 'other-user' };
       jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
 
       // Act & Assert
@@ -186,6 +185,7 @@ describe('TransactionsService', () => {
       const result = await service.findAll(mockUserId, query);
 
       // Assert
+      expect(result).toBeDefined();
       expect(prismaService.transaction.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: { userId: mockUserId, type: 'EXPENSE' },

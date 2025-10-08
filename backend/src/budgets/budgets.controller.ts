@@ -72,7 +72,7 @@ export class BudgetsController {
    * Returns: Progress object (spent, limit, percentage, remaining, alerts)
    */
   @Get(':id/progress')
-  getProgress(@Param('id') id: string, @CurrentUser('id') userId: string) {
+  getProgress(@Param('id') id: string) {
     return this.budgetsService.calculateProgress(id);
   }
 

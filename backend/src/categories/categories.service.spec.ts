@@ -83,6 +83,7 @@ describe('CategoriesService', () => {
     it('should return all categories for user', async () => {
       // Arrange
       const categoriesWithoutUpdatedAt = mockCategories.map(
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         ({ updatedAt, ...rest }) => rest,
       );
       jest

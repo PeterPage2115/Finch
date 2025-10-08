@@ -44,18 +44,6 @@ describe('BudgetsService', () => {
     updatedAt: new Date(),
   };
 
-  const mockTransaction = {
-    id: 'transaction-1',
-    amount: 100,
-    description: 'Test transaction',
-    date: new Date('2025-01-15'),
-    type: 'EXPENSE' as const,
-    categoryId: mockCategoryId,
-    userId: mockUserId,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
