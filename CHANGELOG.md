@@ -10,12 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Screenshots in README (homepage and dashboard)
+- Screenshots in README (homepage, dashboard, categories, budgets, reports)
 
 ### Changed
 - Rebranded from "Tracker Kasy" to "Finch"
 - Translated README and documentation to English
 - Optimized README with collapsible sections
+- Updated screenshots with proper test user authentication
 
 ### Removed
 - 100+ test artifacts (screenshots, coverage reports)
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - .gitignore pattern for coverage folders (recursive)
 - Git author configuration (email updated)
+- Screenshot authentication issues (proper test@example.com login)
 
 ---
 
