@@ -9,12 +9,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- Comprehensive automated testing documentation
-- Testing infrastructure improvements
+### Changed
+- Rebranded from "Tracker Kasy" to "Finch"
+- Translated README and documentation to English
+- Optimized README with collapsible sections
+
+### Removed
+- 100+ test artifacts (screenshots, coverage reports)
+- Outdated documentation and session reports (26 files)
+- Management scripts (security concern)
+- Internal planning documents (TODO, ROADMAP)
 
 ### Fixed
-- Auth service tests now include EmailService mock
+- .gitignore pattern for coverage folders (recursive)
+- Git author configuration (email updated)
 
 ---
 
