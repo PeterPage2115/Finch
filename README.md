@@ -1,4 +1,8 @@
-# � Finch - Personal Finance Tracker
+# Finch - Personal Finance Tracker
+
+> 💡 **Note:** UI is currently in Polish. English internationalization (i18n) coming in v1.1
+
+**Open-source, self-hosted web application for personal finance management**ch - Personal Finance Tracker
 
 > 📢 **English version coming soon!** | Full internationalization (i18n) support planned for v1.1
 >
@@ -15,16 +19,16 @@
 
 ## 🎉 What's New in v1.0 (January 2025)
 
-- ✅ **Nowy system ikon** - Lucide icons zamiast emoji (profesjonalny wygląd)
-- ✅ **Pełny dark mode** - Kompletne wsparcie dla trybu ciemnego
-- ✅ **Ulepszone wykresy** - CategoryPieChart z interaktywnymi detalami transakcji
-- ✅ **Modal szczegółów kategorii** - Kliknij segment wykresu, aby zobaczyć transakcje
-- ✅ **Zoptymalizowana architektura** - Zustand store persistence, API client refactoring
-- ✅ **Testy jednostkowe** - 88 testów backend (100% service coverage)
-- ✅ **Zero luk bezpieczeństwa** - npm audit: 0 vulnerabilities
-- ✅ **Kompletna dokumentacja** - 800+ linii docs, CHANGELOG, API reference
+- ✅ **Modern icon system** - Lucide icons for professional look
+- ✅ **Full dark mode** - Complete dark theme support
+- ✅ **Enhanced charts** - Interactive CategoryPieChart with transaction details
+- ✅ **Category details modal** - Click chart segments to view transactions
+- ✅ **Optimized architecture** - Zustand store persistence, API client refactoring
+- ✅ **Unit tests** - 88 backend tests (100% service coverage)
+- ✅ **Zero vulnerabilities** - npm audit clean
+- ✅ **Complete documentation** - 800+ lines of docs, CHANGELOG, API reference
 
-📖 **Zobacz pełną listę zmian:** [CHANGELOG.md](./CHANGELOG.md)
+📖 **Full changelog:** [CHANGELOG.md](./CHANGELOG.md)
 
 ## 📋 About The Project
 
@@ -38,128 +42,126 @@ Finch is a modern web application designed for simplicity and easy self-hosting.
 - 💼 **Budget management** - Set limits and monitor expenses
 - 📈 **Reports** - Analyze your finances over time
 
-## 🛠️ Stack Technologiczny
+## 🛠️ Tech Stack
 
 - **Frontend:** Next.js 15, React 19, TypeScript, Tailwind CSS v4
 - **Backend:** NestJS, TypeScript
-- **Baza Danych:** PostgreSQL 17
+- **Database:** PostgreSQL 17
 - **ORM:** Prisma
-- **Konteneryzacja:** Docker & Docker Compose
+- **Deployment:** Docker & Docker Compose
 
-📖 **Dokumentacja techniczna:** [docs/technical/](./docs/technical/)
+📖 **Technical documentation:** [docs/technical/](./docs/technical/)
 
-## 🚀 Szybki Start
+## 🚀 Quick Start
 
-### Wymagania
+### Requirements
 
-- Docker (wersja 20.10+)
-- Docker Compose (wersja 2.0+)
+- Docker 20.10+
+- Docker Compose 2.0+
 - Git
 
-### Instalacja i Uruchomienie
+### Installation
 
-1. **Sklonuj repozytorium:**
+1. **Clone repository:**
    ```bash
-   git clone https://github.com/[twoja-nazwa-uzytkownika]/Tracker_kasy.git
-   cd Tracker_kasy
+   git clone https://github.com/PeterPage2115/Finch.git
+   cd Finch
    ```
 
-2. **Skonfiguruj zmienne środowiskowe (opcjonalnie):**
+2. **Configure environment (optional):**
    ```bash
-   # Skopiuj plik .env.example jako .env
+   # Copy example env file
    cp .env.example .env
    
-   # WAŻNE: W produkcji zmień JWT_SECRET na bezpieczny, losowy ciąg znaków!
-   # Możesz wygenerować go za pomocą:
-   # openssl rand -base64 32
+   # IMPORTANT: Change JWT_SECRET in production!
+   # Generate with: openssl rand -base64 32
    ```
 
-3. **Uruchom aplikację:**
+3. **Start application:**
    ```bash
    docker-compose up -d
    ```
 
-   Przy pierwszym uruchomieniu Docker:
-   - Pobierze obrazy PostgreSQL
-   - Zbuduje obrazy backendu i frontendu
-   - Uruchomi wszystkie kontenery
-   - Backend automatycznie wykona migracje bazy danych
+   First run will:
+   - Pull PostgreSQL image
+   - Build frontend & backend images
+   - Start all containers
+   - Run database migrations automatically
 
-   **Proces może potrwać 2-5 minut przy pierwszym uruchomieniu.**
+   **Takes 2-5 minutes on first run.**
 
-4. **Sprawdź status:**
+4. **Check status:**
    ```bash
    docker-compose ps
    ```
 
-   Wszystkie serwisy powinny być w stanie `healthy` lub `running`.
+   All services should be `healthy` or `running`.
 
-5. **Otwórz aplikację w przeglądarce:**
+5. **Open in browser:**
    - **Frontend:** [http://localhost:3000](http://localhost:3000)
    - **Backend API:** [http://localhost:3001](http://localhost:3001)
-   - **Baza danych:** `localhost:5432`
+   - **Database:** `localhost:5432`
 
-### Pierwsza konfiguracja
+### First Setup
 
-Po uruchomieniu aplikacji:
-1. Otwórz [http://localhost:3000](http://localhost:3000)
-2. Kliknij "Załóż konto" i zarejestruj się
-3. Zaloguj się do aplikacji
-4. Gotowe! Możesz zacząć dodawać transakcje
+1. Open [http://localhost:3000](http://localhost:3000)
+2. Click "Register" and create account
+3. Log in to the application
+4. Start tracking your finances!
 
 <details>
-<summary>🛑 Zatrzymanie aplikacji</summary>
+<summary>🛑 Stopping Application</summary>
 
 ```bash
-# Zatrzymanie kontenerów (dane pozostają)
+# Stop containers (data persists)
 docker-compose stop
 
-# Zatrzymanie i usunięcie kontenerów (dane pozostają w wolumenie)
+# Stop and remove containers (data persists in volume)
 docker-compose down
 
-# UWAGA: To usunie WSZYSTKIE dane!
+# WARNING: This will DELETE ALL DATA!
 docker-compose down -v
 ```
 </details>
 
 <details>
-<summary>📋 Logi i Debugowanie</summary>
+<summary>📋 Logs & Debugging</summary>
 
 ```bash
-# Wszystkie logi
+# All logs
 docker-compose logs -f
 
-# Logi konkretnego serwisu
+# Specific service logs
 docker-compose logs -f backend
 docker-compose logs -f frontend
 docker-compose logs -f db
 
-# Sprawdzenie statusu health checks
+# Check health status
 docker-compose ps
 ```
 </details>
 
 <details>
-<summary>🔄 Aktualizacja</summary>
+<summary>🔄 Updates</summary>
 
 ```bash
-# Pobierz najnowsze zmiany
+# Pull latest changes
 git pull
 
-# Przebuduj i uruchom ponownie
+# Rebuild and restart
 docker-compose up -d --build
 ```
 </details>
 
-## 🏗️ Architektura
+## 🏗️ Architecture
 
 <details>
-<summary>📊 Komponenty Systemu</summary>
+<summary>📊 System Components</summary>
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                      Użytkownik                          │
-│                    (Przeglądarka)                        │
+│                        User                              │
+│                      (Browser)                           │
 └────────────────────┬────────────────────────────────────┘
                      │
                      │ HTTP (port 3000)
@@ -183,39 +185,39 @@ docker-compose up -d --build
                      │ PostgreSQL Protocol (port 5432)
                      │
 ┌────────────────────▼────────────────────────────────────┐
-│              Baza Danych (PostgreSQL)                    │
-│  - Dane użytkowników                                     │
-│  - Transakcje, Kategorie, Budżety                        │
+│                Database (PostgreSQL)                     │
+│  - Users, Transactions                                   │
+│  - Categories, Budgets                                   │
 └──────────────────────────────────────────────────────────┘
 ```
 </details>
 
 <details>
-<summary>📁 Struktura Projektu</summary>
+<summary>📁 Project Structure</summary>
 
 ```
-Tracker_kasy/
+Finch/
 ├── backend/              # Backend (NestJS)
 │   ├── src/
-│   │   ├── auth/         # Moduł uwierzytelniania
-│   │   ├── users/        # Zarządzanie użytkownikami
-│   │   ├── transactions/ # Transakcje finansowe
-│   │   ├── categories/   # Kategorie
-│   │   ├── budgets/      # Budżety
+│   │   ├── auth/         # Authentication module
+│   │   ├── users/        # User management
+│   │   ├── transactions/ # Financial transactions
+│   │   ├── categories/   # Categories
+│   │   ├── budgets/      # Budgets
 │   │   └── prisma.service.ts
 │   ├── prisma/
-│   │   └── schema.prisma # Schemat bazy danych
+│   │   └── schema.prisma # Database schema
 │   └── Dockerfile
 │
 ├── frontend/             # Frontend (Next.js)
-│   ├── app/              # App Router (Next.js 14+)
-│   ├── components/       # Komponenty React
-│   ├── lib/              # Utilities i stores
+│   ├── app/              # App Router (Next.js 15)
+│   ├── components/       # React components
+│   ├── lib/              # Utilities & stores
 │   ├── types/            # TypeScript types
 │   └── Dockerfile
 │
-├── docs/                 # Dokumentacja
-├── docker-compose.yml    # Orkiestracja Docker
+├── docs/                 # Documentation
+├── docker-compose.yml    # Docker orchestration
 └── README.md
 ```
 </details>
@@ -231,20 +233,16 @@ Szczegółowa dokumentacja dostępna w folderze [`docs/`](./docs/):
 - [Przewodnik developera](./docs/developer-guide.md) *(wkrótce)*
 
 <details>
-<summary>🔌 Porty i Dostęp</summary>
+<summary>🔌 Ports & Access</summary>
 
-### Porty i Dostęp
-
-Po uruchomieniu aplikacji dostępne są następujące porty:
-
-| Serwis     | Port  | URL                          | Opis                          |
+| Service    | Port  | URL                          | Description                   |
 |------------|-------|------------------------------|-------------------------------|
-| Frontend   | 3000  | http://localhost:3000        | Interfejs użytkownika         |
+| Frontend   | 3000  | http://localhost:3000        | User interface                |
 | Backend    | 3001  | http://localhost:3001        | REST API                      |
-| PostgreSQL | 5432  | localhost:5432               | Baza danych                   |
+| PostgreSQL | 5432  | localhost:5432               | Database                      |
 
-**Dane dostępowe do bazy danych (domyślne):**
-- Host: `localhost` (lub `db` wewnątrz sieci Docker)
+**Default database credentials:**
+- Host: `localhost` (or `db` inside Docker network)
 - Port: `5432`
 - Database: `tracker_kasy`
 - User: `tracker_user`
@@ -252,27 +250,27 @@ Po uruchomieniu aplikacji dostępne są następujące porty:
 </details>
 
 <details>
-<summary>💾 Docker Volumes i Dane</summary>
+<summary>💾 Docker Volumes & Data</summary>
 
-Dane aplikacji są przechowywane w Docker volume `tracker_kasy_pgdata`. Nawet po zatrzymaniu kontenerów (`docker-compose down`), dane pozostają bezpieczne.
+Application data is stored in Docker volume `tracker_kasy_pgdata`. Data persists even after `docker-compose down`.
 
-**Backup bazy danych:**
+**Database backup:**
 ```bash
 docker-compose exec db pg_dump -U tracker_user tracker_kasy > backup.sql
 ```
 
-**Restore bazy danych:**
+**Database restore:**
 ```bash
 docker-compose exec -T db psql -U tracker_user tracker_kasy < backup.sql
 ```
 </details>
 
-## 🧪 Rozwój Lokalny
+## 🧪 Local Development
 
 <details>
-<summary>⚙️ Setup bez Dockera</summary>
+<summary>⚙️ Setup without Docker</summary>
 
-Jeśli chcesz rozwijać aplikację bez Dockera:
+If you want to develop without Docker:
 
 ### Backend (NestJS)
 
@@ -292,7 +290,7 @@ npm run dev
 </details>
 
 <details>
-<summary>🧪 Uruchamianie Testów</summary>
+<summary>🧪 Running Tests</summary>
 
 ```bash
 # Backend - Unit Tests
@@ -330,67 +328,65 @@ npm run test:e2e
 - 🎯 **User-scoped queries** - Każdy endpoint weryfikuje userId
 </details>
 
-## 🤝 Współpraca
+## 🤝 Contributing
 
-Chcesz pomóc w rozwoju projektu? Świetnie! 
+Want to help improve Finch? Great! 
 
-1. Fork'nij repozytorium
-2. Utwórz branch z nową funkcjonalnością (`git checkout -b feat/amazing-feature`)
-3. Commit'uj zmiany (`git commit -m 'feat: dodanie niesamowitej funkcji'`)
-4. Push'nij do branch'a (`git push origin feat/amazing-feature`)
-5. Otwórz Pull Request
+1. Fork the repository
+2. Create feature branch (`git checkout -b feat/amazing-feature`)
+3. Commit changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to branch (`git push origin feat/amazing-feature`)
+5. Open Pull Request
 
-Więcej informacji w pliku [CONTRIBUTING.md](./CONTRIBUTING.md).
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 
 <details>
-<summary>📚 Więcej Dokumentacji</summary>
+<summary>📚 More Documentation</summary>
 
-### Zarządzanie Projektem
-- 📋 [TODO - Current Sprint](./docs/project/TODO.md) - Aktualny sprint i priorytety
-- ✅ [Completed Milestones](./docs/project/COMPLETED.md) - Ostatnie 3 wersje
-- 🗺️ [Roadmap](./docs/project/ROADMAP.md) - Długoterminowa wizja (2025-2027)
-- 📝 [Changelog](./docs/project/CHANGELOG.md) - Pełna historia zmian
+### Project Management
+- 📋 [TODO - Current Sprint](./docs/project/TODO.md) - Current priorities
+- ✅ [Completed Milestones](./docs/project/COMPLETED.md) - Recent releases
+- 🗺️ [Roadmap](./docs/project/ROADMAP.md) - Long-term vision (2025-2027)
+- 📝 [Changelog](./docs/project/CHANGELOG.md) - Full change history
 
-### Dokumentacja Techniczna
-- 🛠️ [Tech Stack](./docs/technical/TECH_STACK.md) - Technologie i zależności
-- 🏗️ [Architecture](./docs/technical/ARCHITECTURE.md) - Architektura systemu
-- 🚀 [Development Guide](./docs/technical/DEVELOPMENT_GUIDE.md) - Setup i workflow
-- 🧪 [Testing Strategy](./docs/technical/TESTING_STRATEGY.md) - Wzorce testów i pokrycie
-- 📡 [API Reference](./docs/technical/API_REFERENCE.md) - Dokumentacja REST API
+### Technical Documentation
+- 🛠️ [Tech Stack](./docs/technical/TECH_STACK.md) - Technologies & dependencies
+- 🏗️ [Architecture](./docs/technical/ARCHITECTURE.md) - System architecture
+- 🚀 [Development Guide](./docs/technical/DEVELOPMENT_GUIDE.md) - Setup & workflow
+- 🧪 [Testing Strategy](./docs/technical/TESTING_STRATEGY.md) - Test patterns & coverage
+- 📡 [API Reference](./docs/technical/API_REFERENCE.md) - REST API documentation
 </details>
 
 <details>
-<summary>📝 Konwencje Commitów</summary>
+<summary>📝 Commit Conventions</summary>
 
-## 📝 Konwencje Commitów
+Project uses [Conventional Commits](https://www.conventionalcommits.org/):
 
-Projekt używa [Conventional Commits](https://www.conventionalcommits.org/):
-
-- `feat:` - nowa funkcjonalność
-- `fix:` - naprawa błędu
-- `docs:` - zmiany w dokumentacji
-- `test:` - dodanie lub modyfikacja testów
-- `refactor:` - refaktoryzacja kodu
-- `chore:` - zmiany w toolingu, konfiguracji
+- `feat:` - new feature
+- `fix:` - bug fix
+- `docs:` - documentation changes
+- `test:` - add or modify tests
+- `refactor:` - code refactoring
+- `chore:` - tooling, config changes
 </details>
 
-## 📄 Licencja
+## 📄 License
 
-Ten projekt jest udostępniony na licencji MIT. Zobacz plik [LICENSE](./LICENSE) po szczegóły.
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
-## 🙏 Podziękowania
+## 🙏 Acknowledgments
 
-Projekt wykorzystuje następujące open-source'owe technologie:
+Built with these amazing open-source technologies:
 - [Next.js](https://nextjs.org/)
 - [NestJS](https://nestjs.com/)
 - [Prisma](https://www.prisma.io/)
 - [PostgreSQL](https://www.postgresql.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
 
-## 📧 Kontakt
+## 📧 Contact
 
-Pytania? Sugestie? Otwórz [Issue](https://github.com/[twoja-nazwa-uzytkownika]/Tracker_kasy/issues)!
+Questions? Suggestions? Open an [Issue](https://github.com/PeterPage2115/Finch/issues)!
 
 ---
 
-**Zbudowane z ❤️ dla społeczności open-source**
+**Built with ❤️ for the open-source community**
