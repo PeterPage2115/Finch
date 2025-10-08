@@ -1,10 +1,10 @@
-# 💰 Tracker Kasy - Aplikacja do Śledzenia Finansów
+# � Finch - Personal Finance Tracker
 
 > 📢 **English version coming soon!** | Full internationalization (i18n) support planned for v1.1
 >
 > **English Documentation (WIP):** This is a Polish financial tracking application. English UI and documentation are currently in development. See [docs/i18n/](./docs/i18n/) for progress.
 
-**Otwartoźródłowa aplikacja webowa do zarządzania finansami osobistymi**
+**Open-source web application for personal finance management**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
@@ -13,7 +13,7 @@
 [![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
-## 🎉 Nowości w v1.0 (Styczeń 2025)
+## 🎉 What's New in v1.0 (January 2025)
 
 - ✅ **Nowy system ikon** - Lucide icons zamiast emoji (profesjonalny wygląd)
 - ✅ **Pełny dark mode** - Kompletne wsparcie dla trybu ciemnego
@@ -26,17 +26,17 @@
 
 📖 **Zobacz pełną listę zmian:** [CHANGELOG.md](./CHANGELOG.md)
 
-## 📋 O Projekcie
+## 📋 About The Project
 
-Tracker Kasy to nowoczesna aplikacja webowa zaprojektowana z myślą o prostocie i łatwości samodzielnego hostowania. Umożliwia śledzenie przychodów, wydatków, kategoryzowanie transakcji, ustalanie budżetów i generowanie raportów finansowych.
+Finch is a modern web application designed for simplicity and easy self-hosting. Track income, expenses, categorize transactions, set budgets, and generate financial reports.
 
-### ✨ Kluczowe Cechy
+### ✨ Key Features
 
-- 🔒 **Prywatność** - Twoje dane pozostają u Ciebie (self-hosted)
-- 🐳 **Łatwe wdrożenie** - Jedna komenda: `docker-compose up`
-- 📊 **Intuicyjny interfejs** - Przejrzysty dashboard z wykresami
-- 💼 **Zarządzanie budżetami** - Ustaw limity i monitoruj wydatki
-- 📈 **Raporty** - Analizuj swoje finanse w czasie
+- 🔒 **Privacy** - Your data stays with you (self-hosted)
+- 🐳 **Easy deployment** - One command: `docker-compose up`
+- 📊 **Intuitive interface** - Clean dashboard with charts
+- 💼 **Budget management** - Set limits and monitor expenses
+- 📈 **Reports** - Analyze your finances over time
 
 ## 🛠️ Stack Technologiczny
 
