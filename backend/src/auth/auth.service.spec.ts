@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma.service';
+import { EmailService } from '../email/email.service';
 import { RegisterDto, LoginDto } from './dto';
 import * as bcrypt from 'bcrypt';
 
@@ -55,6 +56,13 @@ describe('AuthService', () => {
           provide: JwtService,
           useValue: {
             signAsync: jest.fn(),
+          },
+        },
+        {
+          provide: EmailService,
+          useValue: {
+            sendPasswordResetEmail: jest.fn(),
+            sendWelcomeEmail: jest.fn(),
           },
         },
       ],
