@@ -1,41 +1,41 @@
-# 🐳 Docker - Dokumentacja
+# 🐳 Docker - Documentation
 
-Ten dokument zawiera szczegółowe informacje o konfiguracji Docker i orkiestracji aplikacji Finch.
+This document contains detailed information about the Docker configuration and orchestration of the Finch application.
 
-## 📋 Spis Treści
+## 📋 Table of Contents
 
-- [Architektura](#architektura)
-- [Konfiguracja](#konfiguracja)
-- [Volumes i Dane](#volumes-i-dane)
-- [Sieci](#sieci)
+- [Architecture](#architecture)
+- [Configuration](#configuration)
+- [Volumes and Data](#volumes-and-data)
+- [Networking](#networking)
 - [Health Checks](#health-checks)
 - [Troubleshooting](#troubleshooting)
 
-## Architektura
+## Architecture
 
-Aplikacja składa się z trzech głównych kontenerów:
+The application consists of three main containers:
 
 ### 1. **db** - PostgreSQL Database
-- **Obraz:** `postgres:16-alpine`
+- **Image:** `postgres:16-alpine`
 - **Port:** 5432
 - **Volume:** `Finch_pgdata`
-- **Rola:** Przechowywanie wszystkich danych aplikacji
+- **Role:** Stores all application data
 
 ### 2. **backend** - NestJS API
 - **Build:** `./backend/Dockerfile`
 - **Port:** 3001
-- **Zależności:** Czeka na `db` (health check)
-- **Rola:** REST API, logika biznesowa, autoryzacja
+- **Dependencies:** Waits for `db` (health check)
+- **Role:** REST API, business logic, authorization
 
 ### 3. **frontend** - Next.js App
 - **Build:** `./frontend/Dockerfile`
 - **Port:** 3000
-- **Zależności:** Czeka na `backend`
-- **Rola:** Interfejs użytkownika, SSR
+- **Dependencies:** Waits for `backend`
+- **Role:** User interface, SSR
 
-## Konfiguracja
+## Configuration
 
-### Zmienne Środowiskowe
+### Environment Variables
 
 #### Database (db)
 ```yaml
@@ -47,7 +47,7 @@ POSTGRES_DB: Finch_db
 #### Backend
 ```yaml
 DATABASE_URL: postgresql://Finch_user_db:Finch_password_db@db:5432/Finch_db?schema=public
-JWT_SECRET: ${JWT_SECRET}  # Odczytywane z pliku .env
+JWT_SECRET: ${JWT_SECRET}  # Read from the .env file
 JWT_EXPIRATION: 7d
 PORT: 3001
 NODE_ENV: production
@@ -56,25 +56,25 @@ FRONTEND_URL: http://localhost:3000
 
 #### Frontend
 ```yaml
-# Backend URL używane przez Next.js API Routes (server-side only)
+# Backend URL used by Next.js API Routes (server-side only)
 BACKEND_API_URL: http://backend:3001
-NODE_ENV: development  # lub production
+NODE_ENV: development  # or production
 ```
 
-**Uwaga:** Frontend używa Next.js API Routes jako proxy do backendu.
-- Browser łączy się z `/api/*` (same origin, brak CORS)
-- Next.js API Routes wykonują requesty do `BACKEND_API_URL`
-- Nie używamy `NEXT_PUBLIC_*` dla backend URL (embedowane w browser bundle)
+**Note:** The frontend uses Next.js API Routes as a proxy to the backend.
+- The browser connects to `/api/*` (same origin, no CORS)
+- Next.js API Routes make requests to `BACKEND_API_URL`
+- We do not use `NEXT_PUBLIC_*` for the backend URL (as it would be embedded in the browser bundle)
 
-### Bezpieczeństwo
+### Security
 
-**WAŻNE:** W produkcji:
-1. Zmień `JWT_SECRET` na silny, losowy ciąg znaków (min. 32 znaki)
-2. Zmień hasło do bazy danych (`POSTGRES_PASSWORD`)
-3. Użyj secrets zamiast zmiennych środowiskowych dla wrażliwych danych
-4. Rozważ użycie HTTPS (reverse proxy jak Nginx/Traefik)
+**IMPORTANT:** In production:
+1. Change `JWT_SECRET` to a strong, random string (min. 32 characters)
+2. Change the database password (`POSTGRES_PASSWORD`)
+3. Use secrets instead of environment variables for sensitive data
+4. Consider using HTTPS (reverse proxy like Nginx/Traefik)
 
-Generowanie bezpiecznego JWT_SECRET:
+Generating a secure JWT_SECRET:
 ```bash
 # Linux/macOS
 openssl rand -base64 32
@@ -83,9 +83,9 @@ openssl rand -base64 32
 [System.Convert]::ToBase64String([System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32))
 ```
 
-## Volumes i Dane
+## Volumes and Data
 
-### Volume dla PostgreSQL
+### Volume for PostgreSQL
 
 ```yaml
 volumes:
@@ -94,48 +94,48 @@ volumes:
     name: Finch_pgdata
 ```
 
-Dane są przechowywane w Docker volume `Finch_pgdata`. Lokalizacja:
+Data is stored in the Docker volume `Finch_pgdata`. Location:
 - **Linux:** `/var/lib/docker/volumes/Finch_pgdata/_data`
 - **Windows:** `\\wsl$\docker-desktop-data\data\docker\volumes\Finch_pgdata\_data`
 - **macOS:** `~/Library/Containers/com.docker.docker/Data/vms/0/data/docker/volumes/Finch_pgdata/_data`
 
-### Backup i Restore
+### Backup and Restore
 
-#### Backup bazy danych
+#### Database Backup
 ```bash
-# Prosty backup
+# Simple backup
 docker-compose exec db pg_dump -U Finch_user_db Finch > backup.sql
 
-# Backup z kompresją
+# Backup with compression
 docker-compose exec db pg_dump -U Finch_user_db Finch | gzip > backup.sql.gz
 
-# Backup z timestampem
+# Backup with a timestamp
 docker-compose exec db pg_dump -U Finch_user_db Finch > "backup_$(date +%Y%m%d_%H%M%S).sql"
 ```
 
-#### Restore bazy danych
+#### Database Restore
 ```bash
-# Restore z pliku
+# Restore from a file
 docker-compose exec -T db psql -U Finch_user_db Finch < backup.sql
 
-# Restore z kompresją
+# Restore from a compressed file
 gunzip < backup.sql.gz | docker-compose exec -T db psql -U Finch_user_db Finch
 
-# Uwaga: Restore nadpisze istniejące dane!
+# Note: Restore will overwrite existing data!
 ```
 
-#### Pełny backup Docker volume
+#### Full Docker volume backup
 ```bash
-# Backup całego volume
+# Backup the entire volume
 docker run --rm -v Finch_pgdata:/data -v $(pwd):/backup alpine tar czf /backup/pgdata_full_backup.tar.gz -C /data .
 
-# Restore volume
+# Restore the volume
 docker run --rm -v Finch_pgdata:/data -v $(pwd):/backup alpine tar xzf /backup/pgdata_full_backup.tar.gz -C /data
 ```
 
-## Sieci
+## Networking
 
-### Sieć Docker
+### Docker Network
 
 ```yaml
 networks:
@@ -144,12 +144,12 @@ networks:
     name: Finch_network
 ```
 
-Wszystkie kontenery komunikują się w izolowanej sieci `Finch_network`:
-- **db** dostępny jako `db:5432` (wewnątrz sieci)
-- **backend** dostępny jako `backend:3001` (wewnątrz sieci)
-- **frontend** dostępny jako `frontend:3000` (wewnątrz sieci)
+All containers communicate within the isolated `Finch_network`:
+- **db** is accessible as `db:5432` (inside the network)
+- **backend** is accessible as `backend:3001` (inside the network)
+- **frontend** is accessible as `frontend:3000` (inside the network)
 
-### Komunikacja
+### Communication
 
 ```
 frontend:3000  -->  backend:3001  -->  db:5432
@@ -168,7 +168,7 @@ healthcheck:
   retries: 5
 ```
 
-Sprawdza czy PostgreSQL jest gotowy do przyjmowania połączeń.
+Checks if PostgreSQL is ready to accept connections.
 
 ### Backend Health Check
 ```yaml
@@ -180,7 +180,7 @@ healthcheck:
   start_period: 40s
 ```
 
-Sprawdza czy backend odpowiada na żądania HTTP.
+Checks if the backend is responding to HTTP requests.
 
 ### Frontend Health Check
 ```yaml
@@ -192,135 +192,135 @@ healthcheck:
   start_period: 40s
 ```
 
-Sprawdza czy frontend odpowiada na żądania HTTP.
+Checks if the frontend is responding to HTTP requests.
 
-### Sprawdzenie statusu health checks
+### Checking health check status
 ```bash
 docker-compose ps
-# Status: healthy (zdrowy) lub unhealthy (niezdrowy)
+# Status: healthy or unhealthy
 ```
 
 ## Troubleshooting
 
-### Problem: Kontenery nie startują
+### Problem: Containers won't start
 
-**Diagnoza:**
+**Diagnosis:**
 ```bash
 docker-compose logs -f
 ```
 
-**Częste przyczyny:**
-1. Porty zajęte (3000, 3001, 5432)
-2. Niewystarczająca ilość pamięci
-3. Błędy w zmiennych środowiskowych
+**Common causes:**
+1. Ports are already in use (3000, 3001, 5432)
+2. Insufficient memory
+3. Errors in environment variables
 
-**Rozwiązanie:**
+**Solution:**
 ```bash
-# Sprawdź zajęte porty (Windows)
+# Check for used ports (Windows)
 netstat -ano | findstr ":3000"
 netstat -ano | findstr ":3001"
 netstat -ano | findstr ":5432"
 
-# Zmień porty w docker-compose.yml jeśli zajęte
+# Change ports in docker-compose.yml if they are occupied
 ```
 
-### Problem: Backend nie może połączyć się z bazą
+### Problem: Backend cannot connect to the database
 
-**Diagnoza:**
+**Diagnosis:**
 ```bash
 docker-compose logs backend
 ```
 
-**Sprawdź:**
-1. Czy kontener `db` jest `healthy`: `docker-compose ps`
-2. Czy `DATABASE_URL` jest poprawny
-3. Czy użytkownik i hasło się zgadzają
+**Check:**
+1. If the `db` container is `healthy`: `docker-compose ps`
+2. If the `DATABASE_URL` is correct
+3. If the username and password match
 
-**Rozwiązanie:**
+**Solution:**
 ```bash
-# Zrestartuj bazę danych
+# Restart the database
 docker-compose restart db
 
-# Sprawdź czy baza danych działa
+# Check if the database is working
 docker-compose exec db psql -U Finch_user_db -d Finch -c "SELECT 1;"
 ```
 
-### Problem: Frontend nie może połączyć się z backendem
+### Problem: Frontend cannot connect to the backend
 
-**Objawy:**
-- NetworkError w przeglądarce
-- 500/502 błędy w API calls
+**Symptoms:**
+- NetworkError in the browser
+- 500/502 errors in API calls
 
-**Sprawdź:**
-1. Czy backend jest `healthy`: `docker-compose ps`
-2. Czy Next.js API Routes działają: `curl http://localhost:3000/api/auth/me` (powinno zwrócić 401)
-3. Czy `BACKEND_API_URL` jest poprawnie ustawione w `.env.local` (Docker: `http://backend:3001`)
+**Check:**
+1. If the backend is `healthy`: `docker-compose ps`
+2. If Next.js API Routes are working: `curl http://localhost:3000/api/auth/me` (should return 401)
+3. If `BACKEND_API_URL` is set correctly in `.env.local` (Docker: `http://backend:3001`)
 
-**Architektura (od października 2025):**
+**Architecture (as of October 2025):**
 ```
 Browser → /api/* (Next.js API Route, localhost:3000)
          ↓
 Next.js Server → http://backend:3001 (Docker internal)
 ```
 
-**Rozwiązanie:**
+**Solution:**
 ```bash
-# Sprawdź czy backend odpowiada z wewnątrz kontenera frontend
+# Check if the backend is responding from within the frontend container
 docker exec Finch_frontend wget -O- http://backend:3001/
 
-# Sprawdź logi API Routes
+# Check the API Routes logs
 docker logs Finch_frontend --tail 50
 
-# Zrestartuj frontend
+# Restart the frontend
 docker-compose restart frontend
 ```
 
-### Problem: Migracje Prisma nie wykonują się
+### Problem: Prisma migrations do not run
 
-**Diagnoza:**
+**Diagnosis:**
 ```bash
 docker-compose logs backend | grep -i prisma
 ```
 
-**Rozwiązanie:**
+**Solution:**
 ```bash
-# Ręczne wykonanie migracji
+# Manually run migrations
 docker-compose exec backend npx prisma migrate deploy
 
-# Reset bazy (UWAGA: usuwa dane!)
+# Reset the database (WARNING: deletes data!)
 docker-compose exec backend npx prisma migrate reset
 ```
 
-### Problem: Wolne budowanie obrazów
+### Problem: Slow image builds
 
-**Optymalizacja:**
+**Optimization:**
 ```bash
-# Build z cache
+# Build with cache
 docker-compose build --parallel
 
-# Build bez cache (czysty build)
+# Build without cache (clean build)
 docker-compose build --no-cache --parallel
 
-# Usuń nieużywane obrazy
+# Remove unused images
 docker image prune -a
 ```
 
-### Problem: Brak miejsca na dysku
+### Problem: Not enough disk space
 
-**Czyszczenie:**
+**Cleanup:**
 ```bash
-# Usuń nieużywane obrazy, kontenery, sieci
+# Remove unused images, containers, networks
 docker system prune -a
 
-# Usuń wszystkie volume (UWAGA: usuwa dane!)
+# Remove all volumes (WARNING: deletes data!)
 docker volume prune
 ```
 
-## Komendy Pomocnicze
+## Helper Commands
 
-### Przydatne aliasy
+### Useful aliases
 ```bash
-# Dodaj do ~/.bashrc lub ~/.zshrc (Linux/macOS)
+# Add to ~/.bashrc or ~/.zshrc (Linux/macOS)
 alias tk-up='docker-compose up -d'
 alias tk-down='docker-compose down'
 alias tk-restart='docker-compose restart'
@@ -329,7 +329,7 @@ alias tk-ps='docker-compose ps'
 ```
 
 ```powershell
-# Dodaj do $PROFILE (PowerShell)
+# Add to $PROFILE (PowerShell)
 function tk-up { docker-compose up -d }
 function tk-down { docker-compose down }
 function tk-restart { docker-compose restart }
@@ -337,44 +337,44 @@ function tk-logs { docker-compose logs -f }
 function tk-ps { docker-compose ps }
 ```
 
-### Monitorowanie zasobów
+### Resource Monitoring
 ```bash
-# Użycie CPU i pamięci
+# CPU and memory usage
 docker stats
 
-# Logi w czasie rzeczywistym
+# Real-time logs
 docker-compose logs -f --tail=100
 
-# Sprawdzenie rozmiary obrazów
+# Check image sizes
 docker images | grep Finch
 ```
 
-## Produkcja
+## Production
 
-### Rekomendacje dla produkcji:
+### Production Recommendations:
 
-1. **Użyj Docker Secrets**
+1. **Use Docker Secrets**
    ```yaml
    secrets:
      db_password:
        file: ./secrets/db_password.txt
    ```
 
-2. **Dodaj Reverse Proxy (Nginx/Traefik)**
+2. **Add a Reverse Proxy (Nginx/Traefik)**
    - HTTPS/SSL
    - Load balancing
    - Rate limiting
 
-3. **Monitorowanie**
+3. **Monitoring**
    - Prometheus + Grafana
-   - Loki dla logów
+   - Loki for logs
    - Alertmanager
 
-4. **Backup automatyczny**
-   - Cron job dla regularnych backupów
-   - Przechowywanie w cloud (S3, Azure Blob)
+4. **Automatic Backups**
+   - Cron job for regular backups
+   - Store in the cloud (S3, Azure Blob)
 
-5. **Ograniczenia zasobów**
+5. **Resource Limits**
    ```yaml
    deploy:
      resources:
@@ -383,13 +383,13 @@ docker images | grep Finch
          memory: 512M
    ```
 
-## Wsparcie
+## Support
 
-Jeśli napotkasz problemy:
-1. Sprawdź [Issues na GitHubie](https://github.com/PeterPage2115/Finch/issues)
-2. Przeczytaj [FAQ](./FAQ.md)
-3. Stwórz nowy Issue z logami: `docker-compose logs > logs.txt`
+If you encounter problems:
+1. Check the [Issues on GitHub](https://github.com/PeterPage2115/Finch/issues)
+2. Read the [FAQ](./FAQ.md)
+3. Create a new Issue with logs: `docker-compose logs > logs.txt`
 
 ---
 
-**Ostatnia aktualizacja:** 2 października 2025
+**Last updated:** October 2, 2025

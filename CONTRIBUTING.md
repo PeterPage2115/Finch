@@ -1,12 +1,12 @@
 # Contributing to Finch 💰
 
-Dziękujemy za zainteresowanie wkładem w projekt Finch! 
+Thank you for your interest in contributing to the Finch project!
 
-## 📋 Spis Treści
+## 📋 Table of Contents
 
 - [Code of Conduct](#code-of-conduct)
-- [Jak mogę pomóc?](#jak-mogę-pomóc)
-- [Proces developmentu](#proces-developmentu)
+- [How Can I Help?](#how-can-i-help)
+- [Development Process](#development-process)
 - [Conventional Commits](#conventional-commits)
 - [Code Style](#code-style)
 - [Testing](#testing)
@@ -16,58 +16,58 @@ Dziękujemy za zainteresowanie wkładem w projekt Finch!
 
 ## Code of Conduct
 
-Projekt jest open-source i mile widziany jest każdy konstruktywny wkład. Prosimy o szacunek wobec innych contributors i maintainers.
+The project is open-source and any constructive contribution is welcome. Please be respectful towards other contributors and maintainers.
 
 ---
 
-## Jak mogę pomóc?
+## How Can I Help?
 
-### 🐛 Zgłaszanie błędów
-1. Sprawdź czy issue już nie istnieje
-2. Użyj Issue Template
-3. Dodaj szczegóły: kroki reprodukcji, oczekiwane vs faktyczne zachowanie
-4. Załącz logi (jeśli możliwe)
+### 🐛 Reporting Bugs
+1. Check if the issue already exists
+2. Use the Issue Template
+3. Add details: reproduction steps, expected vs. actual behavior
+4. Attach logs (if possible)
 
-### ✨ Proponowanie nowych funkcji
-1. Najpierw otwórz Issue z tagiem "feature request"
-2. Opisz use case i benefity
-3. Poczekaj na feedback od maintainers
+### ✨ Proposing New Features
+1. First, open an Issue with the "feature request" tag
+2. Describe the use case and benefits
+3. Wait for feedback from maintainers
 
 ### 💻 Pull Requests
-1. Fork repozytorium
-2. Stwórz branch z feature/bugfix
-3. Implementuj zmiany
-4. Napisz/zaktualizuj testy
-5. Otwórz Pull Request
+1. Fork the repository
+2. Create a branch for the feature/bugfix
+3. Implement the changes
+4. Write/update tests
+5. Open a Pull Request
 
 ---
 
-## Proces Developmentu
+## Development Process
 
-### Setup środowiska
+### Environment Setup
 
 ```bash
-# 1. Sklonuj repo
+# 1. Clone the repo
 git clone https://github.com/PeterPage2115/Finch.git
 cd Finch
 
-# 2. Skopiuj .env
+# 2. Copy .env
 cp .env.example .env
 
-# 3. Uruchom Docker
+# 3. Run Docker
 docker-compose up -d
 
-# 4. Sprawdź czy działa
+# 4. Check if it's working
 # Backend: http://localhost:3001
 # Frontend: http://localhost:3000
 ```
 
-### Struktura branchy
+### Branch Structure
 
-- `main` - stabilny kod produkcyjny
-- `feature/*` - nowe funkcjonalności
-- `fix/*` - poprawki błędów
-- `docs/*` - zmiany w dokumentacji
+- `main` - stable production code
+- `feature/*` - new functionalities
+- `fix/*` - bug fixes
+- `docs/*` - documentation changes
 
 ---
 
@@ -75,31 +75,31 @@ docker-compose up -d
 
 **Format:** `<type>: <description>`
 
-### Typy commitów:
+### Commit Types:
 
-| Typ | Opis | Przykład |
-|-----|------|----------|
-| `feat` | Nowa funkcjonalność | `feat: add budget alerts` |
-| `fix` | Naprawa błędu | `fix: category deletion validation` |
-| `docs` | Dokumentacja | `docs: update README` |
-| `style` | Formatowanie (nie zmienia logiki) | `style: fix indentation` |
-| `refactor` | Refaktoryzacja | `refactor: extract validation logic` |
-| `test` | Testy | `test: add categories e2e tests` |
-| `chore` | Build/narzędzia | `chore: update dependencies` |
+| Type | Description | Example |
+|---|---|---|
+| `feat` | A new feature | `feat: add budget alerts` |
+| `fix` | A bug fix | `fix: category deletion validation` |
+| `docs` | Documentation only changes | `docs: update README` |
+| `style` | Formatting (does not affect logic) | `style: fix indentation` |
+| `refactor` | Code refactoring | `refactor: extract validation logic` |
+| `test` | Adding missing tests or correcting existing tests | `test: add categories e2e tests` |
+| `chore` | Build process or auxiliary tools and libraries | `chore: update dependencies` |
 
-### Zasady:
-- **Max 50 znaków** w subject line
-- Imperative mood: "add" nie "added"
-- Bez kropki na końcu
-- Body (opcjonalnie) z więcej szczegółów
+### Rules:
+- **Max 50 characters** in the subject line
+- Use imperative mood: "add" not "added"
+- No period at the end
+- Body (optional) with more details
 
-**Przykłady:**
+**Examples:**
 ```
 ✅ feat: add CSV export
 ✅ fix: resolve hydration issue
 ✅ docs: add API documentation
-❌ Added new feature for budgets (za długie, past tense)
-❌ fix bug (zbyt ogólne)
+❌ Added new feature for budgets (too long, past tense)
+❌ fix bug (too generic)
 ```
 
 ---
@@ -108,19 +108,19 @@ docker-compose up -d
 
 ### TypeScript/JavaScript
 
-- **ESLint:** Używamy konfiguracji z `eslint.config.mjs`
-- **Prettier:** Auto-format przed commitem
-- **TypeScript:** Silne typowanie, **unikaj `any`**
+- **ESLint:** We use the configuration from `eslint.config.mjs`
+- **Prettier:** Auto-formats before commit
+- **TypeScript:** Strong typing, **avoid `any`**
 
 ### Naming Conventions
 
 ```typescript
-// ✅ Dobre
+// ✅ Good
 const userCategories = [...];
 function calculateBudgetProgress() {}
 interface CreateTransactionDto {}
 
-// ❌ Złe
+// ❌ Bad
 const x = [...];
 function calc() {}
 interface data {}
@@ -129,7 +129,7 @@ interface data {}
 ### Imports
 
 ```typescript
-// ✅ Grupuj importy
+// ✅ Group imports
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 
@@ -153,12 +153,12 @@ npm run test:e2e
 npm run test:cov
 ```
 
-### Wymagania:
-- ✅ Każda nowa feature = testy
-- ✅ Każdy bugfix = test reprodukujący problem
-- ✅ Minimum 80% coverage dla nowego kodu
+### Requirements:
+- ✅ Every new feature = tests
+- ✅ Every bugfix = a test reproducing the problem
+- ✅ Minimum 80% coverage for new code
 
-### Przykład testu:
+### Example Test:
 
 ```typescript
 describe('CategoriesService', () => {
@@ -180,65 +180,65 @@ describe('CategoriesService', () => {
 
 ## Pull Request Process
 
-### Checklist przed PR:
+### Pre-PR Checklist:
 
-- [ ] Kod działa lokalnie (`docker-compose up`)
-- [ ] Wszystkie testy przechodzą (`npm run test`)
-- [ ] Brak błędów TypeScript
-- [ ] Commity w Conventional Commits format
-- [ ] Dokumentacja zaktualizowana (jeśli potrzebne)
-- [ ] CHANGELOG.md zaktualizowany (dla większych zmian)
+- [ ] The code works locally (`docker-compose up`)
+- [ ] All tests pass (`npm run test`)
+- [ ] No TypeScript errors
+- [ ] Commits are in Conventional Commits format
+- [ ] Documentation updated (if necessary)
+- [ ] CHANGELOG.md updated (for major changes)
 
 ### PR Template:
 
 ```markdown
-## Opis
-Krótki opis co zmienia ten PR.
+## Description
+A brief description of what this PR changes.
 
-## Typ zmiany
+## Type of change
 - [ ] 🐛 Bugfix
-- [ ] ✨ Nowa funkcjonalność
-- [ ] 📝 Dokumentacja
-- [ ] ♻️ Refaktoryzacja
+- [ ] ✨ New feature
+- [ ] 📝 Documentation
+- [ ] ♻️ Refactor
 
 ## Testing
-Jak przetestować te zmiany?
+How to test these changes?
 
-## Screenshots (jeśli UI)
-(dodaj jeśli to zmiana w UI)
+## Screenshots (if UI)
+(add if this is a UI change)
 
 ## Checklist
-- [ ] Testy dodane/zaktualizowane
-- [ ] Dokumentacja zaktualizowana
+- [ ] Tests added/updated
+- [ ] Documentation updated
 - [ ] Conventional commits
 ```
 
 ### Review process:
 
-1. Otwórz PR z opisem
-2. Poczekaj na CI/CD (jak będzie) ⏳
+1. Open a PR with a description
+2. Wait for CI/CD (when available) ⏳
 3. Maintainer review + feedback
-4. Popraw jeśli trzeba
-5. Merge po approve ✅
+4. Make corrections if needed
+5. Merge after approval ✅
 
 ---
 
-## Dodatkowe Zasoby
+## Additional Resources
 
-- **Architecture:** Zobacz `docs/PROJECT_STATUS.md`
+- **Architecture:** See `docs/PROJECT_STATUS.md`
 - **Code Review:** `docs/CODE_REVIEW_REPORT.md`
 - **Changelog:** `CHANGELOG.md`
 - **Roadmap:** `TODO.md`
 
 ---
 
-## Pytania?
+## Questions?
 
-Jeśli masz pytania:
-1. Sprawdź istniejące Issues
-2. Otwórz nowe Issue z pytaniem
-3. Napisz do maintainers
+If you have questions:
+1. Check existing Issues
+2. Open a new Issue with your question
+3. Contact the maintainers
 
 ---
 
-**Dziękujemy za wkład w Finch! 🎉**
+**Thank you for contributing to Finch! 🎉**

@@ -203,7 +203,7 @@ export default function RegisterPage() {
           {/* Footer - Link to Login */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Masz już konto?{' '}
+              Already have an account?{' '}
               <Link
                 href="/login"
                 className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition"

@@ -110,6 +110,7 @@ For detailed instructions, see the [📖 Wiki](https://github.com/PeterPage2115/
 ### For Developers
 - [Contributing Guide](CONTRIBUTING.md)
 - [Technical Documentation](./docs/technical/)
+- [Database Reset Guide](./docs/DATABASE_RESET.md) - Fresh start with clean data
 
 ### Project Info
 - [Changelog](CHANGELOG.md) - Version history
