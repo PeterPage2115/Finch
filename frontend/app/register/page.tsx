@@ -82,7 +82,7 @@ export default function RegisterPage() {
               </h2>
             </div>
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Utwórz konto i zacznij zarządzać swoimi finansami
+              Create an account and start managing your finances
             </p>
           </div>
 
@@ -155,12 +155,12 @@ export default function RegisterPage() {
                 value={formData.password}
                 onChange={handleChange}
                 className="appearance-none relative block w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg placeholder-gray-400 dark:placeholder-gray-500 text-gray-900 dark:text-white bg-white dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                placeholder="Minimum 8 znaków"
+                placeholder="Minimum 8 characters"
                 minLength={8}
                 disabled={isLoading}
               />
               <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-                Minimum 8 znaków
+                Minimum 8 characters
               </p>
             </div>
 
@@ -216,7 +216,7 @@ export default function RegisterPage() {
 
         {/* Additional Info */}
         <p className="text-center text-xs text-gray-500 dark:text-gray-400">
-          Rejestrując się, akceptujesz nasze warunki korzystania z usługi
+          By registering, you accept our terms of service
         </p>
       </div>
     </div>

@@ -1,11 +1,11 @@
 /**
  * Transaction Types
  * 
- * Typy dla transakcji odpowiadające modelowi Prisma
+ * Types for transactions matching Prisma model
  */
 
 /**
- * Typ transakcji
+ * Transaction type
  */
 export enum TransactionType {
   INCOME = 'INCOME',
@@ -13,7 +13,7 @@ export enum TransactionType {
 }
 
 /**
- * Kategoria transakcji
+ * Transaction category
  */
 export interface Category {
   id: string;
@@ -27,7 +27,7 @@ export interface Category {
 }
 
 /**
- * Transakcja (response z API)
+ * Transaction (API response)
  */
 export interface Transaction {
   id: string;
@@ -39,11 +39,11 @@ export interface Transaction {
   type: TransactionType;
   createdAt: string;
   updatedAt: string;
-  category?: Category; // Include z backendu
+  category?: Category; // Include from backend
 }
 
 /**
- * DTO dla tworzenia transakcji
+ * DTO for creating a transaction
  */
 export interface CreateTransactionDto {
   amount: number;
@@ -54,7 +54,7 @@ export interface CreateTransactionDto {
 }
 
 /**
- * DTO dla aktualizacji transakcji (wszystkie pola opcjonalne)
+ * DTO for updating a transaction (all fields optional)
  */
 export interface UpdateTransactionDto {
   amount?: number;
@@ -77,7 +77,7 @@ export interface TransactionQueryParams {
 }
 
 /**
- * Odpowiedź z listą transakcji (z paginacją)
+ * Response with transaction list (with pagination)
  */
 export interface TransactionsListResponse {
   data: Transaction[];
@@ -90,7 +90,7 @@ export interface TransactionsListResponse {
 }
 
 /**
- * Odpowiedź z usuwania transakcji
+ * Response from deleting a transaction
  */
 export interface DeleteTransactionResponse {
   message: string;

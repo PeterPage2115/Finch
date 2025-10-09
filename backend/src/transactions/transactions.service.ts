@@ -50,7 +50,7 @@ export class TransactionsService {
         categoryId: createTransactionDto.categoryId,
       },
       include: {
-        category: true, // Zwracamy również dane kategorii
+        category: true, // Return category data as well
       },
     });
   }
@@ -175,7 +175,7 @@ export class TransactionsService {
       }
     }
 
-    // Aktualizujemy transakcję
+    // Update the transaction
     return this.prisma.transaction.update({
       where: { id },
       data: {

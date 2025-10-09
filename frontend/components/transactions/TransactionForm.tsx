@@ -1,7 +1,7 @@
 /**
  * TransactionForm Component
  * 
- * Formularz do dodawania/edycji transakcji
+ * Form for adding/editing transactions
  */
 
 'use client';
@@ -12,7 +12,7 @@ import { motion } from 'framer-motion';
 import { TrendingUp, TrendingDown } from 'lucide-react';
 
 interface TransactionFormProps {
-  transaction?: Transaction | null; // Jeśli podane, to tryb edycji
+  transaction?: Transaction | null; // If provided, edit mode
   categories: Array<{ id: string; name: string; icon?: string | null; type: TransactionType }>;
   onSubmit: (data: CreateTransactionDto) => Promise<void>;
   onCancel: () => void;

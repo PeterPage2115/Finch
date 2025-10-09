@@ -1,7 +1,7 @@
 /**
  * Transactions API Client
  * 
- * Service dla operacji CRUD na transakcjach
+ * Service for CRUD operations on transactions
  */
 
 import { apiClient } from './client';
@@ -19,11 +19,11 @@ import type {
  */
 export const transactionsApi = {
   /**
-   * Pobiera listę transakcji z filtrami i paginacją
+   * Retrieves transaction list with filters and pagination
    * 
    * @param token - JWT token
    * @param params - query parameters (filters, pagination)
-   * @returns Lista transakcji z metadanymi
+   * @returns Transaction list with metadata
    * 
    * @example
    * const { data, meta } = await transactionsApi.getAll(token, {

@@ -1,7 +1,7 @@
 /**
  * TransactionList Component
  * 
- * Wyświetla listę transakcji w tabeli z akcjami edit/delete
+ * Displays transaction list in a table with edit/delete actions
  * Optimized with React.memo to prevent unnecessary re-renders
  */
 

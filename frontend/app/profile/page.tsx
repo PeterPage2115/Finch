@@ -265,7 +265,7 @@ export default function ProfilePage() {
                 minLength={8}
               />
               <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
-                Minimum 8 znaków, mała i wielka litera, cyfra
+                Minimum 8 characters, lowercase, uppercase, and digit
               </p>
             </div>
 

@@ -210,7 +210,7 @@ export default function LoginPage() {
               href="/forgot-password"
               className="text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition"
             >
-              Zapomniałeś hasła?
+              Forgot password?
             </Link>
           </div>
 
@@ -230,7 +230,7 @@ export default function LoginPage() {
 
         {/* Additional Info */}
         <p className="text-center text-xs text-gray-500 dark:text-gray-400">
-          Twoje dane są bezpieczne i chronione
+          Your data is secure and protected
         </p>
       </div>
     </div>

@@ -1,7 +1,7 @@
 /**
  * Transactions Store (Zustand)
  * 
- * State management dla transakcji z persist do localStorage
+ * State management for transactions with localStorage persistence
  */
 
 import { create } from 'zustand';
@@ -66,7 +66,7 @@ export const useTransactionsStore = create<TransactionsState>()(
       ...initialState,
 
       /**
-       * Ustawia listę transakcji z metadanymi
+       * Sets transaction list with metadata
        */
       setTransactions: (response: TransactionsListResponse) =>
         set({
@@ -76,13 +76,13 @@ export const useTransactionsStore = create<TransactionsState>()(
         }),
 
       /**
-       * Ustawia aktualnie wybraną transakcję
+       * Sets currently selected transaction
        */
       setCurrentTransaction: (transaction: Transaction | null) =>
         set({ currentTransaction: transaction }),
 
       /**
-       * Dodaje nową transakcję do listy (optimistic update)
+       * Adds new transaction to list (optimistic update)
        */
       addTransaction: (transaction: Transaction) =>
         set((state) => ({
@@ -93,7 +93,7 @@ export const useTransactionsStore = create<TransactionsState>()(
         })),
 
       /**
-       * Aktualizuje transakcję w liście
+       * Updates transaction in list
        */
       updateTransaction: (id: string, updated: Transaction) =>
         set((state) => ({
@@ -105,7 +105,7 @@ export const useTransactionsStore = create<TransactionsState>()(
         })),
 
       /**
-       * Usuwa transakcję z listy
+       * Removes transaction from list
        */
       removeTransaction: (id: string) =>
         set((state) => ({
@@ -118,31 +118,31 @@ export const useTransactionsStore = create<TransactionsState>()(
         })),
 
       /**
-       * Ustawia filtry
+       * Sets filters
        */
       setFilters: (filters: TransactionQueryParams) =>
         set({ filters }),
 
       /**
-       * Ustawia stan loading
+       * Sets loading state
        */
       setLoading: (isLoading: boolean) =>
         set({ isLoading }),
 
       /**
-       * Ustawia błąd
+       * Sets error
        */
       setError: (error: string | null) =>
         set({ error, isLoading: false }),
 
       /**
-       * Czyści wszystkie transakcje (np. przy wylogowaniu)
+       * Clears all transactions (e.g., on logout)
        */
       clearTransactions: () =>
         set(initialState),
     }),
     {
-      name: 'transactions-storage', // Nazwa klucza w localStorage
+      name: 'transactions-storage', // localStorage key name
       partialize: (state) => ({
         // Nie zapisujemy loading/error states
         transactions: state.transactions,
