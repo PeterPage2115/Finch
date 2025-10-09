@@ -5,7 +5,7 @@
  * It sets up jest-dom matchers and mocks Zustand for automatic store reset.
  */
 import '@testing-library/jest-dom';
-import { vi, beforeAll, afterAll } from 'vitest';
+import { vi } from 'vitest';
 
 // Mock Zustand for automatic store reset between tests
 vi.mock('zustand');

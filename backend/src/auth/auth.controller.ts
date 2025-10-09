@@ -19,15 +19,7 @@ import {
 } from './dto';
 import { JwtAuthGuard } from './guards';
 import { CurrentUser } from './decorators';
-
-// Interface dla user z JWT tokenu
-interface JwtUser {
-  id: string;
-  email: string;
-  name: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
+import type { AuthenticatedUser } from './decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -61,7 +53,7 @@ export class AuthController {
   @Get('me')
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
-  getProfile(@CurrentUser() user: JwtUser) {
+  getProfile(@CurrentUser() user: AuthenticatedUser) {
     return {
       id: user.id,
       email: user.email,
@@ -80,7 +72,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   async updateProfile(
-    @CurrentUser() user: JwtUser,
+    @CurrentUser() user: AuthenticatedUser,
     @Body() updateProfileDto: UpdateProfileDto,
   ) {
     return this.authService.updateProfile(user.id, updateProfileDto);
@@ -95,7 +87,7 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @HttpCode(HttpStatus.OK)
   async changePassword(
-    @CurrentUser() user: JwtUser,
+    @CurrentUser() user: AuthenticatedUser,
     @Body() changePasswordDto: ChangePasswordDto,
   ) {
     return this.authService.changePassword(

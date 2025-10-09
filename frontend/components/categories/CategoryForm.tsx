@@ -6,7 +6,8 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import { Category } from '@/lib/api/categoriesClient';
 import { TransactionType } from '@/types/transaction';
 import { motion } from 'framer-motion';
@@ -43,18 +44,33 @@ export default function CategoryForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const getErrorMessage = useCallback((err: unknown, fallback: string) => {
+    if (err instanceof Error && err.message) {
+      return err.message;
+    }
+    return fallback;
+  }, []);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setError(null);
     setIsSubmitting(true);
 
     try {
       await onSubmit(formData);
-    } catch (err: any) {
-      setError(err.message || 'Wystąpił błąd');
+    } catch (err) {
+      setError(getErrorMessage(err, 'Wystąpił błąd'));
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleNameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, name: event.target.value }));
+  };
+
+  const handleColorChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, color: event.target.value }));
   };
 
   return (
@@ -84,7 +100,7 @@ export default function CategoryForm({
           minLength={2}
           maxLength={50}
           value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          onChange={handleNameChange}
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md
                      bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                      focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
@@ -153,7 +169,7 @@ export default function CategoryForm({
             type="color"
             id="color"
             value={formData.color}
-            onChange={(e) => setFormData({ ...formData, color: e.target.value })}
+            onChange={handleColorChange}
             className="h-10 w-20 rounded border border-gray-300 dark:border-gray-600 cursor-pointer"
             disabled={isSubmitting}
           />

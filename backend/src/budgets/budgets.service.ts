@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateBudgetDto, UpdateBudgetDto, QueryBudgetDto } from './dto';
-import { BudgetPeriod } from '@prisma/client';
+import { BudgetPeriod, Prisma } from '@prisma/client';
 
 /**
  * Service handling budgets business logic.
@@ -27,7 +27,7 @@ export class BudgetsService {
   async findAll(userId: string, query: QueryBudgetDto) {
     const { categoryId, period, active } = query;
 
-    const where: any = { userId };
+    const where: Prisma.BudgetWhereInput = { userId };
 
     if (categoryId) {
       where.categoryId = categoryId;

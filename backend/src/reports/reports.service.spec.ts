@@ -1,108 +1,222 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ReportsService } from './reports.service';
 import { PrismaService } from '../prisma.service';
+import {
+  Category,
+  CategoryType,
+  Prisma,
+  TransactionType,
+} from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
+
+type CategorySummary = {
+  id: string;
+  name: string;
+  icon: string | null;
+  color: string | null;
+};
+
+type TransactionWithCategory = {
+  id: string;
+  amount: Decimal;
+  description: string | null;
+  type: TransactionType;
+  date: Date;
+  categoryId: string;
+  userId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  category: CategorySummary | null;
+};
+
+type TransactionSummary = {
+  id: string;
+  amount: Decimal;
+  description: string | null;
+  date: Date;
+  type: TransactionType;
+};
+
+type TransactionAggregateResult = {
+  _sum: { amount: Decimal | null };
+  _count: number;
+};
+
+type TransactionDelegateMock = {
+  aggregate: jest.MockedFunction<
+    (
+      args: Prisma.TransactionAggregateArgs,
+    ) => Promise<TransactionAggregateResult>
+  >;
+  findMany: jest.MockedFunction<
+    (
+      args: Prisma.TransactionFindManyArgs,
+    ) => Promise<TransactionWithCategory[] | TransactionSummary[]>
+  >;
+};
+
+type CategoryDelegateMock = {
+  findFirst: jest.MockedFunction<
+    (args: Prisma.CategoryFindFirstArgs) => Promise<Category | null>
+  >;
+};
+
+type MockedPrismaService = {
+  transaction: TransactionDelegateMock;
+  category: CategoryDelegateMock;
+};
+
+const createMockFn = <ReturnValue, Args extends unknown[]>(
+  implementation?: (...args: Args) => ReturnValue,
+): jest.MockedFunction<(...args: Args) => ReturnValue> =>
+  jest.fn<ReturnValue, Args>(implementation) as jest.MockedFunction<
+    (...args: Args) => ReturnValue
+  >;
+
+const createPrismaMock = (): MockedPrismaService => ({
+  transaction: {
+    aggregate: createMockFn<
+      Promise<TransactionAggregateResult>,
+      [Prisma.TransactionAggregateArgs]
+    >(),
+    findMany: createMockFn<
+      Promise<TransactionWithCategory[] | TransactionSummary[]>,
+      [Prisma.TransactionFindManyArgs]
+    >(),
+  },
+  category: {
+    findFirst: createMockFn<
+      Promise<Category | null>,
+      [Prisma.CategoryFindFirstArgs]
+    >(),
+  },
+});
 
 describe('ReportsService', () => {
   let service: ReportsService;
-  let prismaService: PrismaService;
+  let prismaService: MockedPrismaService;
 
-  // Mock data
   const mockUserId = 'user-123';
-  const startDate = new Date('2025-10-01');
-  const endDate = new Date('2025-10-31');
+  const startDate = new Date('2025-10-01T00:00:00.000Z');
+  const endDate = new Date('2025-10-31T00:00:00.000Z');
 
-  const mockCategory1 = {
+  const mockCategory1: Category = {
     id: 'category-food',
     name: 'Jedzenie',
     icon: 'ShoppingCart',
     color: '#10B981',
+    type: CategoryType.EXPENSE,
+    userId: mockUserId,
+    createdAt: new Date('2025-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2025-01-01T00:00:00.000Z'),
   };
-
-  const mockCategory2 = {
+  const mockCategory2: Category = {
     id: 'category-transport',
     name: 'Transport',
     icon: 'Car',
     color: '#3B82F6',
+    type: CategoryType.EXPENSE,
+    userId: mockUserId,
+    createdAt: new Date('2025-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2025-01-01T00:00:00.000Z'),
   };
 
-  const mockTransactions = [
+  const mockIncomeCategory: Category = {
+    id: 'category-salary',
+    name: 'Wynagrodzenie',
+    icon: 'DollarSign',
+    color: '#10B981',
+    type: CategoryType.INCOME,
+    userId: mockUserId,
+    createdAt: new Date('2025-01-01T00:00:00.000Z'),
+    updatedAt: new Date('2025-01-01T00:00:00.000Z'),
+  };
+
+  const mockTransactions: TransactionWithCategory[] = [
     {
       id: 'trans-1',
       amount: new Decimal(500),
       description: 'Zakupy',
-      type: 'EXPENSE' as const,
-      date: new Date('2025-10-05'),
-      categoryId: 'category-food',
+      type: TransactionType.EXPENSE,
+      date: new Date('2025-10-05T00:00:00.000Z'),
+      categoryId: mockCategory1.id,
       userId: mockUserId,
-      createdAt: new Date('2025-10-05'),
-      updatedAt: new Date('2025-10-05'),
-      category: mockCategory1,
+      createdAt: new Date('2025-10-05T00:00:00.000Z'),
+      updatedAt: new Date('2025-10-05T00:00:00.000Z'),
+      category: {
+        id: mockCategory1.id,
+        name: mockCategory1.name,
+        icon: mockCategory1.icon,
+        color: mockCategory1.color,
+      },
     },
     {
       id: 'trans-2',
       amount: new Decimal(300),
       description: 'Paliwo',
-      type: 'EXPENSE' as const,
-      date: new Date('2025-10-10'),
-      categoryId: 'category-transport',
+      type: TransactionType.EXPENSE,
+      date: new Date('2025-10-10T00:00:00.000Z'),
+      categoryId: mockCategory2.id,
       userId: mockUserId,
-      createdAt: new Date('2025-10-10'),
-      updatedAt: new Date('2025-10-10'),
-      category: mockCategory2,
+      createdAt: new Date('2025-10-10T00:00:00.000Z'),
+      updatedAt: new Date('2025-10-10T00:00:00.000Z'),
+      category: {
+        id: mockCategory2.id,
+        name: mockCategory2.name,
+        icon: mockCategory2.icon,
+        color: mockCategory2.color,
+      },
     },
     {
       id: 'trans-3',
       amount: new Decimal(200),
       description: 'Restauracja',
-      type: 'EXPENSE' as const,
-      date: new Date('2025-10-15'),
-      categoryId: 'category-food',
+      type: TransactionType.EXPENSE,
+      date: new Date('2025-10-15T00:00:00.000Z'),
+      categoryId: mockCategory1.id,
       userId: mockUserId,
-      createdAt: new Date('2025-10-15'),
-      updatedAt: new Date('2025-10-15'),
-      category: mockCategory1,
+      createdAt: new Date('2025-10-15T00:00:00.000Z'),
+      updatedAt: new Date('2025-10-15T00:00:00.000Z'),
+      category: {
+        id: mockCategory1.id,
+        name: mockCategory1.name,
+        icon: mockCategory1.icon,
+        color: mockCategory1.color,
+      },
     },
     {
       id: 'trans-4',
       amount: new Decimal(5000),
       description: 'Pensja',
-      type: 'INCOME' as const,
-      date: new Date('2025-10-01'),
-      categoryId: 'category-salary',
+      type: TransactionType.INCOME,
+      date: new Date('2025-10-01T00:00:00.000Z'),
+      categoryId: mockIncomeCategory.id,
       userId: mockUserId,
-      createdAt: new Date('2025-10-01'),
-      updatedAt: new Date('2025-10-01'),
+      createdAt: new Date('2025-10-01T00:00:00.000Z'),
+      updatedAt: new Date('2025-10-01T00:00:00.000Z'),
       category: {
-        id: 'category-salary',
-        name: 'Wynagrodzenie',
-        icon: 'DollarSign',
-        color: '#10B981',
+        id: mockIncomeCategory.id,
+        name: mockIncomeCategory.name,
+        icon: mockIncomeCategory.icon,
+        color: mockIncomeCategory.color,
       },
     },
   ];
 
   beforeEach(async () => {
+    prismaService = createPrismaMock();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         ReportsService,
         {
           provide: PrismaService,
-          useValue: {
-            transaction: {
-              aggregate: jest.fn(),
-              findMany: jest.fn(),
-            },
-            category: {
-              findFirst: jest.fn(),
-            },
-          },
+          useValue: prismaService,
         },
       ],
     }).compile();
 
-    service = module.get<ReportsService>(ReportsService);
-    prismaService = module.get<PrismaService>(PrismaService);
+    service = module.get(ReportsService);
 
     jest.clearAllMocks();
   });
@@ -114,20 +228,19 @@ describe('ReportsService', () => {
   describe('getSummary', () => {
     it('should return summary report with income and expenses', async () => {
       // Arrange
-      const incomeAggregate = {
+      const incomeAggregate: TransactionAggregateResult = {
         _sum: { amount: new Decimal(5000) },
         _count: 1,
       };
 
-      const expenseAggregate = {
+      const expenseAggregate: TransactionAggregateResult = {
         _sum: { amount: new Decimal(1000) },
         _count: 3,
       };
 
-      jest
-        .spyOn(prismaService.transaction, 'aggregate')
-        .mockResolvedValueOnce(incomeAggregate as any)
-        .mockResolvedValueOnce(expenseAggregate as any);
+      prismaService.transaction.aggregate
+        .mockResolvedValueOnce(incomeAggregate)
+        .mockResolvedValueOnce(expenseAggregate);
 
       // Act
       const result = await service.getSummary(mockUserId, startDate, endDate);
@@ -168,13 +281,18 @@ describe('ReportsService', () => {
 
     it('should handle zero income', async () => {
       // Arrange
-      jest
-        .spyOn(prismaService.transaction, 'aggregate')
-        .mockResolvedValueOnce({ _sum: { amount: null }, _count: 0 } as any)
-        .mockResolvedValueOnce({
-          _sum: { amount: new Decimal(500) },
-          _count: 2,
-        } as any);
+      const zeroAggregate: TransactionAggregateResult = {
+        _sum: { amount: null },
+        _count: 0,
+      };
+      const expenseAggregate: TransactionAggregateResult = {
+        _sum: { amount: new Decimal(500) },
+        _count: 2,
+      };
+
+      prismaService.transaction.aggregate
+        .mockResolvedValueOnce(zeroAggregate)
+        .mockResolvedValueOnce(expenseAggregate);
 
       // Act
       const result = await service.getSummary(mockUserId, startDate, endDate);
@@ -187,13 +305,18 @@ describe('ReportsService', () => {
 
     it('should handle zero expenses', async () => {
       // Arrange
-      jest
-        .spyOn(prismaService.transaction, 'aggregate')
-        .mockResolvedValueOnce({
-          _sum: { amount: new Decimal(3000) },
-          _count: 1,
-        } as any)
-        .mockResolvedValueOnce({ _sum: { amount: null }, _count: 0 } as any);
+      const incomeAggregate: TransactionAggregateResult = {
+        _sum: { amount: new Decimal(3000) },
+        _count: 1,
+      };
+      const zeroAggregate: TransactionAggregateResult = {
+        _sum: { amount: null },
+        _count: 0,
+      };
+
+      prismaService.transaction.aggregate
+        .mockResolvedValueOnce(incomeAggregate)
+        .mockResolvedValueOnce(zeroAggregate);
 
       // Act
       const result = await service.getSummary(mockUserId, startDate, endDate);
@@ -206,10 +329,14 @@ describe('ReportsService', () => {
 
     it('should handle no transactions', async () => {
       // Arrange
-      jest
-        .spyOn(prismaService.transaction, 'aggregate')
-        .mockResolvedValueOnce({ _sum: { amount: null }, _count: 0 } as any)
-        .mockResolvedValueOnce({ _sum: { amount: null }, _count: 0 } as any);
+      const zeroAggregate: TransactionAggregateResult = {
+        _sum: { amount: null },
+        _count: 0,
+      };
+
+      prismaService.transaction.aggregate
+        .mockResolvedValueOnce(zeroAggregate)
+        .mockResolvedValueOnce(zeroAggregate);
 
       // Act
       const result = await service.getSummary(mockUserId, startDate, endDate);
@@ -223,9 +350,12 @@ describe('ReportsService', () => {
 
     it('should format dates correctly', async () => {
       // Arrange
-      jest
-        .spyOn(prismaService.transaction, 'aggregate')
-        .mockResolvedValue({ _sum: { amount: null }, _count: 0 } as any);
+      const zeroAggregate: TransactionAggregateResult = {
+        _sum: { amount: null },
+        _count: 0,
+      };
+
+      prismaService.transaction.aggregate.mockResolvedValue(zeroAggregate);
 
       // Act
       const result = await service.getSummary(mockUserId, startDate, endDate);
@@ -239,11 +369,9 @@ describe('ReportsService', () => {
   describe('getByCategoryReport', () => {
     it('should return category breakdown for all transactions', async () => {
       // Arrange
-      jest
-        .spyOn(prismaService.transaction, 'findMany')
-        .mockResolvedValue(
-          mockTransactions.filter((t) => t.type === 'EXPENSE'),
-        );
+      prismaService.transaction.findMany.mockResolvedValue(
+        mockTransactions.filter((t) => t.type === TransactionType.EXPENSE),
+      );
 
       // Act
       const result = await service.getByCategoryReport(
@@ -285,11 +413,9 @@ describe('ReportsService', () => {
     it('should filter by EXPENSE type', async () => {
       // Arrange
       const expenseTransactions = mockTransactions.filter(
-        (t) => t.type === 'EXPENSE',
+        (t) => t.type === TransactionType.EXPENSE,
       );
-      jest
-        .spyOn(prismaService.transaction, 'findMany')
-        .mockResolvedValue(expenseTransactions);
+      prismaService.transaction.findMany.mockResolvedValue(expenseTransactions);
 
       // Act
       const result = await service.getByCategoryReport(
@@ -318,11 +444,9 @@ describe('ReportsService', () => {
     it('should filter by INCOME type', async () => {
       // Arrange
       const incomeTransactions = mockTransactions.filter(
-        (t) => t.type === 'INCOME',
+        (t) => t.type === TransactionType.INCOME,
       );
-      jest
-        .spyOn(prismaService.transaction, 'findMany')
-        .mockResolvedValue(incomeTransactions);
+      prismaService.transaction.findMany.mockResolvedValue(incomeTransactions);
 
       // Act
       const result = await service.getByCategoryReport(
@@ -341,7 +465,7 @@ describe('ReportsService', () => {
 
     it('should handle no transactions', async () => {
       // Arrange
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue([]);
+      prismaService.transaction.findMany.mockResolvedValue([]);
 
       // Act
       const result = await service.getByCategoryReport(
@@ -362,43 +486,56 @@ describe('ReportsService', () => {
           id: 'trans-1',
           amount: new Decimal(100),
           description: 'Test 1',
-          type: 'EXPENSE' as const,
-          date: new Date('2025-10-05'),
+          type: TransactionType.EXPENSE,
+          date: new Date('2025-10-05T00:00:00.000Z'),
           categoryId: 'cat-1',
           userId: mockUserId,
-          createdAt: new Date('2025-10-05'),
-          updatedAt: new Date('2025-10-05'),
-          category: { id: 'cat-1', name: 'Cat1', icon: 'A', color: '#AAA' },
+          createdAt: new Date('2025-10-05T00:00:00.000Z'),
+          updatedAt: new Date('2025-10-05T00:00:00.000Z'),
+          category: {
+            id: 'cat-1',
+            name: 'Cat1',
+            icon: 'A',
+            color: '#AAA',
+          },
         },
         {
           id: 'trans-2',
           amount: new Decimal(200),
           description: 'Test 2',
-          type: 'EXPENSE' as const,
-          date: new Date('2025-10-10'),
+          type: TransactionType.EXPENSE,
+          date: new Date('2025-10-10T00:00:00.000Z'),
           categoryId: 'cat-2',
           userId: mockUserId,
-          createdAt: new Date('2025-10-10'),
-          updatedAt: new Date('2025-10-10'),
-          category: { id: 'cat-2', name: 'Cat2', icon: 'B', color: '#BBB' },
+          createdAt: new Date('2025-10-10T00:00:00.000Z'),
+          updatedAt: new Date('2025-10-10T00:00:00.000Z'),
+          category: {
+            id: 'cat-2',
+            name: 'Cat2',
+            icon: 'B',
+            color: '#BBB',
+          },
         },
         {
           id: 'trans-3',
           amount: new Decimal(300),
           description: 'Test 3',
-          type: 'EXPENSE' as const,
-          date: new Date('2025-10-15'),
+          type: TransactionType.EXPENSE,
+          date: new Date('2025-10-15T00:00:00.000Z'),
           categoryId: 'cat-3',
           userId: mockUserId,
-          createdAt: new Date('2025-10-15'),
-          updatedAt: new Date('2025-10-15'),
-          category: { id: 'cat-3', name: 'Cat3', icon: 'C', color: '#CCC' },
+          createdAt: new Date('2025-10-15T00:00:00.000Z'),
+          updatedAt: new Date('2025-10-15T00:00:00.000Z'),
+          category: {
+            id: 'cat-3',
+            name: 'Cat3',
+            icon: 'C',
+            color: '#CCC',
+          },
         },
       ];
 
-      jest
-        .spyOn(prismaService.transaction, 'findMany')
-        .mockResolvedValue(testTransactions);
+      prismaService.transaction.findMany.mockResolvedValue(testTransactions);
 
       // Act
       const result = await service.getByCategoryReport(
@@ -416,11 +553,9 @@ describe('ReportsService', () => {
 
     it('should sort categories by total DESC', async () => {
       // Arrange
-      jest
-        .spyOn(prismaService.transaction, 'findMany')
-        .mockResolvedValue(
-          mockTransactions.filter((t) => t.type === 'EXPENSE'),
-        );
+      prismaService.transaction.findMany.mockResolvedValue(
+        mockTransactions.filter((t) => t.type === TransactionType.EXPENSE),
+      );
 
       // Act
       const result = await service.getByCategoryReport(
@@ -444,19 +579,24 @@ describe('ReportsService', () => {
           id: 'trans-1',
           amount: new Decimal(100),
           description: 'Test Null',
-          type: 'EXPENSE' as const,
-          date: new Date('2025-10-05'),
+          type: TransactionType.EXPENSE,
+          date: new Date('2025-10-05T00:00:00.000Z'),
           categoryId: 'cat-null',
           userId: mockUserId,
-          createdAt: new Date('2025-10-05'),
-          updatedAt: new Date('2025-10-05'),
-          category: { id: 'cat-null', name: 'NoCat', icon: null, color: null },
+          createdAt: new Date('2025-10-05T00:00:00.000Z'),
+          updatedAt: new Date('2025-10-05T00:00:00.000Z'),
+          category: {
+            id: 'cat-null',
+            name: 'NoCat',
+            icon: null,
+            color: null,
+          },
         },
       ];
 
-      jest
-        .spyOn(prismaService.transaction, 'findMany')
-        .mockResolvedValue(transactionWithNullCategory);
+      prismaService.transaction.findMany.mockResolvedValue(
+        transactionWithNullCategory,
+      );
 
       // Act
       const result = await service.getByCategoryReport(
@@ -475,29 +615,27 @@ describe('ReportsService', () => {
     it('should return category details with transactions', async () => {
       // Arrange
       const categoryId = 'category-food';
-      const mockTransactionsForCategory = [
+      const mockTransactionsForCategory: TransactionSummary[] = [
         {
           id: 'trans-1',
           amount: new Decimal(500),
           description: 'Zakupy',
-          date: new Date('2025-10-05'),
-          type: 'EXPENSE' as const,
+          date: new Date('2025-10-05T00:00:00.000Z'),
+          type: TransactionType.EXPENSE,
         },
         {
           id: 'trans-2',
           amount: new Decimal(300),
           description: 'Restauracja',
-          date: new Date('2025-10-10'),
-          type: 'EXPENSE' as const,
+          date: new Date('2025-10-10T00:00:00.000Z'),
+          type: TransactionType.EXPENSE,
         },
       ];
 
-      jest
-        .spyOn(prismaService.category, 'findFirst')
-        .mockResolvedValue(mockCategory1 as any);
-      jest
-        .spyOn(prismaService.transaction, 'findMany')
-        .mockResolvedValue(mockTransactionsForCategory as any);
+      prismaService.category.findFirst.mockResolvedValue(mockCategory1);
+      prismaService.transaction.findMany.mockResolvedValue(
+        mockTransactionsForCategory,
+      );
 
       // Act
       const result = await service.getCategoryDetails(
@@ -545,7 +683,7 @@ describe('ReportsService', () => {
     it('should throw error if category not found', async () => {
       // Arrange
       const categoryId = 'non-existent';
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
+      prismaService.category.findFirst.mockResolvedValue(null);
 
       // Act & Assert
       await expect(
@@ -556,10 +694,8 @@ describe('ReportsService', () => {
     it('should return zero values when no transactions', async () => {
       // Arrange
       const categoryId = 'category-empty';
-      jest
-        .spyOn(prismaService.category, 'findFirst')
-        .mockResolvedValue(mockCategory1 as any);
-      jest.spyOn(prismaService.transaction, 'findMany').mockResolvedValue([]);
+      prismaService.category.findFirst.mockResolvedValue(mockCategory1);
+      prismaService.transaction.findMany.mockResolvedValue([]);
 
       // Act
       const result = await service.getCategoryDetails(
@@ -579,7 +715,7 @@ describe('ReportsService', () => {
     it('should handle category not belonging to user', async () => {
       // Arrange
       const categoryId = 'other-user-category';
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null); // Category doesn't exist for this user
+      prismaService.category.findFirst.mockResolvedValue(null);
 
       // Act & Assert
       await expect(

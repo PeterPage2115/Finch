@@ -1,4 +1,17 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+import type { Request } from 'express';
+
+export interface AuthenticatedUser {
+  id: string;
+  email: string;
+  name: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+interface AuthenticatedRequest extends Request {
+  user?: AuthenticatedUser;
+}
 
 /**
  * Decorator do wyciągania zalogowanego użytkownika z request
@@ -14,12 +27,19 @@ import { createParamDecorator, ExecutionContext } from '@nestjs/common';
  *   return this.service.findOne(userId);
  * }
  */
-export const CurrentUser = createParamDecorator(
-  (data: string, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    const user = request.user;
+export const CurrentUser = createParamDecorator<
+  keyof AuthenticatedUser | undefined,
+  ExecutionContext,
+  AuthenticatedUser | AuthenticatedUser[keyof AuthenticatedUser] | undefined
+>((data, ctx) => {
+  const request = ctx.switchToHttp().getRequest<AuthenticatedRequest>();
 
-    // Jeśli podano nazwę pola (np. 'id'), zwróć tylko to pole
-    return data ? user?.[data] : user;
-  },
-);
+  const { user } = request;
+
+  if (!user) {
+    return undefined;
+  }
+
+  // Jeśli podano nazwę pola (np. 'id'), zwróć tylko to pole
+  return data ? user[data] : user;
+});

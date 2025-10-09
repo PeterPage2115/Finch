@@ -6,7 +6,7 @@
 
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
 import { useNotificationStore } from '@/lib/stores/notificationStore';
@@ -31,6 +31,31 @@ export default function CategoriesPage() {
   const [editingCategory, setEditingCategory] = useState<Category | undefined>(undefined);
   const [deleteConfirm, setDeleteConfirm] = useState<Category | null>(null);
 
+  const handleErrorMessage = useCallback((error: unknown, fallback: string) => {
+    if (error instanceof Error && error.message) {
+      return error.message;
+    }
+    return fallback;
+  }, []);
+
+  const fetchCategories = useCallback(async () => {
+    if (!token) {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      setError(null);
+      const data = await categoriesApi.getAll(token);
+      setCategories(data);
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+      setError(handleErrorMessage(err, 'Błąd podczas pobierania kategorii'));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [handleErrorMessage, token]);
+
   // Wait for hydration before checking auth
   useEffect(() => {
     if (!hasHydrated) return;
@@ -39,47 +64,40 @@ export default function CategoriesPage() {
       router.push('/login');
       return;
     }
-    fetchCategories();
-  }, [token, hasHydrated, router]);
-
-  const fetchCategories = async () => {
-    try {
-      setIsLoading(true);
-      setError(null);
-      const data = await categoriesApi.getAll(token!);
-      setCategories(data);
-    } catch (err: any) {
-      console.error('Error fetching categories:', err);
-      setError(err.message || 'Błąd podczas pobierania kategorii');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    void fetchCategories();
+  }, [fetchCategories, hasHydrated, router, token]);
 
   const handleCreate = async (formData: CategoryFormData) => {
+    if (!token) {
+      throw new Error('Brak tokenu uwierzytelniającego');
+    }
+
     try {
-      const newCategory = await categoriesApi.create(token!, formData);
-      setCategories([...categories, newCategory]);
+      const newCategory = await categoriesApi.create(token, formData);
+      setCategories((prev) => [...prev, newCategory]);
       setShowForm(false);
       addNotification('Kategoria utworzona pomyślnie', 'success');
-    } catch (err: any) {
-      throw new Error(err.message || 'Błąd podczas tworzenia kategorii');
+    } catch (err) {
+      throw new Error(handleErrorMessage(err, 'Błąd podczas tworzenia kategorii'));
     }
   };
 
   const handleUpdate = async (formData: CategoryFormData) => {
     if (!editingCategory) return;
+    if (!token) {
+      throw new Error('Brak tokenu uwierzytelniającego');
+    }
 
     try {
-      const updated = await categoriesApi.update(token!, editingCategory.id, formData);
-      setCategories(categories.map((cat) => 
+      const updated = await categoriesApi.update(token, editingCategory.id, formData);
+      setCategories((prev) => prev.map((cat) =>
         cat.id === editingCategory.id ? updated : cat
       ));
       setEditingCategory(undefined);
       setShowForm(false);
       addNotification('Kategoria zaktualizowana pomyślnie', 'success');
-    } catch (err: any) {
-      throw new Error(err.message || 'Błąd podczas aktualizacji kategorii');
+    } catch (err) {
+      throw new Error(handleErrorMessage(err, 'Błąd podczas aktualizacji kategorii'));
     }
   };
 
@@ -88,20 +106,24 @@ export default function CategoriesPage() {
     setShowForm(true);
   };
 
-  const handleDelete = async (category: Category) => {
+  const handleDelete = (category: Category) => {
     setDeleteConfirm(category);
   };
 
   const confirmDelete = async () => {
     if (!deleteConfirm) return;
+    if (!token) {
+      addNotification('Brak tokenu uwierzytelniającego', 'error');
+      return;
+    }
 
     try {
-      await categoriesApi.delete(token!, deleteConfirm.id);
-      setCategories(categories.filter((cat) => cat.id !== deleteConfirm.id));
+      await categoriesApi.delete(token, deleteConfirm.id);
+      setCategories((prev) => prev.filter((cat) => cat.id !== deleteConfirm.id));
       setDeleteConfirm(null);
       addNotification('Kategoria usunięta pomyślnie', 'success');
-    } catch (err: any) {
-      addNotification(err.message || 'Błąd podczas usuwania kategorii', 'error');
+    } catch (err) {
+      addNotification(handleErrorMessage(err, 'Błąd podczas usuwania kategorii'), 'error');
     }
   };
 

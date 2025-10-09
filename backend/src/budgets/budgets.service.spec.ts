@@ -8,23 +8,131 @@ import {
 } from '@nestjs/common';
 import { CreateBudgetDto } from './dto/create-budget.dto';
 import { UpdateBudgetDto } from './dto/update-budget.dto';
+import {
+  Budget,
+  BudgetPeriod,
+  Category,
+  CategoryType,
+  Prisma,
+  TransactionType,
+} from '@prisma/client';
 import { Decimal } from '@prisma/client/runtime/library';
 
-// Disable strict type checking for Prisma mocks (Decimal types)
+type CategorySummary = Pick<
+  Category,
+  'id' | 'name' | 'type' | 'color' | 'icon'
+>;
+type BudgetWithCategory = Budget & { category: CategorySummary };
+
+type TransactionAggregateResult = {
+  _sum: { amount: Decimal | null };
+  _count?: { amount: number };
+  _avg?: { amount: Decimal | null };
+  _min?: { amount: Decimal | null };
+  _max?: { amount: Decimal | null };
+};
+
+type BudgetDelegateMock = {
+  findUnique: jest.MockedFunction<
+    (args: Prisma.BudgetFindUniqueArgs) => Promise<Budget | null>
+  >;
+  findFirst: jest.MockedFunction<
+    (
+      args: Prisma.BudgetFindFirstArgs,
+    ) => Promise<Budget | BudgetWithCategory | null>
+  >;
+  findMany: jest.MockedFunction<
+    (args: Prisma.BudgetFindManyArgs) => Promise<BudgetWithCategory[]>
+  >;
+  create: jest.MockedFunction<
+    (args: Prisma.BudgetCreateArgs) => Promise<BudgetWithCategory>
+  >;
+  update: jest.MockedFunction<
+    (args: Prisma.BudgetUpdateArgs) => Promise<BudgetWithCategory>
+  >;
+  delete: jest.MockedFunction<
+    (args: Prisma.BudgetDeleteArgs) => Promise<Budget>
+  >;
+};
+
+type CategoryDelegateMock = {
+  findFirst: jest.MockedFunction<
+    (args: Prisma.CategoryFindFirstArgs) => Promise<Category | null>
+  >;
+};
+
+type TransactionDelegateMock = {
+  aggregate: jest.MockedFunction<
+    (
+      args: Prisma.TransactionAggregateArgs,
+    ) => Promise<TransactionAggregateResult>
+  >;
+};
+
+type MockedPrismaService = {
+  budget: BudgetDelegateMock;
+  category: CategoryDelegateMock;
+  transaction: TransactionDelegateMock;
+};
+
+const createMockFn = <ReturnValue, Args extends unknown[]>(
+  implementation?: (...args: Args) => ReturnValue,
+): jest.MockedFunction<(...args: Args) => ReturnValue> =>
+  jest.fn<ReturnValue, Args>(implementation) as jest.MockedFunction<
+    (...args: Args) => ReturnValue
+  >;
+
+const createPrismaMock = (): MockedPrismaService => ({
+  budget: {
+    findUnique: createMockFn<
+      Promise<Budget | null>,
+      [Prisma.BudgetFindUniqueArgs]
+    >(),
+    findFirst: createMockFn<
+      Promise<Budget | BudgetWithCategory | null>,
+      [Prisma.BudgetFindFirstArgs]
+    >(),
+    findMany: createMockFn<
+      Promise<BudgetWithCategory[]>,
+      [Prisma.BudgetFindManyArgs]
+    >(),
+    create: createMockFn<
+      Promise<BudgetWithCategory>,
+      [Prisma.BudgetCreateArgs]
+    >(),
+    update: createMockFn<
+      Promise<BudgetWithCategory>,
+      [Prisma.BudgetUpdateArgs]
+    >(),
+    delete: createMockFn<Promise<Budget>, [Prisma.BudgetDeleteArgs]>(),
+  },
+  category: {
+    findFirst: createMockFn<
+      Promise<Category | null>,
+      [Prisma.CategoryFindFirstArgs]
+    >(),
+  },
+  transaction: {
+    aggregate: createMockFn<
+      Promise<TransactionAggregateResult>,
+      [Prisma.TransactionAggregateArgs]
+    >(),
+  },
+});
 
 describe('BudgetsService', () => {
   let service: BudgetsService;
-  let prismaService: PrismaService;
+  let prismaService: MockedPrismaService;
 
   // Mock data
   const mockUserId = 'user-123';
   const mockCategoryId = 'category-456';
   const mockBudgetId = 'budget-789';
 
-  const mockCategory = {
+  const mockCategory: Category = {
     id: mockCategoryId,
     name: 'Jedzenie',
-    type: 'EXPENSE' as const,
+    type: CategoryType.EXPENSE,
     color: '#FF5733', // Required field in schema
     icon: '🍔',
     userId: mockUserId,
@@ -32,46 +140,47 @@ describe('BudgetsService', () => {
     updatedAt: new Date(),
   };
 
-  const mockBudget = {
+  const mockCategorySummary: CategorySummary = {
+    id: mockCategoryId,
+    name: mockCategory.name,
+    type: mockCategory.type,
+    color: mockCategory.color,
+    icon: mockCategory.icon,
+  };
+
+  const mockBudget: Budget = {
     id: mockBudgetId,
     amount: new Decimal(1000),
     categoryId: mockCategoryId,
     userId: mockUserId,
-    period: 'MONTHLY' as const,
+    period: BudgetPeriod.MONTHLY,
     startDate: new Date('2025-01-01'),
     endDate: new Date('2025-01-31'),
     createdAt: new Date(),
     updatedAt: new Date(),
   };
 
+  const mockBudgetWithCategory: BudgetWithCategory = {
+    ...mockBudget,
+    category: mockCategorySummary,
+  };
+
+  const mockBudgetsList: BudgetWithCategory[] = [mockBudgetWithCategory];
+
   beforeEach(async () => {
+    prismaService = createPrismaMock();
+
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         BudgetsService,
         {
           provide: PrismaService,
-          useValue: {
-            budget: {
-              findUnique: jest.fn(),
-              findFirst: jest.fn(),
-              findMany: jest.fn(),
-              create: jest.fn(),
-              update: jest.fn(),
-              delete: jest.fn(),
-            },
-            category: {
-              findFirst: jest.fn(),
-            },
-            transaction: {
-              aggregate: jest.fn(),
-            },
-          },
+          useValue: prismaService,
         },
       ],
     }).compile();
 
     service = module.get<BudgetsService>(BudgetsService);
-    prismaService = module.get<PrismaService>(PrismaService);
   });
 
   it('should be defined', () => {
@@ -82,28 +191,28 @@ describe('BudgetsService', () => {
     const createBudgetDto: CreateBudgetDto = {
       amount: 1000,
       categoryId: mockCategoryId,
-      period: 'MONTHLY',
+      period: BudgetPeriod.MONTHLY,
       startDate: '2025-01-01', // String format for DTO
     };
 
     it('should successfully create a budget with auto-calculated endDate', async () => {
-      jest
-        .spyOn(prismaService.category, 'findFirst')
-        .mockResolvedValue(mockCategory);
-      jest.spyOn(prismaService.budget, 'findFirst').mockResolvedValue(null); // No existing budget
-      jest.spyOn(prismaService.budget, 'create').mockResolvedValue(mockBudget);
+      prismaService.category.findFirst.mockResolvedValue(mockCategory);
+      prismaService.budget.findFirst.mockResolvedValue(null);
+      prismaService.budget.create.mockResolvedValue(mockBudgetWithCategory);
 
       const result = await service.create(mockUserId, createBudgetDto);
 
-      expect(result).toEqual(mockBudget);
+      expect(result).toEqual(mockBudgetWithCategory);
       expect(prismaService.category.findFirst).toHaveBeenCalledWith({
         where: { id: mockCategoryId, userId: mockUserId },
       });
-      expect(prismaService.budget.create).toHaveBeenCalled();
+      const createArgs = prismaService.budget.create.mock.calls[0]?.[0];
+      expect(createArgs).toBeDefined();
+      expect(createArgs?.data?.userId).toBe(mockUserId);
     });
 
     it('should throw BadRequestException if category not found', async () => {
-      jest.spyOn(prismaService.category, 'findFirst').mockResolvedValue(null);
+      prismaService.category.findFirst.mockResolvedValue(null);
 
       await expect(service.create(mockUserId, createBudgetDto)).rejects.toThrow(
         BadRequestException,
@@ -111,12 +220,8 @@ describe('BudgetsService', () => {
     });
 
     it('should throw ConflictException if budget already exists', async () => {
-      jest
-        .spyOn(prismaService.category, 'findFirst')
-        .mockResolvedValue(mockCategory);
-      jest
-        .spyOn(prismaService.budget, 'findFirst')
-        .mockResolvedValue(mockBudget); // Existing budget
+      prismaService.category.findFirst.mockResolvedValue(mockCategory);
+      prismaService.budget.findFirst.mockResolvedValue(mockBudget);
 
       await expect(service.create(mockUserId, createBudgetDto)).rejects.toThrow(
         ConflictException,
@@ -124,11 +229,12 @@ describe('BudgetsService', () => {
     });
 
     it('should require endDate for CUSTOM period', async () => {
-      const customDto = { ...createBudgetDto, period: 'CUSTOM' as const };
-      jest
-        .spyOn(prismaService.category, 'findFirst')
-        .mockResolvedValue(mockCategory);
-      jest.spyOn(prismaService.budget, 'findFirst').mockResolvedValue(null);
+      const customDto = {
+        ...createBudgetDto,
+        period: BudgetPeriod.CUSTOM,
+      };
+      prismaService.category.findFirst.mockResolvedValue(mockCategory);
+      prismaService.budget.findFirst.mockResolvedValue(null);
 
       await expect(service.create(mockUserId, customDto)).rejects.toThrow(
         BadRequestException,
@@ -138,13 +244,11 @@ describe('BudgetsService', () => {
 
   describe('findAll', () => {
     it('should return all budgets for user', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findMany')
-        .mockResolvedValue([mockBudget] as any);
+      prismaService.budget.findMany.mockResolvedValue(mockBudgetsList);
 
       const result = await service.findAll(mockUserId, {});
 
-      expect(result).toEqual([mockBudget]);
+      expect(result).toEqual(mockBudgetsList);
       expect(prismaService.budget.findMany).toHaveBeenCalledWith({
         where: { userId: mockUserId },
         include: {
@@ -163,72 +267,47 @@ describe('BudgetsService', () => {
     });
 
     it('should filter budgets by categoryId', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findMany')
-        .mockResolvedValue([mockBudget]);
+      prismaService.budget.findMany.mockResolvedValue(mockBudgetsList);
 
       await service.findAll(mockUserId, { categoryId: mockCategoryId });
 
-      expect(prismaService.budget.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({ categoryId: mockCategoryId }),
-        }),
-      );
+      const findManyArgs = prismaService.budget.findMany.mock.calls[0]?.[0];
+      expect(findManyArgs?.where?.categoryId).toBe(mockCategoryId);
     });
 
     it('should filter budgets by period', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findMany')
-        .mockResolvedValue([mockBudget]);
+      prismaService.budget.findMany.mockResolvedValue(mockBudgetsList);
 
-      await service.findAll(mockUserId, { period: 'MONTHLY' });
+      await service.findAll(mockUserId, { period: BudgetPeriod.MONTHLY });
 
-      expect(prismaService.budget.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({ period: 'MONTHLY' }),
-        }),
-      );
+      const findManyArgs = prismaService.budget.findMany.mock.calls[0]?.[0];
+      expect(findManyArgs?.where?.period).toBe(BudgetPeriod.MONTHLY);
     });
 
     it('should filter active budgets (endDate >= now)', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findMany')
-        .mockResolvedValue([mockBudget]);
+      prismaService.budget.findMany.mockResolvedValue(mockBudgetsList);
 
       await service.findAll(mockUserId, { active: true });
 
-      expect(prismaService.budget.findMany).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({
-            endDate: expect.objectContaining({ gte: expect.any(Date) }),
-          }),
-        }),
-      );
+      const findManyArgs = prismaService.budget.findMany.mock.calls[0]?.[0];
+      const endDateFilter = findManyArgs?.where?.endDate;
+      if (!endDateFilter || typeof endDateFilter !== 'object') {
+        throw new Error('Expected endDate filter with gte');
+      }
+      if (!('gte' in endDateFilter)) {
+        throw new Error('Expected endDate filter to include gte');
+      }
+      expect(endDateFilter.gte).toBeInstanceOf(Date);
     });
   });
 
   describe('findOne', () => {
     it('should return budget with progress', async () => {
-      // Mock budget WITH category relation (findOne uses findFirst with { include: { category: { select: {...} } } })
-      const mockBudgetWithCategory = {
-        ...mockBudget,
-        category: mockCategory,
-      };
-
-      jest
-        .spyOn(prismaService.budget, 'findFirst')
-        .mockResolvedValue(mockBudgetWithCategory as any);
-      // calculateProgress internally uses findUnique, so mock it too
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
+      prismaService.budget.findFirst.mockResolvedValue(mockBudgetWithCategory);
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      prismaService.transaction.aggregate.mockResolvedValue({
         _sum: { amount: new Decimal(500) },
-        _count: { amount: 5 },
-        _avg: { amount: new Decimal(100) },
-        _min: { amount: new Decimal(50) },
-        _max: { amount: new Decimal(150) },
-      } as any);
+      });
 
       const result = await service.findOne(mockBudgetId, mockUserId);
 
@@ -244,7 +323,7 @@ describe('BudgetsService', () => {
     });
 
     it('should throw NotFoundException if budget not found', async () => {
-      jest.spyOn(prismaService.budget, 'findFirst').mockResolvedValue(null);
+      prismaService.budget.findFirst.mockResolvedValue(null);
 
       await expect(
         service.findOne('non-existent-id', mockUserId),
@@ -253,17 +332,16 @@ describe('BudgetsService', () => {
   });
 
   describe('calculateProgress', () => {
-    it('should calculate progress with no transactions (0% spent)', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: null }, // No transactions
-        _count: { amount: 0 },
-        _avg: { amount: null },
-        _min: { amount: null },
-        _max: { amount: null },
+    const setAggregateAmount = (amount: number | null) =>
+      prismaService.transaction.aggregate.mockResolvedValue({
+        _sum: {
+          amount: amount === null ? null : new Decimal(amount),
+        },
       });
+
+    it('should calculate progress with no transactions (0% spent)', async () => {
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      setAggregateAmount(null);
 
       const result = await service.calculateProgress(mockBudgetId);
 
@@ -274,16 +352,8 @@ describe('BudgetsService', () => {
     });
 
     it('should calculate progress at 50% (no alerts)', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: new Decimal(500) },
-        _count: { amount: 5 },
-        _avg: { amount: new Decimal(100) },
-        _min: { amount: new Decimal(50) },
-        _max: { amount: new Decimal(150) },
-      });
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      setAggregateAmount(500);
 
       const result = await service.calculateProgress(mockBudgetId);
 
@@ -294,16 +364,8 @@ describe('BudgetsService', () => {
     });
 
     it('should show 80% alert when spent is 80-99%', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: new Decimal(850) }, // 85% of 1000
-        _count: { amount: 5 },
-        _avg: { amount: new Decimal(170) },
-        _min: { amount: new Decimal(100) },
-        _max: { amount: new Decimal(200) },
-      });
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      setAggregateAmount(850);
 
       const result = await service.calculateProgress(mockBudgetId);
 
@@ -313,16 +375,8 @@ describe('BudgetsService', () => {
     });
 
     it('should show both 80% and 100% alerts at 100%', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: new Decimal(1000) }, // Exactly 100%
-        _count: { amount: 10 },
-        _avg: { amount: new Decimal(100) },
-        _min: { amount: new Decimal(50) },
-        _max: { amount: new Decimal(150) },
-      });
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      setAggregateAmount(1000);
 
       const result = await service.calculateProgress(mockBudgetId);
 
@@ -331,16 +385,8 @@ describe('BudgetsService', () => {
     });
 
     it('should handle budget exceeded (>100%)', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: new Decimal(1200) }, // 120%
-        _count: { amount: 12 },
-        _avg: { amount: new Decimal(100) },
-        _min: { amount: new Decimal(50) },
-        _max: { amount: new Decimal(200) },
-      });
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      setAggregateAmount(1200);
 
       const result = await service.calculateProgress(mockBudgetId);
 
@@ -350,75 +396,50 @@ describe('BudgetsService', () => {
     });
 
     it('should only count EXPENSE transactions (not INCOME)', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: new Decimal(300) },
-        _count: { amount: 3 },
-        _avg: { amount: new Decimal(100) },
-        _min: { amount: new Decimal(50) },
-        _max: { amount: new Decimal(150) },
-      });
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      setAggregateAmount(300);
 
       await service.calculateProgress(mockBudgetId);
 
-      expect(prismaService.transaction.aggregate).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({ type: 'EXPENSE' }),
-        }),
-      );
+      const aggregateArgs =
+        prismaService.transaction.aggregate.mock.calls[0]?.[0];
+      expect(aggregateArgs?.where?.type).toBe(TransactionType.EXPENSE);
     });
 
     it('should only count transactions within budget period', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: new Decimal(400) },
-        _count: { amount: 4 },
-        _avg: { amount: new Decimal(100) },
-        _min: { amount: new Decimal(50) },
-        _max: { amount: new Decimal(150) },
-      });
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      setAggregateAmount(400);
 
       await service.calculateProgress(mockBudgetId);
 
-      expect(prismaService.transaction.aggregate).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({
-            date: {
-              gte: mockBudget.startDate,
-              lte: mockBudget.endDate,
-            },
-          }),
-        }),
+      const aggregateArgs =
+        prismaService.transaction.aggregate.mock.calls[0]?.[0];
+      const dateFilter = aggregateArgs?.where?.date;
+      if (!dateFilter || typeof dateFilter !== 'object') {
+        throw new Error('Expected date filter in aggregate where clause');
+      }
+
+      expect('gte' in dateFilter ? dateFilter.gte : undefined).toEqual(
+        mockBudget.startDate,
+      );
+      expect('lte' in dateFilter ? dateFilter.lte : undefined).toEqual(
+        mockBudget.endDate,
       );
     });
 
     it('should only count transactions for category', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findUnique')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.transaction, 'aggregate').mockResolvedValue({
-        _sum: { amount: new Decimal(600) },
-        _count: { amount: 6 },
-        _avg: { amount: new Decimal(100) },
-        _min: { amount: new Decimal(50) },
-        _max: { amount: new Decimal(150) },
-      });
+      prismaService.budget.findUnique.mockResolvedValue(mockBudget);
+      setAggregateAmount(600);
 
       await service.calculateProgress(mockBudgetId);
 
-      expect(prismaService.transaction.aggregate).toHaveBeenCalledWith(
-        expect.objectContaining({
-          where: expect.objectContaining({ categoryId: mockCategoryId }),
-        }),
-      );
+      const aggregateArgs =
+        prismaService.transaction.aggregate.mock.calls[0]?.[0];
+      expect(aggregateArgs?.where?.categoryId).toBe(mockCategoryId);
     });
 
     it('should throw NotFoundException if budget not found', async () => {
-      jest.spyOn(prismaService.budget, 'findUnique').mockResolvedValue(null);
+      prismaService.budget.findUnique.mockResolvedValue(null);
 
       await expect(
         service.calculateProgress('non-existent-id'),
@@ -432,13 +453,12 @@ describe('BudgetsService', () => {
     };
 
     it('should successfully update budget', async () => {
-      const updatedBudget = { ...mockBudget, amount: new Decimal(1500) };
-      jest
-        .spyOn(prismaService.budget, 'findFirst')
-        .mockResolvedValue(mockBudget);
-      jest
-        .spyOn(prismaService.budget, 'update')
-        .mockResolvedValue(updatedBudget);
+      const updatedBudget: BudgetWithCategory = {
+        ...mockBudgetWithCategory,
+        amount: new Decimal(1500),
+      };
+      prismaService.budget.findFirst.mockResolvedValue(mockBudget);
+      prismaService.budget.update.mockResolvedValue(updatedBudget);
 
       const result = await service.update(mockUserId, mockBudgetId, updateDto);
 
@@ -447,7 +467,7 @@ describe('BudgetsService', () => {
     });
 
     it('should throw NotFoundException if budget not found', async () => {
-      jest.spyOn(prismaService.budget, 'findFirst').mockResolvedValue(null);
+      prismaService.budget.findFirst.mockResolvedValue(null);
 
       await expect(
         service.update(mockUserId, 'non-existent-id', updateDto),
@@ -457,10 +477,8 @@ describe('BudgetsService', () => {
 
   describe('remove', () => {
     it('should successfully delete budget', async () => {
-      jest
-        .spyOn(prismaService.budget, 'findFirst')
-        .mockResolvedValue(mockBudget);
-      jest.spyOn(prismaService.budget, 'delete').mockResolvedValue(mockBudget);
+      prismaService.budget.findFirst.mockResolvedValue(mockBudget);
+      prismaService.budget.delete.mockResolvedValue(mockBudget);
 
       // remove() method doesn't return value (void)
       const result = await service.remove(mockBudgetId, mockUserId);
@@ -472,7 +490,7 @@ describe('BudgetsService', () => {
     });
 
     it('should throw NotFoundException if budget not found', async () => {
-      jest.spyOn(prismaService.budget, 'findFirst').mockResolvedValue(null);
+      prismaService.budget.findFirst.mockResolvedValue(null);
 
       await expect(
         service.remove('non-existent-id', mockUserId),

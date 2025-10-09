@@ -62,21 +62,21 @@ describe('ProgressBar', () => {
     });
 
     it('should apply red text color for >= 100%', () => {
-      const { container } = render(<ProgressBar percentage={110} spent={1100} limit={1000} />);
+      render(<ProgressBar percentage={110} spent={1100} limit={1000} />);
       
       const percentageText = screen.getByText('110%');
       expect(percentageText).toHaveClass('text-red-600');
     });
 
     it('should apply yellow text color for 80-99%', () => {
-      const { container } = render(<ProgressBar percentage={90} spent={900} limit={1000} />);
+      render(<ProgressBar percentage={90} spent={900} limit={1000} />);
       
       const percentageText = screen.getByText('90%');
       expect(percentageText).toHaveClass('text-yellow-600');
     });
 
     it('should apply green text color for < 80%', () => {
-      const { container } = render(<ProgressBar percentage={70} spent={700} limit={1000} />);
+      render(<ProgressBar percentage={70} spent={700} limit={1000} />);
       
       const percentageText = screen.getByText('70%');
       expect(percentageText).toHaveClass('text-green-600');

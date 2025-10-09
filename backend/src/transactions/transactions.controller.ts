@@ -56,10 +56,10 @@ export class TransactionsController {
   @Post()
   @HttpCode(HttpStatus.CREATED)
   create(
-    @CurrentUser() user: any,
+    @CurrentUser('id') userId: string,
     @Body() createTransactionDto: CreateTransactionDto,
   ) {
-    return this.transactionsService.create(user.id, createTransactionDto);
+    return this.transactionsService.create(userId, createTransactionDto);
   }
 
   /**
@@ -73,8 +73,11 @@ export class TransactionsController {
    * GET /transactions?type=EXPENSE&startDate=2025-01-01&endDate=2025-12-31&page=1&limit=10
    */
   @Get()
-  findAll(@CurrentUser() user: any, @Query() query: QueryTransactionDto) {
-    return this.transactionsService.findAll(user.id, query);
+  findAll(
+    @CurrentUser('id') userId: string,
+    @Query() query: QueryTransactionDto,
+  ) {
+    return this.transactionsService.findAll(userId, query);
   }
 
   /**
@@ -88,8 +91,8 @@ export class TransactionsController {
    * GET /transactions/550e8400-e29b-41d4-a716-446655440000
    */
   @Get(':id')
-  findOne(@CurrentUser() user: any, @Param('id') id: string) {
-    return this.transactionsService.findOne(id, user.id);
+  findOne(@CurrentUser('id') userId: string, @Param('id') id: string) {
+    return this.transactionsService.findOne(id, userId);
   }
 
   /**
@@ -109,11 +112,11 @@ export class TransactionsController {
    */
   @Patch(':id')
   update(
-    @CurrentUser() user: any,
+    @CurrentUser('id') userId: string,
     @Param('id') id: string,
     @Body() updateTransactionDto: UpdateTransactionDto,
   ) {
-    return this.transactionsService.update(id, user.id, updateTransactionDto);
+    return this.transactionsService.update(id, userId, updateTransactionDto);
   }
 
   /**
@@ -128,7 +131,7 @@ export class TransactionsController {
    */
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  remove(@CurrentUser() user: any, @Param('id') id: string) {
-    return this.transactionsService.remove(id, user.id);
+  remove(@CurrentUser('id') userId: string, @Param('id') id: string) {
+    return this.transactionsService.remove(id, userId);
   }
 }

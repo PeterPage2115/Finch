@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import PDFDocument from 'pdfkit';
+import type { Prisma } from '@prisma/client';
 
 @Injectable()
 export class ReportsService {
@@ -68,7 +69,7 @@ export class ReportsService {
     endDate: Date,
     type?: 'INCOME' | 'EXPENSE',
   ) {
-    const where: any = {
+    const where: Prisma.TransactionWhereInput = {
       userId,
       date: {
         gte: startDate,
@@ -95,6 +96,8 @@ export class ReportsService {
       },
     });
 
+    type TransactionWithCategory = (typeof transactions)[number];
+
     // Group by category (manual aggregation)
     const grouped: Record<
       string,
@@ -108,19 +111,19 @@ export class ReportsService {
       }
     > = {};
 
-    transactions.forEach((t) => {
-      const catId = t.categoryId;
+    transactions.forEach((transaction: TransactionWithCategory) => {
+      const catId = transaction.categoryId;
       if (!grouped[catId]) {
         grouped[catId] = {
           categoryId: catId,
-          categoryName: t.category?.name || 'Unknown',
-          categoryIcon: t.category?.icon || null,
-          categoryColor: t.category?.color || null,
+          categoryName: transaction.category?.name || 'Unknown',
+          categoryIcon: transaction.category?.icon || null,
+          categoryColor: transaction.category?.color || null,
           total: 0,
           transactionCount: 0,
         };
       }
-      grouped[catId].total += Number(t.amount);
+      grouped[catId].total += Number(transaction.amount);
       grouped[catId].transactionCount++;
     });
 
@@ -159,7 +162,7 @@ export class ReportsService {
     categoryId?: string,
     granularity: 'daily' | 'weekly' | 'monthly' = 'daily',
   ) {
-    const where: any = {
+    const where: Prisma.TransactionWhereInput = {
       userId,
       date: {
         gte: startDate,
@@ -181,21 +184,23 @@ export class ReportsService {
       },
     });
 
+    type TrendTransaction = (typeof transactions)[number];
+
     // Group by date granularity
     const grouped: Record<
       string,
       { date: string; income: number; expense: number; count: number }
     > = {};
 
-    transactions.forEach((t) => {
-      const dateKey = this.getDateKey(t.date, granularity);
+    transactions.forEach((transaction: TrendTransaction) => {
+      const dateKey = this.getDateKey(transaction.date, granularity);
       if (!grouped[dateKey]) {
         grouped[dateKey] = { date: dateKey, income: 0, expense: 0, count: 0 };
       }
-      if (t.type === 'INCOME') {
-        grouped[dateKey].income += Number(t.amount);
+      if (transaction.type === 'INCOME') {
+        grouped[dateKey].income += Number(transaction.amount);
       } else {
-        grouped[dateKey].expense += Number(t.amount);
+        grouped[dateKey].expense += Number(transaction.amount);
       }
       grouped[dateKey].count++;
     });

@@ -12,13 +12,13 @@ import TransactionList from '@/components/transactions/TransactionList';
 import TransactionForm from '@/components/transactions/TransactionForm';
 import AppNavbar from '@/components/layout/AppNavbar';
 import BudgetWidget from '@/components/budgets/BudgetWidget';
-import type { Transaction, CreateTransactionDto, TransactionType } from '@/types/transaction';
+import type { Transaction, CreateTransactionDto } from '@/types/transaction';
 import type { BudgetWithProgress } from '@/types';
 import { motion } from 'framer-motion';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { user, logout, isAuthenticated, token, _hasHydrated } = useAuthStore();
+  const { user, isAuthenticated, token, _hasHydrated } = useAuthStore();
   const { addNotification } = useNotificationStore();
   const {
     transactions,
@@ -42,6 +42,13 @@ export default function DashboardPage() {
   // Budget widget state
   const [budgets, setBudgets] = useState<BudgetWithProgress[]>([]);
   const [budgetsLoading, setBudgetsLoading] = useState(true);
+
+  const handleErrorMessage = useCallback((err: unknown, fallback: string) => {
+    if (err instanceof Error && err.message) {
+      return err.message;
+    }
+    return fallback;
+  }, []);
 
   useEffect(() => {
     // Wait for hydration before checking auth
@@ -103,10 +110,9 @@ export default function DashboardPage() {
         } else {
           setBudgets([]);
         }
-      } catch (err: any) {
+      } catch (err) {
         console.error('Error fetching data:', err);
-        const errorMessage = err?.message || 'Nie udało się pobrać danych';
-        setError(errorMessage);
+        setError(handleErrorMessage(err, 'Nie udało się pobrać danych'));
         // Set empty data to prevent undefined errors
         setTransactions({ data: [], meta: { total: 0, page: 1, limit: 50, totalPages: 0 } });
         setCategories([]);
@@ -117,17 +123,17 @@ export default function DashboardPage() {
       }
     };
 
-    fetchData();
-  }, [isAuthenticated, token, setTransactions, setLoading, setError]);
+    void fetchData();
+  }, [handleErrorMessage, isAuthenticated, setError, setLoading, setTransactions, token]);
 
   // Refetch budgets (called after transaction create/update/delete)
-  const refetchBudgets = async () => {
+  const refetchBudgets = useCallback(async () => {
     if (!token) return;
-    
+
     try {
       setBudgetsLoading(true);
       const budgetsResponse = await fetchBudgets(token).catch(() => []);
-      
+
       if (budgetsResponse.length > 0) {
         const budgetsWithProgress = await Promise.all(
           budgetsResponse.slice(0, 5).map(async (budget) => {
@@ -138,12 +144,12 @@ export default function DashboardPage() {
             }
           })
         );
-        
+
         const validBudgets = budgetsWithProgress.filter((b): b is BudgetWithProgress => b !== null);
         const topBudgets = validBudgets
           .sort((a, b) => b.progress.percentage - a.progress.percentage)
           .slice(0, 3);
-        
+
         setBudgets(topBudgets);
       } else {
         setBudgets([]);
@@ -153,12 +159,7 @@ export default function DashboardPage() {
     } finally {
       setBudgetsLoading(false);
     }
-  };
-
-  const handleLogout = () => {
-    logout();
-    router.push('/login');
-  };
+  }, [token]);
 
   const handleAddNew = () => {
     setEditingTransaction(null);
@@ -176,7 +177,10 @@ export default function DashboardPage() {
   }, []);
 
   const handleSubmit = async (data: CreateTransactionDto) => {
-    if (!token) return;
+    if (!token) {
+      addNotification('Brak tokenu uwierzytelniającego', 'error');
+      return;
+    }
 
     try {
       setIsSubmitting(true);
@@ -198,14 +202,17 @@ export default function DashboardPage() {
       await refetchBudgets();
     } catch (err) {
       console.error('Error submitting transaction:', err);
-      addNotification('Nie udało się zapisać transakcji', 'error');
+      addNotification(handleErrorMessage(err, 'Nie udało się zapisać transakcji'), 'error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleDelete = useCallback(async (id: string) => {
-    if (!token) return;
+    if (!token) {
+      addNotification('Brak tokenu uwierzytelniającego', 'error');
+      return;
+    }
     if (!confirm('Czy na pewno chcesz usunąć tę transakcję?')) return;
 
     try {
@@ -217,17 +224,16 @@ export default function DashboardPage() {
       await refetchBudgets();
     } catch (err) {
       console.error('Error deleting transaction:', err);
-      addNotification('Nie udało się usunąć transakcji', 'error');
+      addNotification(handleErrorMessage(err, 'Nie udało się usunąć transakcji'), 'error');
     }
-  }, [token, removeTransaction, refetchBudgets, addNotification]);
+  }, [addNotification, handleErrorMessage, refetchBudgets, removeTransaction, token]);
 
   // Calculate stats (defensive programming - handle undefined/empty transactions)
-  const safeTransactions = Array.isArray(transactions) ? transactions : [];
   const stats = {
-    income: safeTransactions
+    income: transactions
       .filter(t => t && t.type === 'INCOME')
       .reduce((sum, t) => sum + (Number(t.amount) || 0), 0),
-    expenses: safeTransactions
+    expenses: transactions
       .filter(t => t && t.type === 'EXPENSE')
       .reduce((sum, t) => sum + (Number(t.amount) || 0), 0),
     balance: 0,

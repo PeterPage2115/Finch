@@ -17,7 +17,7 @@ function BudgetList({ budgets, onEdit, onDelete }: BudgetListProps) {
     return (
       <div className="text-center py-12 bg-white border border-gray-200 rounded-lg">
         <p className="text-gray-500 text-lg">Nie masz jeszcze żadnych budżetów</p>
-        <p className="text-gray-400 text-sm mt-2">Kliknij "Dodaj budżet" aby utworzyć pierwszy</p>
+        <p className="text-gray-400 text-sm mt-2">Kliknij &quot;Dodaj budżet&quot; aby utworzyć pierwszy</p>
       </div>
     );
   }

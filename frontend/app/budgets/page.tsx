@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/stores/authStore';
-import { BudgetWithProgress, CreateBudgetRequest, Budget } from '@/types';
+import { BudgetWithProgress, CreateBudgetRequest } from '@/types';
 import { Category, categoriesApi } from '@/lib/api/categoriesClient';
 import { 
   fetchBudgets, 
@@ -35,34 +35,28 @@ export default function BudgetsPage() {
   const [editingBudget, setEditingBudget] = useState<BudgetWithProgress | undefined>(undefined);
   const [deleteConfirm, setDeleteConfirm] = useState<BudgetWithProgress | null>(null);
 
-  // Wait for hydration before checking auth
-  useEffect(() => {
-    if (!hasHydrated) return;
+  const handleErrorMessage = useCallback((error: unknown, fallback: string) => {
+    if (error instanceof Error && error.message) {
+      return error.message;
+    }
+    return fallback;
+  }, []);
 
+  const fetchBudgetsData = useCallback(async () => {
     if (!token) {
-      router.push('/login');
       return;
     }
 
-    // Fetch both budgets and categories
-    Promise.all([
-      fetchBudgetsData(),
-      fetchCategoriesData(),
-    ]);
-  }, [token, hasHydrated, router]);
+    setError(null);
 
-  const fetchBudgetsData = async () => {
     try {
-      setIsLoading(true);
-      setError(null);
-      const data = await fetchBudgets(token!);
-      // Fetch full budget with progress for each
+      const data = await fetchBudgets(token);
       const budgetsWithProgress = await Promise.all(
         data.map(async (budget) => {
           try {
-            return await fetchBudgetById(token!, budget.id);
-          } catch {
-            // Fallback: return budget with empty progress
+            return await fetchBudgetById(token, budget.id);
+          } catch (innerError) {
+            console.error('Error fetching budget by id:', innerError);
             return {
               ...budget,
               progress: {
@@ -72,54 +66,89 @@ export default function BudgetsPage() {
                 remaining: Number(budget.amount),
                 alerts: [],
               },
-            } as BudgetWithProgress;
+            } satisfies BudgetWithProgress;
           }
         })
       );
       setBudgets(budgetsWithProgress);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error fetching budgets:', err);
-      setError(err.message || 'Błąd podczas pobierania budżetów');
-    } finally {
-      setIsLoading(false);
+      setError(handleErrorMessage(err, 'Błąd podczas pobierania budżetów'));
     }
-  };
+  }, [handleErrorMessage, token]);
 
-  const fetchCategoriesData = async () => {
-    try {
-      const data = await categoriesApi.getAll(token!);
-      setCategories(data);
-    } catch (err: any) {
-      console.error('Error fetching categories:', err);
+  const fetchCategoriesData = useCallback(async () => {
+    if (!token) {
+      return;
     }
-  };
+
+    try {
+      const data = await categoriesApi.getAll(token);
+      setCategories(data);
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+      setError((prev) => prev ?? handleErrorMessage(err, 'Błąd podczas pobierania kategorii'));
+    }
+  }, [handleErrorMessage, token]);
+
+  // Wait for hydration before checking auth
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    if (!token) {
+      router.push('/login');
+      return;
+    }
+
+    setIsLoading(true);
+
+    void Promise.all([fetchBudgetsData(), fetchCategoriesData()])
+      .catch((err) => {
+        console.error('Error loading budgets page data:', err);
+        setError(handleErrorMessage(err, 'Błąd podczas ładowania danych budżetów'));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  }, [fetchBudgetsData, fetchCategoriesData, handleErrorMessage, hasHydrated, router, token]);
 
   const handleCreate = async (formData: CreateBudgetRequest) => {
+    if (!token) {
+      throw new Error('Brak tokenu uwierzytelniającego');
+    }
+
     try {
-      const newBudget = await createBudget(token!, formData);
+      const newBudget = await createBudget(token, formData);
       // Fetch updated budget with progress
-      const budgetWithProgress = await fetchBudgetById(token!, newBudget.id);
-      setBudgets([...budgets, budgetWithProgress]);
+      const budgetWithProgress = await fetchBudgetById(token, newBudget.id);
+      setBudgets((prev) => [...prev, budgetWithProgress]);
       setShowForm(false);
-    } catch (err: any) {
-      throw new Error(err.message || 'Błąd podczas tworzenia budżetu');
+    } catch (err) {
+      const message = handleErrorMessage(err, 'Błąd podczas tworzenia budżetu');
+      throw new Error(message);
     }
   };
 
   const handleUpdate = async (formData: CreateBudgetRequest) => {
     if (!editingBudget) return;
+    if (!token) {
+      throw new Error('Brak tokenu uwierzytelniającego');
+    }
 
     try {
-      const updated = await updateBudget(token!, editingBudget.id, formData);
+      const updated = await updateBudget(token, editingBudget.id, formData);
       // Fetch updated budget with progress
-      const budgetWithProgress = await fetchBudgetById(token!, updated.id);
-      setBudgets(budgets.map((b) => 
-        b.id === editingBudget.id ? budgetWithProgress : b
-      ));
+      const budgetWithProgress = await fetchBudgetById(token, updated.id);
+      setBudgets((prev) =>
+        prev.map((budget) =>
+          budget.id === editingBudget.id ? budgetWithProgress : budget,
+        ),
+      );
       setEditingBudget(undefined);
       setShowForm(false);
-    } catch (err: any) {
-      throw new Error(err.message || 'Błąd podczas aktualizacji budżetu');
+    } catch (err) {
+      const message = handleErrorMessage(err, 'Błąd podczas aktualizacji budżetu');
+      throw new Error(message);
     }
   };
 
@@ -137,14 +166,18 @@ export default function BudgetsPage() {
 
   const handleDelete = async () => {
     if (!deleteConfirm) return;
+    if (!token) {
+      setError('Brak tokenu uwierzytelniającego');
+      return;
+    }
 
     try {
-      await deleteBudget(token!, deleteConfirm.id);
-      setBudgets(budgets.filter((b) => b.id !== deleteConfirm.id));
+      await deleteBudget(token, deleteConfirm.id);
+      setBudgets((prev) => prev.filter((budget) => budget.id !== deleteConfirm.id));
       setDeleteConfirm(null);
-    } catch (err: any) {
+    } catch (err) {
       console.error('Error deleting budget:', err);
-      setError(err.message || 'Błąd podczas usuwania budżetu');
+      setError(handleErrorMessage(err, 'Błąd podczas usuwania budżetu'));
     }
   };
 
@@ -202,11 +235,17 @@ export default function BudgetsPage() {
         )}
 
         {/* Budgets List */}
-        <BudgetList
-          budgets={budgets}
-          onEdit={handleEdit}
-          onDelete={handleDeleteClick}
-        />
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <p className="text-gray-600 dark:text-gray-300">Ładowanie budżetów...</p>
+          </div>
+        ) : (
+          <BudgetList
+            budgets={budgets}
+            onEdit={handleEdit}
+            onDelete={handleDeleteClick}
+          />
+        )}
 
         {/* Delete Confirmation Modal */}
         {deleteConfirm && (
