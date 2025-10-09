@@ -54,6 +54,11 @@ memory.json
 ROADMAP_*.md
 *_LOCAL.md
 
+# Local project tracking (keep these local only)
+docs/project/TODO.md
+docs/project/COMPLETED.md
+docs/RELEASE_*.md
+
 # Temporary files
 *.tmp
 *.temp
