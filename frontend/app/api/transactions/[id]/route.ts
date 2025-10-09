@@ -7,6 +7,15 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
+/**
+ * Sanitizes user-controlled values before logging to prevent log injection.
+ * Removes control characters and caps length.
+ */
+const sanitizeForLog = (value: string, maxLength = 200): string =>
+  value
+    .replace(/[\u0000-\u001F\u007F]+/g, '')
+    .slice(0, maxLength);
+
 const BACKEND_URL = process.env.BACKEND_API_URL;
 
 if (!BACKEND_URL) {
@@ -33,7 +42,10 @@ export async function GET(
       );
     }
 
-    console.log(`🔄 [API Route] Proxying GET to backend: /transactions/${id}`);
+    console.log(
+      '🔄 [API Route] Proxying GET to backend:',
+      `/transactions/${sanitizeForLog(id)}`,
+    );
 
     // Forward request do backendu
     const backendResponse = await fetch(`${BACKEND_URL}/transactions/${id}`, {
@@ -81,7 +93,10 @@ export async function PATCH(
     // Pobierz body
     const body = await request.json();
 
-    console.log(`🔄 [API Route] Proxying PATCH to backend: /transactions/${id}`);
+    console.log(
+      '🔄 [API Route] Proxying PATCH to backend:',
+      `/transactions/${sanitizeForLog(id)}`,
+    );
 
     // Forward request do backendu
     const backendResponse = await fetch(`${BACKEND_URL}/transactions/${id}`, {
@@ -127,7 +142,10 @@ export async function DELETE(
       );
     }
 
-    console.log(`🔄 [API Route] Proxying DELETE to backend: /transactions/${id}`);
+    console.log(
+      '🔄 [API Route] Proxying DELETE to backend:',
+      `/transactions/${sanitizeForLog(id)}`,
+    );
 
     // Forward request do backendu
     const backendResponse = await fetch(`${BACKEND_URL}/transactions/${id}`, {
