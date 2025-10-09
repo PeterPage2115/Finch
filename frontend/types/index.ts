@@ -73,30 +73,6 @@ export interface CreateCategoryDto {
 }
 
 /**
- * Budget types
- */
-export interface Budget {
-  id: string;
-  userId: string;
-  categoryId: string;
-  category?: Category;
-  amount: number;
-  period: 'MONTHLY' | 'YEARLY';
-  startDate: string;
-  endDate?: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CreateBudgetDto {
-  categoryId: string;
-  amount: number;
-  period: 'MONTHLY' | 'YEARLY';
-  startDate: string;
-  endDate?: string;
-}
-
-/**
  * API Response types
  */
 export interface ApiResponse<T = unknown> {

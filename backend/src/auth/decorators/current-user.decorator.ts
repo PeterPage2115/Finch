@@ -27,19 +27,17 @@ interface AuthenticatedRequest extends Request {
  *   return this.service.findOne(userId);
  * }
  */
-export const CurrentUser = createParamDecorator<
-  keyof AuthenticatedUser | undefined,
-  ExecutionContext,
-  AuthenticatedUser | AuthenticatedUser[keyof AuthenticatedUser] | undefined
->((data, ctx) => {
-  const request = ctx.switchToHttp().getRequest<AuthenticatedRequest>();
+export const CurrentUser = createParamDecorator(
+  (data: keyof AuthenticatedUser | undefined, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest<AuthenticatedRequest>();
 
-  const { user } = request;
+    const { user } = request;
 
-  if (!user) {
-    return undefined;
-  }
+    if (!user) {
+      return undefined;
+    }
 
-  // Jeśli podano nazwę pola (np. 'id'), zwróć tylko to pole
-  return data ? user[data] : user;
-});
+    // Jeśli podano nazwę pola (np. 'id'), zwróć tylko to pole
+    return data ? user[data] : user;
+  },
+);
