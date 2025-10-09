@@ -149,6 +149,80 @@ npm run test
 # E2E tests
 npm run test:e2e
 
+# Coverage report
+npm run test:cov
+```
+
+**Requirements:**
+- All new features must have tests
+- Maintain >90% coverage
+- Tests must pass before PR approval
+
+### Frontend (Vitest)
+
+```bash
+# Run tests
+npm test run
+
+# Watch mode
+npm test
+
+# Coverage
+npm run test:coverage
+```
+
+---
+
+## Development Utilities
+
+### Database Reset Script
+
+When you need a fresh database with latest code changes:
+
+**Windows (PowerShell):**
+```powershell
+.\reset-database.ps1
+```
+
+**What it does:**
+1. Stops all Docker containers
+2. Rebuilds backend image with latest code
+3. Removes database volume (⚠️ deletes all data)
+4. Creates fresh database with migrations
+5. Starts backend service
+
+**Use when:**
+- After pulling new migrations
+- After changing backend code (categories, default data)
+- Testing needs clean slate
+- Database is in inconsistent state
+
+**⚠️ Warning:** This deletes ALL data! Only use in development.
+
+See [Database Reset Guide](./docs/DATABASE_RESET.md) for detailed documentation.
+
+### Seed Test Data
+
+Generate sample transactions for testing:
+
+**Windows (PowerShell):**
+```powershell
+.\backend\scripts\seed-test-data.ps1
+```
+
+**Prerequisites:**
+- Application running
+- User account created (demo@tracker.com)
+
+**What it creates:**
+- 90 transactions (3 months of data)
+- Realistic income/expense patterns
+- Uses existing user categories
+
+See `backend/scripts/README.md` for more details.
+
+---
+
 # Coverage
 npm run test:cov
 ```
