@@ -284,7 +284,8 @@ export class ImportService {
    */
   private checkDuplicate(row: CsvRowDto, duplicateSet: Set<string>): boolean {
     const date = new Date(row.date);
-    const key = `${date.toISOString()}_${row.amount}_${row.description}`;
+    const amount = new Decimal(row.amount);
+    const key = `${date.toISOString()}_${amount.toString()}_${row.description}`;
     return duplicateSet.has(key);
   }
 
