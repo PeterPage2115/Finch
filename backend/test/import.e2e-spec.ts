@@ -144,7 +144,9 @@ describe('ImportController (e2e)', () => {
       expect(response.body.failedRows.length).toBeGreaterThanOrEqual(1);
 
       // Check that at least one failed row has duplicate error
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call
       const hasDuplicateError = response.body.failedRows.some((row: any) =>
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return
         row.errors.some((err: string) =>
           err.includes('Duplicate transaction detected'),
         ),
