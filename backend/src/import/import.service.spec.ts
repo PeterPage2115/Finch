@@ -18,29 +18,29 @@ describe('ImportService', () => {
   const MOCK_CATEGORY_ID = '223e4567-e89b-12d3-a456-426614174001';
 
   const VALID_CSV_STRING = [
-    'date,amount,description,categoryName,type,notes',
+    'date,amount,description,category,type,notes',
     '2025-01-15,50.00,Grocery shopping,Groceries,EXPENSE,Weekly shopping',
     '2025-01-20,3000.00,Salary,Salary,INCOME,January salary',
   ].join('\n');
 
   const VALID_CSV_MINIMAL = [
-    'date,amount,description,categoryName',
+    'date,amount,description,category',
     '2025-01-15,50.00,Grocery shopping,Groceries',
     '2025-01-20,-75.50,Electricity bill,Utilities',
   ].join('\n');
 
   const INVALID_CSV_MALFORMED = [
-    'date,amount,description,categoryName',
+    'date,amount,description,category',
     '2025-01-15,50.00,"Unmatched quote,Groceries',
   ].join('\n');
 
   const UTF8_CSV_STRING = [
-    'date,amount,description,categoryName',
+    'date,amount,description,category',
     '2025-01-15,50.00,Zakupy spożywcze,Żywność',
     '2025-01-20,100.00,Książki edukacyjne,Edukacja',
   ].join('\n');
 
-  const EMPTY_CSV_STRING = 'date,amount,description,categoryName';
+  const EMPTY_CSV_STRING = 'date,amount,description,category';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -76,7 +76,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'Test transaction',
-        categoryName: 'Test Category',
+        category: 'Test Category',
         type: 'EXPENSE',
         notes: 'Test notes',
       };
@@ -91,7 +91,7 @@ describe('ImportService', () => {
         date: 'invalid-date',
         amount: '50.00',
         description: 'Test transaction',
-        categoryName: 'Test Category',
+        category: 'Test Category',
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -106,7 +106,7 @@ describe('ImportService', () => {
         date: '',
         amount: '50.00',
         description: 'Test transaction',
-        categoryName: 'Test Category',
+        category: 'Test Category',
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -119,7 +119,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: 'not-a-number',
         description: 'Test transaction',
-        categoryName: 'Test Category',
+        category: 'Test Category',
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -132,7 +132,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '0',
         description: 'Test transaction',
-        categoryName: 'Test Category',
+        category: 'Test Category',
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -145,7 +145,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: '',
-        categoryName: 'Test Category',
+        category: 'Test Category',
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -158,7 +158,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'a'.repeat(501),
-        categoryName: 'Test Category',
+        category: 'Test Category',
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -171,7 +171,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'Test transaction',
-        categoryName: '',
+        category: '',
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -184,7 +184,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'Test transaction',
-        categoryName: 'a'.repeat(101),
+        category: 'a'.repeat(101),
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -197,7 +197,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'Test transaction',
-        categoryName: 'Test Category',
+        category: 'Test Category',
         type: 'INVALID' as unknown as 'INCOME' | 'EXPENSE',
       };
 
@@ -211,7 +211,7 @@ describe('ImportService', () => {
         date: 'invalid',
         amount: '0',
         description: '',
-        categoryName: '',
+        category: '',
       };
 
       const errors = service['validateRow'](invalidRow);
@@ -237,7 +237,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'Grocery shopping',
-        categoryName: 'Groceries',
+        category: 'Groceries',
         type: 'EXPENSE',
         notes: 'Weekly shopping',
       });
@@ -245,7 +245,7 @@ describe('ImportService', () => {
         date: '2025-01-20',
         amount: '3000.00',
         description: 'Salary',
-        categoryName: 'Salary',
+        category: 'Salary',
         type: 'INCOME',
         notes: 'January salary',
       });
@@ -261,7 +261,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'Grocery shopping',
-        categoryName: 'Groceries',
+        category: 'Groceries',
       });
       expect(rows[0].type).toBeUndefined();
       expect(rows[0].notes).toBeUndefined();
@@ -274,9 +274,9 @@ describe('ImportService', () => {
 
       expect(rows).toHaveLength(2);
       expect(rows[0].description).toBe('Zakupy spożywcze');
-      expect(rows[0].categoryName).toBe('Żywność');
+      expect(rows[0].category).toBe('Żywność');
       expect(rows[1].description).toBe('Książki edukacyjne');
-      expect(rows[1].categoryName).toBe('Edukacja');
+      expect(rows[1].category).toBe('Edukacja');
     });
 
     it('should return empty array for CSV with only headers', async () => {
@@ -297,7 +297,7 @@ describe('ImportService', () => {
 
     it('should skip empty rows', async () => {
       const csvWithEmptyRows = [
-        'date,amount,description,categoryName',
+        'date,amount,description,category',
         '2025-01-15,50.00,Test,Category',
         ',,,',
         '2025-01-20,100.00,Test2,Category2',
@@ -441,7 +441,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'Test transaction',
-        categoryName: 'Test',
+        category: 'Test',
       };
       const date = new Date('2025-01-15');
       // Key must match the format that checkDuplicate generates (Decimal normalizes to '50')
@@ -458,7 +458,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '50.00',
         description: 'Test transaction',
-        categoryName: 'Test',
+        category: 'Test',
       };
       const duplicateSet = new Set<string>();
 
@@ -474,7 +474,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '-50.00',
         description: 'Test transaction',
-        categoryName: 'Test',
+        category: 'Test',
       };
       const mockTransaction = {
         id: '123',
@@ -518,7 +518,7 @@ describe('ImportService', () => {
         date: '2025-01-15',
         amount: '100.00',
         description: '  Test with spaces  ',
-        categoryName: 'Test',
+        category: 'Test',
       };
       const mockTransaction = {
         id: '123',
@@ -603,7 +603,7 @@ describe('ImportService', () => {
 
     it('should handle partial success with invalid rows', async () => {
       const csvWithErrors = [
-        'date,amount,description,categoryName',
+        'date,amount,description,category',
         '2025-01-15,50.00,Valid transaction,Groceries',
         'invalid-date,50.00,Invalid transaction,Groceries',
         '2025-01-20,0,Zero amount,Groceries',
@@ -678,7 +678,7 @@ describe('ImportService', () => {
     it('should detect and skip duplicate transactions', async () => {
       // Simplified test - just verify the duplicate logic works
       const csvWithOnlyOneRow = [
-        'date,amount,description,categoryName',
+        'date,amount,description,category',
         '2025-01-15,50.00,Grocery shopping,Groceries',
       ].join('\n');
 

@@ -22,7 +22,7 @@ export class CsvRowDto {
 
   @IsString()
   @IsNotEmpty()
-  categoryName: string;
+  category: string;
 
   @IsOptional()
   @IsEnum(['INCOME', 'EXPENSE'])

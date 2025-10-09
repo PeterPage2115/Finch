@@ -67,7 +67,7 @@ export class ImportService {
         })
         .on('data', (row: CsvRowDto) => {
           // Skip empty rows
-          if (row.date || row.amount || row.description || row.categoryName) {
+          if (row.date || row.amount || row.description || row.category) {
             rows.push(row);
           }
         })
@@ -139,11 +139,11 @@ export class ImportService {
         }
 
         // Find or create category
-        const cacheKey = `${row.categoryName.toLowerCase()}_${type}`;
+        const cacheKey = `${row.category.toLowerCase()}_${type}`;
         let categoryId = categoryCache.get(cacheKey);
         if (!categoryId) {
           const category = await this.findOrCreateCategory(
-            row.categoryName,
+            row.category,
             type === TransactionType.INCOME
               ? CategoryType.INCOME
               : CategoryType.EXPENSE,
@@ -154,7 +154,7 @@ export class ImportService {
 
           // Track if category was auto-created
           if (!category.existed) {
-            autoCreatedCategories.add(row.categoryName);
+            autoCreatedCategories.add(row.category);
           }
         }
 
@@ -221,9 +221,9 @@ export class ImportService {
     }
 
     // Validate category name
-    if (!row.categoryName || !row.categoryName.trim()) {
+    if (!row.category || !row.category.trim()) {
       errors.push('Category name is required');
-    } else if (row.categoryName.length > 100) {
+    } else if (row.category.length > 100) {
       errors.push('Category name must not exceed 100 characters');
     }
 

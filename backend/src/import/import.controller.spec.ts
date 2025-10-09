@@ -61,7 +61,7 @@ describe('ImportController', () => {
       mimetype: 'text/csv',
       size: 1024,
       buffer: Buffer.from(
-        'date,amount,description,categoryName\n2025-01-15,50.00,Test,Food',
+        'date,amount,description,category\n2025-01-15,50.00,Test,Food',
       ),
       stream: null as any,
       destination: '',
@@ -121,7 +121,7 @@ describe('ImportController', () => {
               date: 'invalid-date',
               amount: '50.00',
               description: 'Test',
-              categoryName: 'Food',
+              category: 'Food',
               type: TransactionType.EXPENSE,
             },
             errors: ['Date must be in YYYY-MM-DD format'],
