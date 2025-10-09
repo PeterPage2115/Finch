@@ -5,15 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Latest Release](https://img.shields.io/github/v/release/PeterPage2115/Finch?display_name=tag)](https://github.com/PeterPage2115/Finch/releases)
 [![CI](https://github.com/PeterPage2115/Finch/actions/workflows/ci.yml/badge.svg)](https://github.com/PeterPage2115/Finch/actions/workflows/ci.yml)
-[![CodeQL](https://github.com/PeterPage2115/Finch/actions/workflows/codeql.yml/badge.svg)](https://github.com/PeterPage2115/Finch/actions/workflows/codeql.yml)
-[![Docker Publish](https://github.com/PeterPage2115/Finch/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/PeterPage2115/Finch/actions/workflows/docker-publish.yml)
-[![Coverage](https://img.shields.io/badge/Coverage-Coming%20Soon-lightgrey)](#-testing)
-
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Next.js](https://img.shields.io/badge/Next.js-000000?logo=next.js&logoColor=white)](https://nextjs.org/)
-[![NestJS](https://img.shields.io/badge/NestJS-E0234E?logo=nestjs&logoColor=white)](https://nestjs.com/)
-[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 
 > 💡 **UI is currently in Polish.** English i18n coming in v1.1
 
