@@ -1,45 +1,45 @@
 ---
 name: Bug Report
-about: Zgłoś błąd aby pomóc nam ulepszyć Tracker Kasy
+about: Report a bug to help us improve Finch
 title: '[BUG] '
 labels: bug
 assignees: ''
 
 ---
 
-## 🐛 Opis błędu
-<!-- Jasny i zwięzły opis problemu -->
+## 🐛 Bug Description
+<!-- A clear and concise description of the problem -->
 
-## 📋 Kroki do reprodukcji
-1. Przejdź do '...'
-2. Kliknij na '...'
-3. Przewiń do '...'
-4. Błąd się pojawia
+## 📋 Steps to Reproduce
+1. Go to '...'
+2. Click on '...'
+3. Scroll down to '...'
+4. See error
 
-## ✅ Oczekiwane zachowanie
-<!-- Co powinno się stać -->
+## ✅ Expected Behavior
+<!-- What should happen -->
 
-## ❌ Rzeczywiste zachowanie
-<!-- Co się rzeczywiście dzieje -->
+## ❌ Actual Behavior
+<!-- What actually happens -->
 
-## 📸 Zrzuty ekranu
-<!-- Jeśli dotyczy, dodaj zrzuty ekranu -->
+## 📸 Screenshots
+<!-- If applicable, add screenshots to help explain the problem -->
 
-## 🖥️ Środowisko
-- **OS:** [np. Windows 11, Ubuntu 22.04, macOS 14]
-- **Przeglądarka:** [np. Chrome 120, Firefox 121, Safari 17]
-- **Wersja Tracker Kasy:** [np. v1.0.0]
-- **Środowisko:** [Development / Docker / Production]
+## 🖥️ Environment
+- **OS:** [e.g., Windows 11, Ubuntu 22.04, macOS 14]
+- **Browser:** [e.g., Chrome 120, Firefox 121, Safari 17]
+- **Finch Version:** [e.g., v1.0.0]
+- **Environment:** [Development / Docker / Production]
 
-## 📝 Dodatkowy kontekst
-<!-- Dodatkowe informacje, logi, itp. -->
+## 📝 Additional Context
+<!-- Any other information, logs, etc. -->
 
-## 🔍 Logi
+## 🔍 Logs
 ```
-Wklej tutaj istotne logi z konsoli lub terminala
+Paste relevant logs from console or terminal here
 ```
 
 ## ✔️ Checklist
-- [ ] Sprawdziłem czy ten błąd nie został już zgłoszony
-- [ ] Sprawdziłem dokumentację i FAQ
-- [ ] Problem występuje w najnowszej wersji
+- [ ] I have checked that this bug has not already been reported
+- [ ] I have checked the documentation and FAQ
+- [ ] The issue occurs in the latest version

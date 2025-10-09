@@ -1,34 +1,34 @@
 ---
 name: Feature Request
-about: Zaproponuj nową funkcjonalność dla Tracker Kasy
+about: Suggest a new feature for Finch
 title: '[FEATURE] '
 labels: enhancement
 assignees: ''
 
 ---
 
-## 🚀 Opis funkcjonalności
-<!-- Jasny i zwięzły opis proponowanej funkcjonalności -->
+## 🚀 Feature Description
+<!-- A clear and concise description of the proposed feature -->
 
-## 💡 Motywacja / Problem do rozwiązania
-<!-- Dlaczego ta funkcjonalność jest potrzebna? Jaki problem rozwiązuje? -->
+## 💡 Motivation / Problem to Solve
+<!-- Why is this feature needed? What problem does it solve? -->
 
-## 📋 Proponowane rozwiązanie
-<!-- Jak widzisz implementację tej funkcjonalności? -->
+## 📋 Proposed Solution
+<!-- How do you envision the implementation of this feature? -->
 
-## 🔄 Alternatywy
-<!-- Czy rozważałeś inne rozwiązania? Opisz je tutaj -->
+## 🔄 Alternatives
+<!-- Have you considered other solutions? Describe them here -->
 
-## 📸 Mockupy / Przykłady
-<!-- Jeśli masz szkice interfejsu lub przykłady z innych aplikacji -->
+## 📸 Mockups / Examples
+<!-- If you have UI sketches or examples from other applications -->
 
-## 🎯 Priorytet
-- [ ] Critical - aplikacja nie działa bez tego
-- [ ] High - bardzo ważna funkcjonalność
-- [ ] Medium - przydatna, ale nie krytyczna
+## 🎯 Priority
+- [ ] Critical - app doesn't work without it
+- [ ] High - very important feature
+- [ ] Medium - useful but not critical
 - [ ] Low - nice to have
 
-## 🏷️ Kategoria
+## 🏷️ Category
 - [ ] Frontend (UI/UX)
 - [ ] Backend (API)
 - [ ] Database
@@ -36,10 +36,10 @@ assignees: ''
 - [ ] Documentation
 - [ ] Testing
 
-## 📝 Dodatkowy kontekst
-<!-- Wszelkie dodatkowe informacje, linki, itp. -->
+## 📝 Additional Context
+<!-- Any additional information, links, etc. -->
 
 ## ✔️ Checklist
-- [ ] Sprawdziłem czy ta funkcjonalność nie została już zaproponowana
-- [ ] Sprawdziłem roadmap projektu
-- [ ] Ta funkcjonalność jest zgodna z filozofią projektu
+- [ ] I have checked that this feature has not already been requested
+- [ ] I have checked the project roadmap
+- [ ] This feature aligns with the project philosophy

@@ -84,3 +84,12 @@ wiki/
 
 # Old/archived documentation
 README_OLD.md
+
+# Memory
+memory.json
+
+# Local Planning Documents (not for public repo)
+ROADMAP_v1.1_COMPETITOR_ANALYSIS.md
+PLANNING_*.md
+NOTES_*.md
+*_INTERNAL.md

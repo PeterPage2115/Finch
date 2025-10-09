@@ -1,22 +1,22 @@
 # Pull Request
 
-## 📝 Opis zmian
-<!-- Opisz co zostało zrobione -->
+## 📝 Description of Changes
+<!-- Describe what has been done -->
 
-## 🎯 Typ PR
-- [ ] Bug fix (zmiana nie łamiąca kompatybilności)
-- [ ] New feature (zmiana nie łamiąca kompatybilności)
-- [ ] Breaking change (fix lub feature łamiący kompatybilność)
+## 🎯 PR Type
+- [ ] Bug fix (non-breaking change)
+- [ ] New feature (non-breaking change)
+- [ ] Breaking change (fix or feature that breaks compatibility)
 - [ ] Documentation update
-- [ ] Refactoring (bez zmian funkcjonalnych)
+- [ ] Refactoring (no functional changes)
 - [ ] Performance improvement
 - [ ] Test coverage improvement
 
-## 🔗 Powiązane Issue
-<!-- Fixes #123 lub Closes #456 -->
+## 🔗 Related Issue
+<!-- Fixes #123 or Closes #456 -->
 
-## 📋 Zmiany
-<!-- Lista zmian wprowadzonych w tym PR -->
+## 📋 Changes
+<!-- List of changes introduced in this PR -->
 - 
 - 
 - 
@@ -24,30 +24,30 @@
 ## ✅ Checklist
 
 ### Code Quality
-- [ ] Kod jest sformatowany (prettier/eslint)
-- [ ] Brak console.log/debugger w production code
-- [ ] Brak nieużywanych importów/zmiennych
-- [ ] TypeScript: brak błędów kompilacji
-- [ ] Następuję konwencję Conventional Commits
+- [ ] Code is formatted (prettier/eslint)
+- [ ] No console.log/debugger in production code
+- [ ] No unused imports/variables
+- [ ] TypeScript: no compilation errors
+- [ ] Following Conventional Commits convention
 
 ### Testing
-- [ ] Dodałem/zaktualizowałem testy jednostkowe
-- [ ] Wszystkie testy przechodzą (`npm test`)
-- [ ] Przetestowałem manualnie w przeglądarce
-- [ ] Sprawdziłem responsywność (mobile/tablet/desktop)
+- [ ] Added/updated unit tests
+- [ ] All tests pass (`npm test`)
+- [ ] Manually tested in browser
+- [ ] Checked responsiveness (mobile/tablet/desktop)
 
 ### Documentation
-- [ ] Zaktualizowałem dokumentację (jeśli dotyczy)
-- [ ] Dodałem komentarze do skomplikowanego kodu
-- [ ] Zaktualizowałem CHANGELOG.md
+- [ ] Updated documentation (if applicable)
+- [ ] Added comments to complex code
+- [ ] Updated CHANGELOG.md
 
 ### Security & Performance
-- [ ] Sprawdziłem security implications
-- [ ] Brak nowych vulnerabilities (`npm audit`)
-- [ ] Nie ma problemów z performance
+- [ ] Checked security implications
+- [ ] No new vulnerabilities (`npm audit`)
+- [ ] No performance issues
 
-## 📸 Zrzuty ekranu
-<!-- Jeśli dotyczy zmian w UI -->
+## 📸 Screenshots
+<!-- If applicable for UI changes -->
 
 ## 🧪 Jak przetestować
 1. 
