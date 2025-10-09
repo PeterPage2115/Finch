@@ -8,6 +8,10 @@ Write-Host ""
 Write-Host "[*] Stopping Docker containers..." -ForegroundColor Cyan
 docker compose down
 
+# Rebuild backend image with latest code
+Write-Host "[*] Rebuilding backend image with latest code..." -ForegroundColor Cyan
+docker compose build backend
+
 # Remove the correct database volume (name from docker-compose.yml)
 Write-Host "[*] Removing database volume (Finch_pgdata)..." -ForegroundColor Cyan
 docker volume rm Finch_pgdata -f
