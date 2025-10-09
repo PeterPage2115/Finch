@@ -607,6 +607,104 @@ Invoke-WebRequest -Uri http://localhost:3001/budgets/budget-uuid -Method DELETE 
 
 ---
 
+## 📥 CSV Import Endpoints
+
+### Import Transactions from CSV
+
+Bulk import transactions from a CSV file.
+
+**Endpoint:** `POST /import/transactions`
+
+**Authentication:** Required (JWT Bearer token)
+
+**Content-Type:** `multipart/form-data`
+
+**Request Body:**
+- `file`: CSV file (max 5MB)
+
+**CSV Format:**
+```csv
+date,amount,type,category,description
+2025-01-15,50.00,EXPENSE,Food,Grocery shopping
+2025-01-16,1500.00,INCOME,Salary,Monthly paycheck
+```
+
+**Required Columns:**
+- `date`: ISO 8601 format (`YYYY-MM-DD`)
+- `amount`: Positive number
+- `type`: `INCOME` or `EXPENSE`
+- `category`: Category name (case-insensitive)
+- `description`: Optional text
+
+**Success Response (200 OK):**
+```json
+{
+  "successCount": 2,
+  "failedCount": 1,
+  "autoCreatedCategories": ["Food", "Transport"],
+  "failedRows": [
+    {
+      "rowNumber": 3,
+      "errors": [
+        "Invalid date format. Use ISO 8601 (YYYY-MM-DD)"
+      ]
+    }
+  ]
+}
+```
+
+**Features:**
+- ✅ Duplicate detection (date + amount + description)
+- ✅ Auto-create categories if not found
+- ✅ UTF-8 encoding support
+- ✅ Partial imports (valid rows imported, invalid skipped)
+- ✅ Row-level error reporting
+
+**Error Responses:**
+
+**400 Bad Request** - Invalid file:
+```json
+{
+  "statusCode": 400,
+  "message": "Only CSV files are allowed",
+  "error": "Bad Request"
+}
+```
+
+**413 Payload Too Large** - File too large:
+```json
+{
+  "statusCode": 413,
+  "message": "File size exceeds 5MB limit",
+  "error": "Payload Too Large"
+}
+```
+
+**401 Unauthorized** - Missing or invalid token:
+```json
+{
+  "statusCode": 401,
+  "message": "Unauthorized"
+}
+```
+
+**Example (PowerShell):**
+```powershell
+$headers = @{Authorization="Bearer $token"}
+$filePath = "transactions.csv"
+$form = @{file=Get-Item $filePath}
+Invoke-WebRequest -Uri http://localhost:3001/import/transactions -Method POST -Headers $headers -Form $form
+```
+
+**Example (cURL):**
+```bash
+curl -X POST http://localhost:3001/import/transactions \
+  -H "Authorization: Bearer $TOKEN" \
+  -F "file=@transactions.csv"
+```
+
+---
+
 ## 🧪 Testing Examples (Authentication)
 
 ### Using PowerShell
@@ -651,9 +749,10 @@ curl -X GET http://localhost:3001/auth/me \
 - [ ] Rate limiting for auth endpoints
 - [ ] Account lockout after failed attempts
 - [ ] Two-factor authentication (2FA)
+- [x] **CSV Import** (✅ Implemented in v1.0.0)
 
 ---
 
-**Last Updated:** October 2, 2025  
+**Last Updated:** January 10, 2025  
 **Version:** 1.0.0  
-**Status:** Phase 3.1 - Auth System Implemented ✅
+**Status:** CSV Import Feature Added ✅

@@ -10,6 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- 📥 **CSV Import Feature** - Bulk import transactions from CSV files
+  - ImportService with CSV parsing (@fast-csv/parse)
+  - Duplicate detection by date + amount + description
+  - Auto-create categories (case-insensitive matching)
+  - UTF-8 encoding support (international characters)
+  - Partial imports with row-level error reporting
+  - 5MB file size limit with client and server validation
+  - 42 comprehensive tests (30 unit + 6 controller + 6 E2E)
+  - Frontend components: ImportTransactionsButton, ImportResultsModal
+  - Next.js API route handler for multipart/form-data
+  - Dashboard integration with results modal
 - Screenshots in README (homepage, dashboard, categories, budgets, reports)
 
 ### Changed
@@ -28,6 +39,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - .gitignore pattern for coverage folders (recursive)
 - Git author configuration (email updated)
 - Screenshot authentication issues (proper test@example.com login)
+- Decimal normalization in duplicate detection (Decimal.toString())
+- FileTypeValidator MIME type bug (replaced with extension check)
+- E2E database connection for local testing (localhost vs docker hostname)
+- ESLint unsafe-call errors in E2E tests
 
 ---
 

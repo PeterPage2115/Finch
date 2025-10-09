@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
@@ -61,7 +60,9 @@ describe('ImportController', () => {
       encoding: '7bit',
       mimetype: 'text/csv',
       size: 1024,
-      buffer: Buffer.from('date,amount,description,categoryName\n2025-01-15,50.00,Test,Food'),
+      buffer: Buffer.from(
+        'date,amount,description,categoryName\n2025-01-15,50.00,Test,Food',
+      ),
       stream: null as any,
       destination: '',
       filename: '',
@@ -77,9 +78,14 @@ describe('ImportController', () => {
         autoCreatedCategories: ['Food'],
       };
 
-      mockImportService.parseAndImportTransactions.mockResolvedValue(mockResult);
+      mockImportService.parseAndImportTransactions.mockResolvedValue(
+        mockResult,
+      );
 
-      const result = await controller.importTransactions(mockFile, mockRequest as any);
+      const result = await controller.importTransactions(
+        mockFile,
+        mockRequest as any,
+      );
 
       expect(result).toEqual(mockResult);
       expect(service.parseAndImportTransactions).toHaveBeenCalledWith(
@@ -124,9 +130,14 @@ describe('ImportController', () => {
         autoCreatedCategories: [],
       };
 
-      mockImportService.parseAndImportTransactions.mockResolvedValue(mockResult);
+      mockImportService.parseAndImportTransactions.mockResolvedValue(
+        mockResult,
+      );
 
-      const result = await controller.importTransactions(mockFile, mockRequest as any);
+      const result = await controller.importTransactions(
+        mockFile,
+        mockRequest as any,
+      );
 
       expect(result).toEqual(mockResult);
       expect(result.successCount).toBe(1);
@@ -143,9 +154,14 @@ describe('ImportController', () => {
         autoCreatedCategories: ['New Category 1', 'New Category 2'],
       };
 
-      mockImportService.parseAndImportTransactions.mockResolvedValue(mockResult);
+      mockImportService.parseAndImportTransactions.mockResolvedValue(
+        mockResult,
+      );
 
-      const result = await controller.importTransactions(mockFile, mockRequest as any);
+      const result = await controller.importTransactions(
+        mockFile,
+        mockRequest as any,
+      );
 
       expect(result.autoCreatedCategories).toHaveLength(2);
       expect(result.autoCreatedCategories).toContain('New Category 1');
@@ -168,7 +184,9 @@ describe('ImportController', () => {
         autoCreatedCategories: [],
       };
 
-      mockImportService.parseAndImportTransactions.mockResolvedValue(mockResult);
+      mockImportService.parseAndImportTransactions.mockResolvedValue(
+        mockResult,
+      );
 
       await controller.importTransactions(mockFile, differentRequest as any);
 

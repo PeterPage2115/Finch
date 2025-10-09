@@ -54,6 +54,7 @@ For detailed instructions, see the [📖 Wiki](https://github.com/PeterPage2115/
 - 📊 **Modern UI** - Clean dashboard with interactive charts
 - 💼 **Budget Tracking** - Set limits and monitor spending
 - 📈 **Financial Reports** - Analyze income, expenses, and trends
+- 📥 **CSV Import** - Bulk import transactions from CSV files
 - 🎨 **Dark Mode** - Full dark theme support
 - 🔐 **Secure** - JWT authentication, bcrypt passwords
 - 📱 **Responsive** - Works on desktop and mobile
