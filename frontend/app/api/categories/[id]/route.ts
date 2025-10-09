@@ -4,7 +4,7 @@ const BACKEND_URL = process.env.BACKEND_API_URL || 'http://backend:3001';
 
 /**
  * GET /api/categories/[id]
- * Pobiera szczegóły pojedynczej kategorii
+ * Fetches single category details
  */
 export async function GET(
   request: NextRequest,
@@ -15,7 +15,7 @@ export async function GET(
 
   if (!authHeader) {
     return NextResponse.json(
-      { message: 'Brak tokenu autoryzacji' },
+      { message: 'Authorization token missing' },
       { status: 401 }
     );
   }
@@ -47,7 +47,7 @@ export async function GET(
 
 /**
  * PATCH /api/categories/[id]
- * Aktualizuje kategorię
+ * Updates category
  */
 export async function PATCH(
   request: NextRequest,
@@ -58,7 +58,7 @@ export async function PATCH(
 
   if (!authHeader) {
     return NextResponse.json(
-      { message: 'Brak tokenu autoryzacji' },
+      { message: 'Authorization token missing' },
       { status: 401 }
     );
   }
@@ -93,7 +93,7 @@ export async function PATCH(
 
 /**
  * DELETE /api/categories/[id]
- * Usuwa kategorię
+ * Deletes category
  */
 export async function DELETE(
   request: NextRequest,
@@ -104,7 +104,7 @@ export async function DELETE(
 
   if (!authHeader) {
     return NextResponse.json(
-      { message: 'Brak tokenu autoryzacji' },
+      { message: 'Authorization token missing' },
       { status: 401 }
     );
   }

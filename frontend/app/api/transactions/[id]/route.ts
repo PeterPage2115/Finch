@@ -1,7 +1,7 @@
 /**
  * API Route: /api/transactions/[id]
  * 
- * Proxy do backendu dla operacji na pojedynczej transakcji
+ * Proxy to backend for operations on individual transaction
  * GET, PATCH, DELETE
  */
 
@@ -24,7 +24,7 @@ if (!BACKEND_URL) {
 
 /**
  * GET /api/transactions/[id]
- * Pobiera pojedynczą transakcję
+ * Fetches single transaction
  */
 export async function GET(
   request: NextRequest,
@@ -47,7 +47,7 @@ export async function GET(
       `/transactions/${sanitizeForLog(id)}`,
     );
 
-    // Forward request do backendu
+    // Forward request to backend
     const backendResponse = await fetch(`${BACKEND_URL}/transactions/${id}`, {
       method: 'GET',
       headers: {
@@ -72,7 +72,7 @@ export async function GET(
 
 /**
  * PATCH /api/transactions/[id]
- * Aktualizuje transakcję
+ * Updates transaction
  */
 export async function PATCH(
   request: NextRequest,
@@ -81,7 +81,7 @@ export async function PATCH(
   try {
     const { id } = await params;
     
-    // Pobierz Authorization header
+    // Get Authorization header
     const authHeader = request.headers.get('authorization');
     if (!authHeader) {
       return NextResponse.json(
@@ -90,7 +90,7 @@ export async function PATCH(
       );
     }
 
-    // Pobierz body
+    // Get body
     const body = await request.json();
 
     console.log(
@@ -98,7 +98,7 @@ export async function PATCH(
       `/transactions/${sanitizeForLog(id)}`,
     );
 
-    // Forward request do backendu
+    // Forward request to backend
     const backendResponse = await fetch(`${BACKEND_URL}/transactions/${id}`, {
       method: 'PATCH',
       headers: {
@@ -124,7 +124,7 @@ export async function PATCH(
 
 /**
  * DELETE /api/transactions/[id]
- * Usuwa transakcję
+ * Deletes transaction
  */
 export async function DELETE(
   request: NextRequest,
@@ -133,7 +133,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     
-    // Pobierz Authorization header
+    // Get Authorization header
     const authHeader = request.headers.get('authorization');
     if (!authHeader) {
       return NextResponse.json(
@@ -147,7 +147,7 @@ export async function DELETE(
       `/transactions/${sanitizeForLog(id)}`,
     );
 
-    // Forward request do backendu
+    // Forward request to backend
     const backendResponse = await fetch(`${BACKEND_URL}/transactions/${id}`, {
       method: 'DELETE',
       headers: {

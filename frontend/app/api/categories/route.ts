@@ -4,7 +4,7 @@ const BACKEND_API_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
 
 /**
  * GET /api/categories
- * Proxy do backendu - pobiera kategorie użytkownika
+ * Proxy to backend - fetches user categories
  */
 export async function GET(request: NextRequest) {
   try {
@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
 
 /**
  * POST /api/categories
- * Proxy do backendu - tworzy nową kategorię
+ * Proxy to backend - creates new category
  */
 export async function POST(request: NextRequest) {
   try {

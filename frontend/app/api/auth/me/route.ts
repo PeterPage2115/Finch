@@ -1,31 +1,31 @@
 /**
  * API Route: GET /api/auth/me
  * 
- * Proxy do backend auth endpoint dla pobrania profilu użytkownika.
- * Wykonuje request server-side do backendu z tokenem JWT.
+ * Proxy to backend auth endpoint for fetching user profile.
+ * Executes server-side request to backend with JWT token.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 
-// Backend URL - dostępne tylko na serwerze, NIE w przeglądarce
+// Backend URL - available only on server, NOT in browser
 const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
 
 export async function GET(request: NextRequest) {
   try {
-    console.log('👤 [API Route] GET /api/auth/me - proxy do backend');
+    console.log('👤 [API Route] GET /api/auth/me - proxy to backend');
     
-    // Pobierz Authorization header z request
+    // Get Authorization header from request
     const authHeader = request.headers.get('authorization');
     
     if (!authHeader) {
-      console.warn('⚠️ [API Route] Brak Authorization header');
+      console.warn('⚠️ [API Route] Missing Authorization header');
       return NextResponse.json(
-        { message: 'Brak tokenu autoryzacji' },
+        { message: 'Authorization token missing' },
         { status: 401 }
       );
     }
     
-    console.log('📤 [API Route] Przekazywanie do backend:', {
+    console.log('📤 [API Route] Forwarding to backend:', {
       url: `${BACKEND_URL}/auth/me`,
       hasToken: true
     });
@@ -39,15 +39,15 @@ export async function GET(request: NextRequest) {
       },
     });
     
-    console.log('📥 [API Route] Odpowiedź z backend:', {
+    console.log('📥 [API Route] Response from backend:', {
       status: response.status,
       ok: response.ok
     });
     
-    // Pobierz dane z odpowiedzi
+    // Get data from response
     const data = await response.json();
     
-    // Zwróć odpowiedź do przeglądarki z tym samym statusem co backend
+    // Return response to browser with same status as backend
     return NextResponse.json(data, { 
       status: response.status,
       headers: {

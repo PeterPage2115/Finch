@@ -1,23 +1,23 @@
 /**
  * API Route: POST /api/auth/login
  * 
- * Proxy do backend auth endpoint.
- * Wykonuje request server-side do backendu i zwraca odpowiedź do przeglądarki.
+ * Proxy to backend auth endpoint.
+ * Executes server-side request to backend and returns response to browser.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 
-// Backend URL - dostępne tylko na serwerze, NIE w przeglądarce
+// Backend URL - available only on server, NOT in browser
 const BACKEND_URL = process.env.BACKEND_API_URL || 'http://localhost:3001';
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('🔐 [API Route] POST /api/auth/login - proxy do backend');
+    console.log('🔐 [API Route] POST /api/auth/login - proxy to backend');
     
-    // Pobierz body z request
+    // Get body from request
     const body = await request.json();
     
-    console.log('📤 [API Route] Przekazywanie do backend:', {
+    console.log('📤 [API Route] Forwarding to backend:', {
       url: `${BACKEND_URL}/auth/login`,
       email: body.email
     });
@@ -31,15 +31,15 @@ export async function POST(request: NextRequest) {
       body: JSON.stringify(body),
     });
     
-    console.log('📥 [API Route] Odpowiedź z backend:', {
+    console.log('📥 [API Route] Response from backend:', {
       status: response.status,
       ok: response.ok
     });
     
-    // Pobierz dane z odpowiedzi
+    // Get data from response
     const data = await response.json();
     
-    // Zwróć odpowiedź do przeglądarki z tym samym statusem co backend
+    // Return response to browser with same status as backend
     return NextResponse.json(data, { 
       status: response.status,
       headers: {

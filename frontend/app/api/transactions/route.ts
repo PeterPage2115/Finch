@@ -1,8 +1,8 @@
 /**
  * API Route: GET /api/transactions
  * 
- * Proxy do backendu dla pobierania listy transakcji z filtrami i paginacją
- * Używa BACKEND_API_URL (server-side only)
+ * Proxy to backend for fetching transaction list with filters and pagination
+ * Uses BACKEND_API_URL (server-side only)
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -25,7 +25,7 @@ if (!BACKEND_URL) {
 
 /**
  * GET /api/transactions
- * Pobiera listę transakcji z filtrami i paginacją
+ * Fetches transaction list with filters and pagination
  * 
  * Query params:
  * - type?: INCOME | EXPENSE
@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
 
     console.log('🔄 [API Route] Proxying GET to backend:', sanitizeForLog(endpoint));
 
-    // Forward request do backendu
+    // Forward request to backend
     const backendResponse = await fetch(`${BACKEND_URL}${endpoint}`, {
       method: 'GET',
       headers: {
@@ -92,12 +92,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Pobierz body
+    // Get body
     const body = await request.json();
 
     console.log('🔄 [API Route] Proxying POST to backend: /transactions');
 
-    // Forward request do backendu
+    // Forward request to backend
     const backendResponse = await fetch(`${BACKEND_URL}/transactions`, {
       method: 'POST',
       headers: {
