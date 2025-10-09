@@ -120,8 +120,8 @@ export interface IconCategory {
 }
 
 export const INCOME_ICONS: IconCategory = {
-  name: 'Przychody',
-  description: 'Ikony dla kategorii przychodów (wynagrodzenie, bonusy, etc.)',
+  name: 'Income',
+  description: 'Icons for income-related categories (salary, bonuses, etc.)',
   icons: [
     'DollarSign',
     'TrendingUp',
@@ -134,50 +134,50 @@ export const INCOME_ICONS: IconCategory = {
 };
 
 export const EXPENSE_FOOD_ICONS: IconCategory = {
-  name: 'Jedzenie i napoje',
-  description: 'Ikony dla kategorii żywności i napojów',
+  name: 'Food & drinks',
+  description: 'Icons for food and beverage categories',
   icons: ['UtensilsCrossed', 'Pizza', 'Coffee', 'Beer'],
 };
 
 export const EXPENSE_SHOPPING_ICONS: IconCategory = {
-  name: 'Zakupy',
-  description: 'Ikony dla kategorii zakupów',
+  name: 'Shopping',
+  description: 'Icons for shopping categories',
   icons: ['ShoppingBag', 'ShoppingCart', 'Shirt'],
 };
 
 export const EXPENSE_HOME_ICONS: IconCategory = {
-  name: 'Dom i rachunki',
-  description: 'Ikony dla kategorii domowych i rachunków',
+  name: 'Home & bills',
+  description: 'Icons for home and utilities categories',
   icons: ['Home', 'Zap', 'Receipt'],
 };
 
 export const EXPENSE_TRANSPORT_ICONS: IconCategory = {
-  name: 'Transport',
-  description: 'Ikony dla kategorii transportowych',
+  name: 'Transportation',
+  description: 'Icons for travel and transportation categories',
   icons: ['Car', 'Bus', 'Train', 'Plane', 'Bike'],
 };
 
 export const EXPENSE_HEALTH_ICONS: IconCategory = {
-  name: 'Zdrowie i sport',
-  description: 'Ikony dla kategorii zdrowotnych i sportowych',
+  name: 'Health & fitness',
+  description: 'Icons for health and fitness categories',
   icons: ['Heart', 'Pill', 'Dumbbell'],
 };
 
 export const EXPENSE_ENTERTAINMENT_ICONS: IconCategory = {
-  name: 'Rozrywka',
-  description: 'Ikony dla kategorii rozrywkowych',
+  name: 'Entertainment',
+  description: 'Icons for entertainment categories',
   icons: ['Film', 'Gamepad2', 'Music'],
 };
 
 export const EXPENSE_EDUCATION_ICONS: IconCategory = {
-  name: 'Edukacja',
-  description: 'Ikony dla kategorii edukacyjnych',
+  name: 'Education',
+  description: 'Icons for education categories',
   icons: ['GraduationCap', 'Book'],
 };
 
 export const GENERIC_ICONS: IconCategory = {
-  name: 'Ogólne',
-  description: 'Ogólne ikony uniwersalne',
+  name: 'General',
+  description: 'Universal icons for any category',
   icons: ['Tag', 'Star', 'Gift', 'Briefcase', 'Phone', 'Laptop', 'Camera', 'MoreHorizontal'],
 };
 

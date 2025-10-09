@@ -9,13 +9,16 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import ProgressBar from '@/components/budgets/ProgressBar';
+import { formatCurrency } from '@/lib/utils';
+
+const currencyText = (value: number): string => formatCurrency(value).replace(/\u00a0/g, ' ');
 
 describe('ProgressBar', () => {
   describe('Display and Calculations', () => {
     it('should render spent and limit amounts', () => {
       render(<ProgressBar percentage={50} spent={500} limit={1000} />);
       
-      expect(screen.getByText('500.00 zł / 1000.00 zł')).toBeInTheDocument();
+    expect(screen.getByText(`${currencyText(500)} / ${currencyText(1000)}`)).toBeInTheDocument();
     });
 
     it('should display percentage', () => {
@@ -87,33 +90,33 @@ describe('ProgressBar', () => {
     it('should not render alerts when array is empty', () => {
       render(<ProgressBar percentage={50} spent={500} limit={1000} alerts={[]} />);
       
-      expect(screen.queryByText(/wykorzystane/)).not.toBeInTheDocument();
-      expect(screen.queryByText(/Przekroczony/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/80% used/i)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Limit exceeded/i)).not.toBeInTheDocument();
     });
 
     it('should render 80% alert when in alerts array', () => {
       render(<ProgressBar percentage={85} spent={850} limit={1000} alerts={['80%']} />);
       
-      expect(screen.getByText('⚠️ 80% wykorzystane')).toBeInTheDocument();
+      expect(screen.getByText('⚠️ 80% used')).toBeInTheDocument();
     });
 
     it('should render 100% alert when in alerts array', () => {
       render(<ProgressBar percentage={105} spent={1050} limit={1000} alerts={['100%']} />);
       
-      expect(screen.getByText('🚨 Przekroczony!')).toBeInTheDocument();
+      expect(screen.getByText('🚨 Limit exceeded!')).toBeInTheDocument();
     });
 
     it('should render both alerts when both in array', () => {
       render(<ProgressBar percentage={105} spent={1050} limit={1000} alerts={['80%', '100%']} />);
       
-      expect(screen.getByText('⚠️ 80% wykorzystane')).toBeInTheDocument();
-      expect(screen.getByText('🚨 Przekroczony!')).toBeInTheDocument();
+      expect(screen.getByText('⚠️ 80% used')).toBeInTheDocument();
+      expect(screen.getByText('🚨 Limit exceeded!')).toBeInTheDocument();
     });
 
     it('should not render alerts when not provided (default)', () => {
       render(<ProgressBar percentage={90} spent={900} limit={1000} />);
       
-      expect(screen.queryByText(/wykorzystane/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/80% used/)).not.toBeInTheDocument();
     });
   });
 
@@ -121,8 +124,8 @@ describe('ProgressBar', () => {
     it('should handle 0% progress', () => {
       render(<ProgressBar percentage={0} spent={0} limit={1000} />);
       
-      expect(screen.getByText('0%')).toBeInTheDocument();
-      expect(screen.getByText('0.00 zł / 1000.00 zł')).toBeInTheDocument();
+    expect(screen.getByText('0%')).toBeInTheDocument();
+    expect(screen.getByText(`${currencyText(0)} / ${currencyText(1000)}`)).toBeInTheDocument();
     });
 
     it('should handle 100% exactly', () => {
@@ -136,7 +139,7 @@ describe('ProgressBar', () => {
     it('should handle decimal amounts', () => {
       render(<ProgressBar percentage={33.33} spent={333.33} limit={1000} />);
       
-      expect(screen.getByText('333.33 zł / 1000.00 zł')).toBeInTheDocument();
+    expect(screen.getByText(`${currencyText(333.33)} / ${currencyText(1000)}`)).toBeInTheDocument();
       expect(screen.getByText('33%')).toBeInTheDocument();
     });
   });

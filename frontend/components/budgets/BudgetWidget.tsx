@@ -27,7 +27,7 @@ export default function BudgetWidget({ budgets, isLoading }: BudgetWidgetProps) 
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <TrendingUp className="text-blue-600 dark:text-blue-400" size={20} />
-          Budżety
+          Budgets
         </h3>
         <Link
           href="/budgets"
@@ -142,18 +142,18 @@ function EmptyState() {
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
           <TrendingUp className="text-blue-600 dark:text-blue-400" size={20} />
-          Budżety
+          Budgets
         </h3>
       </div>
       <div className="text-center py-8">
         <p className="text-gray-500 dark:text-gray-400 mb-4">
-          Nie masz jeszcze żadnych budżetów
+          You don&apos;t have any budgets yet
         </p>
         <Link
           href="/budgets"
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition-colors"
         >
-          Dodaj pierwszy budżet
+          Add your first budget
           <ArrowRight size={16} />
         </Link>
       </div>

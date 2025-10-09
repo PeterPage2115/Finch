@@ -3,6 +3,7 @@ import ProgressBar from './ProgressBar';
 import { Pencil, Trash2 } from 'lucide-react';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { motion } from 'framer-motion';
+import { formatCurrency, formatDate } from '@/lib/utils';
 
 interface BudgetCardProps {
   budget: BudgetWithProgress;
@@ -17,17 +18,18 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
   const { category, period, startDate, endDate, progress } = budget;
 
   // Format dates
-  const start = new Date(startDate).toLocaleDateString('pl-PL');
-  const end = new Date(endDate).toLocaleDateString('pl-PL');
+  const start = formatDate(startDate);
+  const end = formatDate(endDate);
 
   // Period label
   const periodLabels: Record<string, string> = {
-    DAILY: 'Dzienny',
-    WEEKLY: 'Tygodniowy',
-    MONTHLY: 'Miesięczny',
-    YEARLY: 'Roczny',
-    CUSTOM: 'Niestandardowy',
+    DAILY: 'Daily',
+    WEEKLY: 'Weekly',
+    MONTHLY: 'Monthly',
+    YEARLY: 'Yearly',
+    CUSTOM: 'Custom',
   };
+  const periodLabel = periodLabels[period] ?? periodLabels.CUSTOM;
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
@@ -40,10 +42,10 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
               color={category?.color || '#6b7280'} 
               size={20} 
             />
-            {category?.name || 'Kategoria'}
+            {category?.name || 'Category'}
           </h3>
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            {periodLabels[period]} • {start} - {end}
+            {periodLabel} • {start} - {end}
           </p>
         </div>
 
@@ -54,7 +56,7 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
             whileTap={{ scale: 0.9 }}
             onClick={() => onEdit(budget)}
             className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-            aria-label="Edytuj budżet"
+            aria-label="Edit budget"
           >
             <Pencil size={18} />
           </motion.button>
@@ -63,7 +65,7 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
             whileTap={{ scale: 0.9 }}
             onClick={() => onDelete(budget.id)}
             className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-            aria-label="Usuń budżet"
+            aria-label="Delete budget"
           >
             <Trash2 size={18} />
           </motion.button>
@@ -80,8 +82,15 @@ export default function BudgetCard({ budget, onEdit, onDelete }: BudgetCardProps
 
       {/* Remaining Amount */}
       <div className="mt-3 text-sm text-gray-600 dark:text-gray-300">
-        Pozostało: <span className={`font-semibold ${progress.remaining >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}>
-          {progress.remaining.toFixed(2)} zł
+        Remaining:{' '}
+        <span
+          className={`font-semibold ${
+            progress.remaining >= 0
+              ? 'text-green-600 dark:text-green-400'
+              : 'text-red-600 dark:text-red-400'
+          }`}
+        >
+          {formatCurrency(progress.remaining)}
         </span>
       </div>
     </div>

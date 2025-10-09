@@ -1,7 +1,7 @@
 /**
  * Categories Page
  * 
- * Strona zarządzania kategoriami użytkownika
+ * User category management page
  */
 
 'use client';
@@ -50,7 +50,7 @@ export default function CategoriesPage() {
       setCategories(data);
     } catch (err) {
       console.error('Error fetching categories:', err);
-      setError(handleErrorMessage(err, 'Błąd podczas pobierania kategorii'));
+  setError(handleErrorMessage(err, 'Error while fetching categories'));
     } finally {
       setIsLoading(false);
     }
@@ -69,23 +69,23 @@ export default function CategoriesPage() {
 
   const handleCreate = async (formData: CategoryFormData) => {
     if (!token) {
-      throw new Error('Brak tokenu uwierzytelniającego');
+  throw new Error('Missing authentication token');
     }
 
     try {
       const newCategory = await categoriesApi.create(token, formData);
       setCategories((prev) => [...prev, newCategory]);
       setShowForm(false);
-      addNotification('Kategoria utworzona pomyślnie', 'success');
+  addNotification('Category created successfully', 'success');
     } catch (err) {
-      throw new Error(handleErrorMessage(err, 'Błąd podczas tworzenia kategorii'));
+  throw new Error(handleErrorMessage(err, 'Error while creating the category'));
     }
   };
 
   const handleUpdate = async (formData: CategoryFormData) => {
     if (!editingCategory) return;
     if (!token) {
-      throw new Error('Brak tokenu uwierzytelniającego');
+  throw new Error('Missing authentication token');
     }
 
     try {
@@ -95,9 +95,9 @@ export default function CategoriesPage() {
       ));
       setEditingCategory(undefined);
       setShowForm(false);
-      addNotification('Kategoria zaktualizowana pomyślnie', 'success');
+  addNotification('Category updated successfully', 'success');
     } catch (err) {
-      throw new Error(handleErrorMessage(err, 'Błąd podczas aktualizacji kategorii'));
+  throw new Error(handleErrorMessage(err, 'Error while updating the category'));
     }
   };
 
@@ -113,7 +113,7 @@ export default function CategoriesPage() {
   const confirmDelete = async () => {
     if (!deleteConfirm) return;
     if (!token) {
-      addNotification('Brak tokenu uwierzytelniającego', 'error');
+  addNotification('Missing authentication token', 'error');
       return;
     }
 
@@ -121,9 +121,9 @@ export default function CategoriesPage() {
       await categoriesApi.delete(token, deleteConfirm.id);
       setCategories((prev) => prev.filter((cat) => cat.id !== deleteConfirm.id));
       setDeleteConfirm(null);
-      addNotification('Kategoria usunięta pomyślnie', 'success');
+  addNotification('Category deleted successfully', 'success');
     } catch (err) {
-      addNotification(handleErrorMessage(err, 'Błąd podczas usuwania kategorii'), 'error');
+  addNotification(handleErrorMessage(err, 'Error while deleting the category'), 'error');
     }
   };
 
@@ -149,10 +149,10 @@ export default function CategoriesPage() {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Kategorie
+                Categories
               </h1>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                Zarządzaj swoimi kategoriami finansowymi
+                Manage your financial categories
               </p>
             </div>
             
@@ -164,7 +164,7 @@ export default function CategoriesPage() {
                 className="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition"
               >
                 <Plus className="w-5 h-5 mr-2" />
-                Dodaj kategorię
+                Add category
               </motion.button>
             )}
           </div>
@@ -180,7 +180,7 @@ export default function CategoriesPage() {
         {showForm && (
           <div className="mb-8 bg-white dark:bg-gray-900 rounded-lg shadow p-6">
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              {editingCategory ? 'Edytuj kategorię' : 'Nowa kategoria'}
+              {editingCategory ? 'Edit category' : 'New category'}
             </h2>
             <CategoryForm
               category={editingCategory}
@@ -206,24 +206,24 @@ export default function CategoriesPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
           <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl max-w-md w-full p-6">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-              Potwierdzenie usunięcia
+              Delete confirmation
             </h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Czy na pewno chcesz usunąć kategorię <strong>{deleteConfirm.name}</strong>?
-              {' '}Ta operacja jest nieodwracalna.
+              Are you sure you want to delete the <strong>{deleteConfirm.name}</strong> category?
+              {' '}This action cannot be undone.
             </p>
             <div className="flex justify-end space-x-3">
               <button
                 onClick={() => setDeleteConfirm(null)}
                 className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition"
               >
-                Anuluj
+                Cancel
               </button>
               <button
                 onClick={confirmDelete}
                 className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition"
               >
-                Usuń
+                Delete
               </button>
             </div>
           </div>

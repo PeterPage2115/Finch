@@ -36,7 +36,7 @@ export function IconPicker({
   return (
     <div className={`space-y-6 ${className}`}>
       <div className="text-sm text-gray-600 dark:text-gray-400">
-        Wybierz ikonę dla swojej kategorii
+        Choose an icon for your category
       </div>
 
       {categories.map((category) => (
@@ -90,7 +90,7 @@ export function IconPicker({
       {value && (
         <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
           <div className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            Wybrana ikona:
+            Selected icon:
           </div>
           <div className="flex items-center gap-2">
             <CategoryIcon iconName={value} size={32} />

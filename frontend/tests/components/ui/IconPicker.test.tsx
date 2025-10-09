@@ -23,7 +23,7 @@ describe('IconPicker', () => {
         />
       );
 
-      expect(screen.getByText('Wybierz ikonę dla swojej kategorii')).toBeInTheDocument();
+  expect(screen.getByText('Choose an icon for your category')).toBeInTheDocument();
     });
 
     it('should render category headings', () => {
@@ -36,9 +36,9 @@ describe('IconPicker', () => {
       );
 
       // EXPENSE should show multiple categories
-      expect(screen.getByText('Jedzenie i napoje')).toBeInTheDocument();
-      expect(screen.getByText('Zakupy')).toBeInTheDocument();
-      expect(screen.getByText('Transport')).toBeInTheDocument();
+  expect(screen.getByText('Food & drinks')).toBeInTheDocument();
+  expect(screen.getByText('Shopping')).toBeInTheDocument();
+  expect(screen.getByText('Transportation')).toBeInTheDocument();
     });
 
     it('should render icon buttons', () => {
@@ -67,13 +67,13 @@ describe('IconPicker', () => {
       );
 
       // INCOME category
-      expect(screen.getByText('Przychody')).toBeInTheDocument();
+  expect(screen.getByText('Income')).toBeInTheDocument();
       // GENERIC category
-      expect(screen.getByText('Ogólne')).toBeInTheDocument();
+  expect(screen.getByText('General')).toBeInTheDocument();
 
       // Should NOT show expense-specific categories
-      expect(screen.queryByText('Jedzenie i napoje')).not.toBeInTheDocument();
-      expect(screen.queryByText('Zakupy')).not.toBeInTheDocument();
+  expect(screen.queryByText('Food & drinks')).not.toBeInTheDocument();
+  expect(screen.queryByText('Shopping')).not.toBeInTheDocument();
     });
 
     it('should show EXPENSE categories (7 types + GENERIC)', () => {
@@ -86,18 +86,18 @@ describe('IconPicker', () => {
       );
 
       // EXPENSE categories
-      expect(screen.getByText('Jedzenie i napoje')).toBeInTheDocument();
-      expect(screen.getByText('Zakupy')).toBeInTheDocument();
-      expect(screen.getByText('Dom i rachunki')).toBeInTheDocument();
-      expect(screen.getByText('Transport')).toBeInTheDocument();
-      expect(screen.getByText('Zdrowie i sport')).toBeInTheDocument();
-      expect(screen.getByText('Rozrywka')).toBeInTheDocument();
-      expect(screen.getByText('Edukacja')).toBeInTheDocument();
+  expect(screen.getByText('Food & drinks')).toBeInTheDocument();
+  expect(screen.getByText('Shopping')).toBeInTheDocument();
+  expect(screen.getByText('Home & bills')).toBeInTheDocument();
+  expect(screen.getByText('Transportation')).toBeInTheDocument();
+  expect(screen.getByText('Health & fitness')).toBeInTheDocument();
+  expect(screen.getByText('Entertainment')).toBeInTheDocument();
+  expect(screen.getByText('Education')).toBeInTheDocument();
       // GENERIC category
-      expect(screen.getByText('Ogólne')).toBeInTheDocument();
+  expect(screen.getByText('General')).toBeInTheDocument();
 
       // Should NOT show income-specific categories
-      expect(screen.queryByText('Przychody')).not.toBeInTheDocument();
+  expect(screen.queryByText('Income')).not.toBeInTheDocument();
     });
 
     it('should have more icons for EXPENSE than INCOME', () => {
@@ -249,7 +249,7 @@ describe('IconPicker', () => {
         />
       );
 
-      expect(screen.getByText('Wybrana ikona:')).toBeInTheDocument();
+  expect(screen.getByText('Selected icon:')).toBeInTheDocument();
       expect(screen.getByText('Car')).toBeInTheDocument(); // Icon name in code block
     });
 
@@ -262,7 +262,7 @@ describe('IconPicker', () => {
         />
       );
 
-      expect(screen.queryByText('Wybrana ikona:')).not.toBeInTheDocument();
+  expect(screen.queryByText('Selected icon:')).not.toBeInTheDocument();
     });
 
     it('should display selected icon name in code format', () => {
@@ -288,10 +288,10 @@ describe('IconPicker', () => {
       );
 
       // Preview section exists
-      expect(screen.getByText('Wybrana ikona:')).toBeInTheDocument();
+  expect(screen.getByText('Selected icon:')).toBeInTheDocument();
       
       // Find icon in preview section - it's in the same parent as "Wybrana ikona:" text
-      const previewLabel = screen.getByText('Wybrana ikona:');
+  const previewLabel = screen.getByText('Selected icon:');
       const previewContainer = previewLabel.parentElement;
       const icon = previewContainer?.querySelector('svg');
       
@@ -311,7 +311,7 @@ describe('IconPicker', () => {
       );
 
       // Should render without errors
-      expect(screen.getByText('Wybierz ikonę dla swojej kategorii')).toBeInTheDocument();
+  expect(screen.getByText('Choose an icon for your category')).toBeInTheDocument();
     });
 
     it('should handle invalid icon name in value', () => {
@@ -324,7 +324,7 @@ describe('IconPicker', () => {
       );
 
       // Should still render preview (CategoryIcon handles fallback)
-      expect(screen.getByText('Wybrana ikona:')).toBeInTheDocument();
+  expect(screen.getByText('Selected icon:')).toBeInTheDocument();
       expect(screen.getByText('NonExistentIcon')).toBeInTheDocument();
     });
 

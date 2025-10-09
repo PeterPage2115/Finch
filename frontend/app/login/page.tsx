@@ -217,12 +217,12 @@ export default function LoginPage() {
           {/* Footer - Link to Register */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Nie masz jeszcze konta?{' '}
+              Don&apos;t have an account?{' '}
               <Link
                 href="/register"
                 className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition"
               >
-                Załóż konto
+                Create Account
               </Link>
             </p>
           </div>

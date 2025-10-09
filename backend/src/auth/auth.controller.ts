@@ -27,7 +27,7 @@ export class AuthController {
 
   /**
    * POST /auth/register
-   * Rejestracja nowego użytkownika
+   * Registers a new user
    */
   @Post('register')
   @HttpCode(HttpStatus.CREATED)
@@ -37,7 +37,7 @@ export class AuthController {
 
   /**
    * POST /auth/login
-   * Logowanie użytkownika
+   * Authenticates a user
    */
   @Post('login')
   @HttpCode(HttpStatus.OK)
@@ -47,8 +47,8 @@ export class AuthController {
 
   /**
    * GET /auth/me
-   * Zwraca profil zalogowanego użytkownika
-   * Wymaga tokenu JWT w nagłówku Authorization
+   * Returns the authenticated user profile
+   * Requires a JWT token in the Authorization header
    */
   @Get('me')
   @UseGuards(JwtAuthGuard)
@@ -65,8 +65,8 @@ export class AuthController {
 
   /**
    * PATCH /auth/profile
-   * Aktualizacja profilu użytkownika (name, email)
-   * Wymaga tokenu JWT w nagłówku Authorization
+   * Updates user profile (name, email)
+   * Requires a JWT token in the Authorization header
    */
   @Patch('profile')
   @UseGuards(JwtAuthGuard)
@@ -80,8 +80,8 @@ export class AuthController {
 
   /**
    * PATCH /auth/change-password
-   * Zmiana hasła użytkownika
-   * Wymaga tokenu JWT w nagłówku Authorization
+   * Changes the user password
+   * Requires a JWT token in the Authorization header
    */
   @Patch('change-password')
   @UseGuards(JwtAuthGuard)
@@ -99,7 +99,7 @@ export class AuthController {
 
   /**
    * POST /auth/forgot-password
-   * Generuje token resetowania hasła i loguje go do konsoli (dev mode)
+   * Generates a password reset token and logs it to the console (dev mode)
    */
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
@@ -109,7 +109,7 @@ export class AuthController {
 
   /**
    * POST /auth/reset-password
-   * Resetuje hasło używając tokenu
+   * Resets the password using a token
    */
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)

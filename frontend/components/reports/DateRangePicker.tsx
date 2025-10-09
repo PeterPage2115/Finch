@@ -66,17 +66,17 @@ export default function DateRangePicker({
   };
 
   const presets: { key: DateRangePreset; label: string }[] = [
-    { key: 'month', label: 'Bieżący miesiąc' },
-    { key: 'quarter', label: 'Bieżący kwartał' },
-    { key: 'year', label: 'Bieżący rok' },
-    { key: 'custom', label: 'Własny zakres' },
+    { key: 'month', label: 'Current Month' },
+    { key: 'quarter', label: 'Current Quarter' },
+    { key: 'year', label: 'Current Year' },
+    { key: 'custom', label: 'Custom Range' },
   ];
 
   return (
     <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <Calendar size={20} className="text-gray-600 dark:text-gray-400" />
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Zakres dat</h3>
+        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Date Range</h3>
       </div>
 
       {/* Preset buttons */}

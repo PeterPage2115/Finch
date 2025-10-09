@@ -1,47 +1,47 @@
-# Frontend - Tracker Kasy
+# Frontend - Finance Tracker
 
-Frontend aplikacji zbudowany z Next.js 14+, TypeScript i Tailwind CSS.
+Frontend application built with Next.js 14+, TypeScript, and Tailwind CSS.
 
-## 🚀 Szybki Start
+## 🚀 Quick Start
 
-### Lokalne Uruchomienie (bez Dockera)
+### Local Development (without Docker)
 
-1. **Zainstaluj zależności:**
+1. **Install dependencies:**
    ```bash
    npm install
    ```
 
-2. **Skonfiguruj zmienne środowiskowe:**
+2. **Configure environment variables:**
    ```bash
    cp .env.example .env.local
-   # Edytuj .env.local i ustaw BACKEND_API_URL
+   # Edit .env.local and set BACKEND_API_URL
    ```
 
-3. **Uruchom serwer deweloperski:**
+3. **Start the development server:**
    ```bash
    npm run dev
    ```
 
-Frontend będzie dostępny pod adresem: `http://localhost:3000`
+The frontend will be available at `http://localhost:3000`.
 
-## 📁 Struktura Projektu
+## 📁 Project Structure
 
 ```
 app/
-├── api/            # Next.js API Routes (proxy do backendu)
+├── api/            # Next.js API Routes (proxy to the backend)
 │   └── auth/       # Auth endpoints (login, register, me)
-├── login/          # Strona logowania
-├── register/       # Strona rejestracji
-├── dashboard/      # Dashboard (chroniony)
-├── layout.tsx      # Główny layout aplikacji
-├── middleware.ts   # Next.js middleware (ochrona tras)
-└── page.tsx        # Strona główna
+├── login/          # Login page
+├── register/       # Registration page
+├── dashboard/      # Dashboard (protected)
+├── layout.tsx      # Application shell
+├── middleware.ts   # Next.js middleware (route protection)
+└── page.tsx        # Landing page
 
 components/
-└── ...             # Komponenty UI (będą dodane w kolejnych fazach)
+└── ...             # UI components (added iteratively)
 
 lib/
-├── api/            # API client (komunikacja z Next.js API Routes)
+├── api/            # API client (communication with Next.js API Routes)
 │   ├── client.ts   # Generic API client
 │   └── authClient.ts # Auth API wrapper
 ├── stores/         # Zustand stores
@@ -49,38 +49,38 @@ lib/
 └── utils.ts        # Utility functions
 
 types/
-└── index.ts        # TypeScript types i interfaces
+└── index.ts        # TypeScript types and interfaces
 ```
 
-## 🎨 Style i UI
+## 🎨 Styling and UI
 
-Projekt używa **Tailwind CSS** do stylowania. Wszystkie komponenty są responsywne i dostosowane do urządzeń mobilnych.
+The project uses **Tailwind CSS** for styling. Every component is responsive and mobile-friendly.
 
-### Kolory (do dostosowania w tailwind.config.ts):
-- Primary: Niebieski
-- Success: Zielony (przychody)
-- Danger: Czerwony (wydatki)
-- Neutralne: Szarości
+### Color palette (configured in `tailwind.config.ts`):
+- Primary: Blue
+- Success: Green (income)
+- Danger: Red (expenses)
+- Neutral: Grays
 
-## 📦 Główne Biblioteki
+## 📦 Core Libraries
 
-- **Next.js 14+**: Framework React z SSR
-- **TypeScript**: Silne typowanie
+- **Next.js 14+**: React framework with SSR
+- **TypeScript**: Strong static typing
 - **Tailwind CSS**: Utility-first CSS framework
-- **Zustand**: Lekkie zarządzanie stanem
-- **React Hook Form**: Obsługa formularzy
-- **Recharts**: Biblioteka do wykresów
+- **Zustand**: Lightweight state management
+- **React Hook Form**: Form handling
+- **Recharts**: Charting library
 
-## 🔧 Skrypty NPM
+## 🔧 NPM Scripts
 
 ```bash
-# Uruchomienie w trybie deweloperskim
+# Development mode
 npm run dev
 
-# Budowanie produkcyjne
+# Production build
 npm run build
 
-# Start produkcyjny
+# Production start
 npm run start
 
 # Linting
@@ -90,22 +90,22 @@ npm run lint
 npm run type-check
 ```
 
-## 🌐 Zmienne Środowiskowe
+## 🌐 Environment Variables
 
-Zobacz `.env.example` dla pełnej listy wymaganych zmiennych.
+See `.env.example` for the full list of required variables.
 
-**Kluczowe zmienne:**
+**Key variables:**
 
-- **`BACKEND_API_URL`** (server-side only): URL backendu używany przez Next.js API Routes
-  - Lokalnie: `http://localhost:3001`
+- **`BACKEND_API_URL`** (server-side only): Backend URL used by Next.js API Routes
+  - Local: `http://localhost:3001`
   - Docker: `http://backend:3001`
 
-**Ważne:** Nie używamy `NEXT_PUBLIC_*` dla backend URL, ponieważ:
-- `NEXT_PUBLIC_*` są embedowane w browser bundle
-- Browser nie ma dostępu do Docker internal hostnames
-- Next.js API Routes działają jako proxy (server-side → backend)
+**Important:** We don't expose the backend URL via `NEXT_PUBLIC_*` because:
+- `NEXT_PUBLIC_*` values are embedded in the browser bundle
+- The browser cannot resolve Docker internal hostnames
+- Next.js API Routes act as a proxy (server-side → backend)
 
-**Architektura:**
+**Architecture:**
 ```
 Browser → /api/auth/* (Next.js API Route, same origin)
          ↓
@@ -114,22 +114,22 @@ Next.js Server → http://backend:3001/auth/* (Docker internal)
 
 ## 🐳 Docker
 
-Frontend jest automatycznie budowany jako część `docker-compose.yml` w głównym katalogu projektu.
+The frontend is built automatically as part of the project-level `docker-compose.yml`.
 
-## 🧪 Testowanie
+## 🧪 Testing
 
 ```bash
-# Testy jednostkowe (do skonfigurowania)
+# Unit tests (to be configured)
 npm run test
 
-# Testy E2E (do skonfigurowania)
+# E2E tests (to be configured)
 npm run test:e2e
 ```
 
-## 📱 Responsywność
+## 📱 Responsiveness
 
-Aplikacja jest w pełni responsywna i działa na:
-- Desktopach (1920px+)
-- Laptopach (1024px - 1920px)
-- Tabletach (768px - 1024px)
-- Telefonach (320px - 768px)
+The application is fully responsive and optimized for:
+- Desktops (1920px+)
+- Laptops (1024px - 1920px)
+- Tablets (768px - 1024px)
+- Phones (320px - 768px)

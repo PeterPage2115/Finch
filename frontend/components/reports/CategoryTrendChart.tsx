@@ -65,7 +65,7 @@ export default function CategoryTrendChart({
   if (!data || data.length === 0) {
     return (
       <div className="flex h-[300px] items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-        <p className="text-gray-500 dark:text-gray-400">Brak danych do wyświetlenia</p>
+        <p className="text-gray-500 dark:text-gray-400">No data to display</p>
       </div>
     );
   }

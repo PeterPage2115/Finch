@@ -49,17 +49,17 @@
 ## 📸 Screenshots
 <!-- If applicable for UI changes -->
 
-## 🧪 Jak przetestować
+## 🧪 How to Test
 1. 
 2. 
 3. 
 
-## 📝 Dodatkowe uwagi
-<!-- Dodatkowe informacje dla reviewerów -->
+## 📝 Additional Notes
+<!-- Additional context for reviewers -->
 
-## 🔍 Review Checklist (dla maintainerów)
-- [ ] Kod jest czytelny i dobrze udokumentowany
-- [ ] Architektura jest zgodna z projektem
-- [ ] Nie ma duplikacji kodu
-- [ ] Performance jest akceptowalny
-- [ ] Bezpieczeństwo zostało sprawdzone
+## 🔍 Review Checklist (Maintainers)
+- [ ] Code is readable and well documented
+- [ ] Architecture aligns with the project
+- [ ] No code duplication
+- [ ] Performance is acceptable
+- [ ] Security considerations were reviewed

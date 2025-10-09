@@ -1,7 +1,7 @@
 /**
  * CategoryForm Component
  * 
- * Formularz do tworzenia i edycji kategorii
+ * Form for creating and editing categories
  */
 
 'use client';
@@ -59,7 +59,7 @@ export default function CategoryForm({
     try {
       await onSubmit(formData);
     } catch (err) {
-      setError(getErrorMessage(err, 'Wystąpił błąd'));
+      setError(getErrorMessage(err, 'Something went wrong'));
     } finally {
       setIsSubmitting(false);
     }
@@ -76,7 +76,7 @@ export default function CategoryForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-        {isEditMode ? 'Edytuj kategorię' : 'Nowa kategoria'}
+  {isEditMode ? 'Edit category' : 'New category'}
       </h2>
 
       {error && (
@@ -85,13 +85,13 @@ export default function CategoryForm({
         </div>
       )}
 
-      {/* Nazwa */}
+  {/* Name */}
       <div>
         <label
           htmlFor="name"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
         >
-          Nazwa <span className="text-red-500">*</span>
+          Name <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
@@ -104,20 +104,20 @@ export default function CategoryForm({
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md
                      bg-white dark:bg-gray-800 text-gray-900 dark:text-white
                      focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
-          placeholder="np. Zakupy spożywcze"
+          placeholder="e.g. Groceries"
           disabled={isSubmitting}
           autoFocus
         />
         <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-          2-50 znaków
+          2-50 characters
         </p>
       </div>
 
-      {/* Typ - tylko przy tworzeniu */}
+  {/* Type - only when creating */}
       {!isEditMode && (
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Typ <span className="text-red-500">*</span>
+            Type <span className="text-red-500">*</span>
           </label>
           <div className="flex gap-3">
             <button
@@ -134,7 +134,7 @@ export default function CategoryForm({
               disabled={isSubmitting}
             >
               <TrendingDown size={18} />
-              Wydatek
+              Expense
             </button>
             <button
               type="button"
@@ -150,19 +150,19 @@ export default function CategoryForm({
               disabled={isSubmitting}
             >
               <TrendingUp size={18} />
-              Przychód
+              Income
             </button>
           </div>
         </div>
       )}
 
-      {/* Kolor */}
+  {/* Color */}
       <div>
         <label
           htmlFor="color"
           className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
         >
-          Kolor
+          Color
         </label>
         <div className="flex items-center gap-3">
           <input
@@ -179,10 +179,10 @@ export default function CategoryForm({
         </div>
       </div>
 
-      {/* Ikona */}
+  {/* Icon */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-          Ikona <span className="text-red-500">*</span>
+          Icon <span className="text-red-500">*</span>
         </label>
         <IconPicker
           value={formData.icon}
@@ -191,7 +191,7 @@ export default function CategoryForm({
         />
       </div>
 
-      {/* Przyciski */}
+  {/* Actions */}
       <div className="flex justify-end gap-3 pt-4">
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -204,7 +204,7 @@ export default function CategoryForm({
                      rounded-md hover:bg-gray-50 dark:hover:bg-gray-700
                      disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Anuluj
+          Cancel
         </motion.button>
         <motion.button
           whileHover={{ scale: 1.05 }}
@@ -219,10 +219,10 @@ export default function CategoryForm({
           {isSubmitting ? (
             <>
               <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-              {isEditMode ? 'Zapisywanie...' : 'Tworzenie...'}
+              {isEditMode ? 'Saving...' : 'Creating...'}
             </>
           ) : (
-            <>{isEditMode ? 'Zapisz zmiany' : 'Dodaj kategorię'}</>
+            <>{isEditMode ? 'Save changes' : 'Add category'}</>
           )}
         </motion.button>
       </div>

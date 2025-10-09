@@ -11,6 +11,9 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import BudgetCard from '@/components/budgets/BudgetCard';
 import { BudgetWithProgress } from '@/types';
+import { formatCurrency, formatDate } from '@/lib/utils';
+
+const currencyText = (value: number): string => formatCurrency(value).replace(/\u00a0/g, ' ');
 
 // Mock budget data factory
 const createMockBudget = (overrides?: Partial<BudgetWithProgress>): BudgetWithProgress => ({
@@ -25,7 +28,7 @@ const createMockBudget = (overrides?: Partial<BudgetWithProgress>): BudgetWithPr
   updatedAt: '2025-10-01T00:00:00Z',
   category: {
     id: 'cat-1',
-    name: 'Jedzenie',
+    name: 'Food',
     icon: 'UtensilsCrossed',
     color: '#ef4444',
     type: 'EXPENSE',
@@ -46,24 +49,24 @@ describe('BudgetCard', () => {
       const budget = createMockBudget();
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      expect(screen.getByText('Jedzenie')).toBeInTheDocument();
+      expect(screen.getByText('Food')).toBeInTheDocument();
       // Icon is rendered by CategoryIcon component
     });
 
-    it('should render period label in Polish', () => {
+    it('should render period label in English', () => {
       const budget = createMockBudget({ period: 'MONTHLY' });
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      expect(screen.getByText(/Miesięczny/)).toBeInTheDocument();
+      expect(screen.getByText(/Monthly/)).toBeInTheDocument();
     });
 
     it('should render all period types correctly', () => {
       const periods: Array<{ period: BudgetWithProgress['period']; label: string }> = [
-        { period: 'DAILY', label: 'Dzienny' },
-        { period: 'WEEKLY', label: 'Tygodniowy' },
-        { period: 'MONTHLY', label: 'Miesięczny' },
-        { period: 'YEARLY', label: 'Roczny' },
-        { period: 'CUSTOM', label: 'Niestandardowy' },
+        { period: 'DAILY', label: 'Daily' },
+        { period: 'WEEKLY', label: 'Weekly' },
+        { period: 'MONTHLY', label: 'Monthly' },
+        { period: 'YEARLY', label: 'Yearly' },
+        { period: 'CUSTOM', label: 'Custom' },
       ];
 
       periods.forEach(({ period, label }) => {
@@ -74,18 +77,25 @@ describe('BudgetCard', () => {
       });
     });
 
-    it('should render formatted dates in Polish locale', () => {
+    it('should render formatted dates', () => {
       const budget = createMockBudget({
         startDate: '2025-10-01T00:00:00Z',
         endDate: '2025-10-31T23:59:59Z',
       });
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      // Polish date format: DD.MM.YYYY (dates rendered via toLocaleDateString)
-      // Note: exact format depends on system locale, but should contain the date parts
-      expect(screen.getByText(/1\.10\.2025/)).toBeInTheDocument();
-      // End date might be rendered as next day due to UTC/local timezone conversion
-      expect(screen.getByText(/1\.11\.2025|31\.10\.2025/)).toBeInTheDocument();
+      // Dates are formatted using the shared utility (en-GB locale)
+      // Note: exact end date depends on timezone conversion, so allow both options
+      const startFormatted = formatDate('2025-10-01T00:00:00Z');
+      const endFormatted = formatDate('2025-10-31T23:59:59Z');
+      const fallbackEndFormatted = formatDate(new Date('2025-11-01T00:00:00Z'));
+
+      expect(
+        screen.getByText((content) => content.includes(startFormatted))
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText((content) => content.includes(endFormatted) || content.includes(fallbackEndFormatted))
+      ).toBeInTheDocument();
     });
 
     it('should render remaining amount', () => {
@@ -100,15 +110,17 @@ describe('BudgetCard', () => {
       });
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      expect(screen.getByText(/Pozostało:/)).toBeInTheDocument();
-      expect(screen.getByText('400.00 zł')).toBeInTheDocument();
+      expect(screen.getByText(/Remaining/)).toBeInTheDocument();
+      expect(
+        screen.getByText((content, element) => element?.tagName === 'SPAN' && content.includes(currencyText(400)))
+      ).toBeInTheDocument();
     });
 
     it('should handle missing category gracefully', () => {
       const budget = createMockBudget({ category: undefined });
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      expect(screen.getByText('Kategoria')).toBeInTheDocument();
+      expect(screen.getByText('Category')).toBeInTheDocument();
     });
   });
 
@@ -126,9 +138,9 @@ describe('BudgetCard', () => {
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
       // ProgressBar should render these values
-      expect(screen.getByText('850.00 zł / 1000.00 zł')).toBeInTheDocument();
+      expect(screen.getByText(`${currencyText(850)} / ${currencyText(1000)}`)).toBeInTheDocument();
       expect(screen.getByText('85%')).toBeInTheDocument();
-      expect(screen.getByText('⚠️ 80% wykorzystane')).toBeInTheDocument();
+      expect(screen.getByText('⚠️ 80% used')).toBeInTheDocument();
     });
 
     it('should display over-budget state', () => {
@@ -143,7 +155,7 @@ describe('BudgetCard', () => {
       });
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      expect(screen.getByText('🚨 Przekroczony!')).toBeInTheDocument();
+      expect(screen.getByText('🚨 Limit exceeded!')).toBeInTheDocument();
       expect(screen.getByText('120%')).toBeInTheDocument();
     });
   });
@@ -159,11 +171,11 @@ describe('BudgetCard', () => {
           alerts: [],
         },
       });
-      render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
+      const { container } = render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      // Find the remaining amount by text content
-      const remainingText = screen.getByText('500.00 zł');
+      const remainingText = container.querySelector('.font-semibold.text-green-600');
       expect(remainingText).toHaveClass('text-green-600');
+      expect(remainingText).toHaveTextContent(currencyText(500));
     });
 
     it('should apply red color for negative remaining amount', () => {
@@ -176,11 +188,11 @@ describe('BudgetCard', () => {
           alerts: ['80%', '100%'],
         },
       });
-      render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
+      const { container } = render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      // Find the remaining amount by text content
-      const remainingText = screen.getByText('-100.00 zł');
+      const remainingText = container.querySelector('.font-semibold.text-red-600');
       expect(remainingText).toHaveClass('text-red-600');
+      expect(remainingText).toHaveTextContent(currencyText(-100));
     });
   });
 
@@ -190,7 +202,7 @@ describe('BudgetCard', () => {
       const budget = createMockBudget();
       render(<BudgetCard budget={budget} onEdit={onEdit} onDelete={vi.fn()} />);
       
-      const editButton = screen.getByLabelText('Edytuj budżet');
+      const editButton = screen.getByLabelText('Edit budget');
       fireEvent.click(editButton);
       
       expect(onEdit).toHaveBeenCalledTimes(1);
@@ -202,7 +214,7 @@ describe('BudgetCard', () => {
       const budget = createMockBudget({ id: 'budget-123' });
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={onDelete} />);
       
-      const deleteButton = screen.getByLabelText('Usuń budżet');
+      const deleteButton = screen.getByLabelText('Delete budget');
       fireEvent.click(deleteButton);
       
       expect(onDelete).toHaveBeenCalledTimes(1);
@@ -213,8 +225,8 @@ describe('BudgetCard', () => {
       const budget = createMockBudget();
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      expect(screen.getByLabelText('Edytuj budżet')).toBeInTheDocument();
-      expect(screen.getByLabelText('Usuń budżet')).toBeInTheDocument();
+      expect(screen.getByLabelText('Edit budget')).toBeInTheDocument();
+      expect(screen.getByLabelText('Delete budget')).toBeInTheDocument();
     });
   });
 
@@ -233,7 +245,7 @@ describe('BudgetCard', () => {
       
       // 0 is >= 0, should be green
       const remainingSpan = container.querySelector('.text-green-600');
-      expect(remainingSpan).toHaveTextContent('0.00 zł');
+  expect(remainingSpan).toHaveTextContent(currencyText(0));
     });
 
     it('should handle decimal amounts', () => {
@@ -248,15 +260,15 @@ describe('BudgetCard', () => {
       });
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      expect(screen.getByText('756.45 zł / 1000.00 zł')).toBeInTheDocument();
-      expect(screen.getByText('243.55 zł')).toBeInTheDocument();
+  expect(screen.getByText(`${currencyText(756.45)} / ${currencyText(1000)}`)).toBeInTheDocument();
+  expect(screen.getByText(currencyText(243.55))).toBeInTheDocument();
     });
 
     it('should handle very long category names', () => {
       const budget = createMockBudget({
         category: {
           id: 'cat-1',
-          name: 'Bardzo Długa Nazwa Kategorii Która Może Być Problematyczna',
+          name: 'Very Long Category Name That Could Be Problematic',
           icon: 'UtensilsCrossed',
           color: '#ef4444',
           type: 'EXPENSE',
@@ -264,7 +276,7 @@ describe('BudgetCard', () => {
       });
       render(<BudgetCard budget={budget} onEdit={vi.fn()} onDelete={vi.fn()} />);
       
-      expect(screen.getByText('Bardzo Długa Nazwa Kategorii Która Może Być Problematyczna')).toBeInTheDocument();
+      expect(screen.getByText('Very Long Category Name That Could Be Problematic')).toBeInTheDocument();
     });
   });
 });

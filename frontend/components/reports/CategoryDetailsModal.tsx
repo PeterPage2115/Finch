@@ -179,19 +179,19 @@ export default function CategoryDetailsModal({
               {/* Summary Cards */}
               <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 p-4">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Suma</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Total</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
                     {formatCurrency(data.summary.totalAmount)}
                   </p>
                 </div>
                 <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 p-4">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Średnia</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Average</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
                     {formatCurrency(data.summary.averageAmount)}
                   </p>
                 </div>
                 <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-700/50 p-4">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Transakcje</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Transactions</p>
                   <p className="text-2xl font-bold text-gray-900 dark:text-white">
                     {data.summary.transactionCount}
                   </p>
@@ -201,11 +201,11 @@ export default function CategoryDetailsModal({
               {/* Transactions List */}
               <div>
                 <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Lista transakcji
+                  Transaction List
                 </h3>
                 {data.transactions.length === 0 ? (
                   <p className="text-center text-gray-500 dark:text-gray-400 py-8">
-                    Brak transakcji w tym okresie
+                    No transactions in this period
                   </p>
                 ) : (
                   <div className="space-y-2">

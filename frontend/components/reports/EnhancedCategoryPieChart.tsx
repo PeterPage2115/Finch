@@ -61,7 +61,7 @@ export default function EnhancedCategoryPieChart({
   if (!categories || categories.length === 0) {
     return (
       <div className="flex h-[400px] items-center justify-center rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
-        <p className="text-gray-500 dark:text-gray-400">Brak danych do wyświetlenia</p>
+        <p className="text-gray-500 dark:text-gray-400">No data to display</p>
       </div>
     );
   }
@@ -79,7 +79,7 @@ export default function EnhancedCategoryPieChart({
             Procent: <span className="font-medium">{data.percentage.toFixed(1)}%</span>
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Transakcje: <span className="font-medium">{data.count}</span>
+            Transactions: <span className="font-medium">{data.count}</span>
           </p>
         </div>
       );

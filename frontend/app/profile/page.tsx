@@ -113,7 +113,7 @@ export default function ProfilePage() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <AppNavbar />
       <div className="container mx-auto px-4 py-8 max-w-2xl mt-8">
-        <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Profil użytkownika</h1>
+        <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">User Profile</h1>
 
       {/* Profile Information Section */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
@@ -211,7 +211,7 @@ export default function ProfilePage() {
       {/* Change Password Section */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Zmiana hasła</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Change Password</h2>
           {!isChangingPassword && (
             <button
               onClick={() => setIsChangingPassword(true)}

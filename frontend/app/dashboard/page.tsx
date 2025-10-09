@@ -15,6 +15,7 @@ import BudgetWidget from '@/components/budgets/BudgetWidget';
 import type { Transaction, CreateTransactionDto } from '@/types/transaction';
 import type { BudgetWithProgress } from '@/types';
 import { motion } from 'framer-motion';
+import { formatCurrency } from '@/lib/utils';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -53,8 +54,8 @@ export default function DashboardPage() {
   useEffect(() => {
     // Wait for hydration before checking auth
     if (!_hasHydrated) return;
-    
-    // Sprawdź czy użytkownik jest zalogowany
+
+    // Ensure the user is authenticated
     if (!isAuthenticated) {
       router.push('/login');
     } else {
@@ -112,7 +113,7 @@ export default function DashboardPage() {
         }
       } catch (err) {
         console.error('Error fetching data:', err);
-        setError(handleErrorMessage(err, 'Nie udało się pobrać danych'));
+  setError(handleErrorMessage(err, 'Failed to fetch data'));
         // Set empty data to prevent undefined errors
         setTransactions({ data: [], meta: { total: 0, page: 1, limit: 50, totalPages: 0 } });
         setCategories([]);
@@ -178,7 +179,7 @@ export default function DashboardPage() {
 
   const handleSubmit = async (data: CreateTransactionDto) => {
     if (!token) {
-      addNotification('Brak tokenu uwierzytelniającego', 'error');
+  addNotification('Missing authentication token', 'error');
       return;
     }
 
@@ -188,11 +189,11 @@ export default function DashboardPage() {
       if (editingTransaction) {
         const updated = await transactionsApi.update(token, editingTransaction.id, data);
         updateTransactionInStore(editingTransaction.id, updated);
-        addNotification('Transakcja zaktualizowana pomyślnie', 'success');
+  addNotification('Transaction updated successfully', 'success');
       } else {
         const created = await transactionsApi.create(token, data);
         addTransaction(created);
-        addNotification('Transakcja dodana pomyślnie', 'success');
+  addNotification('Transaction added successfully', 'success');
       }
 
       setShowForm(false);
@@ -202,7 +203,7 @@ export default function DashboardPage() {
       await refetchBudgets();
     } catch (err) {
       console.error('Error submitting transaction:', err);
-      addNotification(handleErrorMessage(err, 'Nie udało się zapisać transakcji'), 'error');
+  addNotification(handleErrorMessage(err, 'Unable to save the transaction'), 'error');
     } finally {
       setIsSubmitting(false);
     }
@@ -210,21 +211,21 @@ export default function DashboardPage() {
 
   const handleDelete = useCallback(async (id: string) => {
     if (!token) {
-      addNotification('Brak tokenu uwierzytelniającego', 'error');
+  addNotification('Missing authentication token', 'error');
       return;
     }
-    if (!confirm('Czy na pewno chcesz usunąć tę transakcję?')) return;
+  if (!confirm('Are you sure you want to delete this transaction?')) return;
 
     try {
       await transactionsApi.delete(token, id);
       removeTransaction(id);
-      addNotification('Transakcja usunięta pomyślnie', 'success');
+  addNotification('Transaction deleted successfully', 'success');
       
       // Refetch budgets to update widget after transaction deletion
       await refetchBudgets();
     } catch (err) {
       console.error('Error deleting transaction:', err);
-      addNotification(handleErrorMessage(err, 'Nie udało się usunąć transakcji'), 'error');
+  addNotification(handleErrorMessage(err, 'Unable to delete the transaction'), 'error');
     }
   }, [addNotification, handleErrorMessage, refetchBudgets, removeTransaction, token]);
 
@@ -245,7 +246,7 @@ export default function DashboardPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
-          <p className="mt-4 text-gray-600">Ładowanie...</p>
+          <p className="mt-4 text-gray-600">Loading...</p>
         </div>
       </div>
     );
@@ -261,10 +262,10 @@ export default function DashboardPage() {
         {/* Welcome Card */}
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6 border border-gray-200 dark:border-gray-700">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-2">
-            Witaj, {user?.name || 'Użytkowniku'}!
+            Welcome, {user?.name || 'there'}!
           </h2>
           <p className="text-gray-600 dark:text-gray-300">
-            To jest Twój dashboard. Tutaj będziesz mógł zarządzać swoimi finansami.
+            This is your dashboard. Manage your finances from here.
           </p>
         </div>
 
@@ -274,8 +275,8 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Przychody</p>
-                <p className="text-2xl font-bold text-green-600 dark:text-green-400">{stats.income.toFixed(2)} zł</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Income</p>
+                <p className="text-2xl font-bold text-green-600 dark:text-green-400">{formatCurrency(stats.income)}</p>
               </div>
               <div className="p-3 bg-green-100 dark:bg-green-900/30 rounded-full">
                 <svg
@@ -293,15 +294,15 @@ export default function DashboardPage() {
                 </svg>
               </div>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Ten miesiąc</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">This month</p>
           </div>
 
           {/* Expenses Card */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Wydatki</p>
-                <p className="text-2xl font-bold text-red-600 dark:text-red-400">{stats.expenses.toFixed(2)} zł</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Expenses</p>
+                <p className="text-2xl font-bold text-red-600 dark:text-red-400">{formatCurrency(stats.expenses)}</p>
               </div>
               <div className="p-3 bg-red-100 dark:bg-red-900/30 rounded-full">
                 <svg
@@ -319,16 +320,16 @@ export default function DashboardPage() {
                 </svg>
               </div>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Ten miesiąc</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">This month</p>
           </div>
 
           {/* Balance Card */}
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Bilans</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Balance</p>
                 <p className={`text-2xl font-bold ${stats.balance >= 0 ? 'text-indigo-600 dark:text-indigo-400' : 'text-red-600 dark:text-red-400'}`}>
-                  {stats.balance.toFixed(2)} zł
+                  {formatCurrency(stats.balance)}
                 </p>
               </div>
               <div className="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-full">
@@ -347,7 +348,7 @@ export default function DashboardPage() {
                 </svg>
               </div>
             </div>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">Ten miesiąc</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">This month</p>
           </div>
         </div>
 
@@ -371,7 +372,7 @@ export default function DashboardPage() {
             onClick={handleAddNew}
             className="px-6 py-3 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 rounded-lg shadow-md transition"
           >
-            + Dodaj transakcję
+            + Add transaction
           </motion.button>
         </div>
 
@@ -399,8 +400,8 @@ export default function DashboardPage() {
         {/* Pagination info */}
         {meta && meta.total > 0 && (
           <div className="mt-4 text-center text-sm text-gray-600 dark:text-gray-400">
-            Pokazuję {transactions.length} z {meta.total} transakcji
-            {meta.totalPages > 1 && ` (strona ${meta.page} z ${meta.totalPages})`}
+            Showing {transactions.length} of {meta.total} transactions
+            {meta.totalPages > 1 && ` (page ${meta.page} of ${meta.totalPages})`}
           </div>
         )}
       </main>

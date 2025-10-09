@@ -6,7 +6,7 @@
  * Format number as currency (PLN)
  */
 export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('pl-PL', {
+  return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'PLN',
   }).format(amount);
@@ -19,14 +19,14 @@ export function formatDate(date: string | Date, format: 'short' | 'long' = 'shor
   const dateObj = typeof date === 'string' ? new Date(date) : date;
   
   if (format === 'long') {
-    return new Intl.DateTimeFormat('pl-PL', {
+    return new Intl.DateTimeFormat('en-GB', {
       year: 'numeric',
       month: 'long',
       day: 'numeric',
     }).format(dateObj);
   }
   
-  return new Intl.DateTimeFormat('pl-PL', {
+  return new Intl.DateTimeFormat('en-GB', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
@@ -49,10 +49,10 @@ export function getRelativeTime(date: string | Date): string {
   const now = new Date();
   const diffInSeconds = Math.floor((now.getTime() - dateObj.getTime()) / 1000);
   
-  if (diffInSeconds < 60) return 'przed chwilą';
-  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} min temu`;
-  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} godz. temu`;
-  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} dni temu`;
+  if (diffInSeconds < 60) return 'just now';
+  if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} min ago`;
+  if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hr ago`;
+  if (diffInSeconds < 604800) return `${Math.floor(diffInSeconds / 86400)} days ago`;
   
   return formatDate(dateObj);
 }

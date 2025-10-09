@@ -43,7 +43,7 @@ function CategoryPieChart({ categories, isLoading }: CategoryPieChartProps) {
           Podział po kategorii
         </h3>
         <div className="flex items-center justify-center h-96 text-gray-500 dark:text-gray-400">
-          Brak danych dla wybranego okresu
+          No data for selected period
         </div>
       </div>
     );

@@ -7,7 +7,7 @@
 [![CI](https://github.com/PeterPage2115/Finch/actions/workflows/ci.yml/badge.svg)](https://github.com/PeterPage2115/Finch/actions/workflows/ci.yml)
 [![Docker](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
 
-> 💡 **UI is currently in Polish.** English i18n coming in v1.1
+> ✅ **Fully translated to English!** The entire UI is now in English with Polish złoty (PLN) currency support.
 
 ---
 

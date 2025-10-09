@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tracker Kasy - Zarządzaj swoimi finansami",
-  description: "Aplikacja do śledzenia finansów osobistych",
+  title: "Tracker Kasy - Manage Your Finances",
+  description: "Self-hosted finance tracking application",
 };
 
 export default function RootLayout({

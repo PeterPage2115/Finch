@@ -1,5 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
+import { formatCurrency } from '@/lib/utils';
 
 interface ProgressBarProps {
   percentage: number; // 0-100+
@@ -33,7 +34,7 @@ export default function ProgressBar({ percentage, spent, limit, alerts = [] }: P
       {/* Progress info */}
       <div className="flex justify-between items-center mb-2">
         <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-          {spent.toFixed(2)} zł / {limit.toFixed(2)} zł
+          {formatCurrency(spent)} / {formatCurrency(limit)}
         </span>
         <span className={`text-sm font-bold ${percentage >= 100 ? 'text-red-600 dark:text-red-400' : percentage >= 80 ? 'text-yellow-600 dark:text-yellow-400' : 'text-green-600 dark:text-green-400'}`}>
           {percentage.toFixed(0)}%
@@ -55,12 +56,12 @@ export default function ProgressBar({ percentage, spent, limit, alerts = [] }: P
         <div className="mt-2 flex gap-2">
           {alerts.includes('80%') && (
             <span className="text-xs px-2 py-1 bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 rounded-full">
-              ⚠️ 80% wykorzystane
+              ⚠️ 80% used
             </span>
           )}
           {alerts.includes('100%') && (
             <span className="text-xs px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200 rounded-full">
-              🚨 Przekroczony!
+              🚨 Limit exceeded!
             </span>
           )}
         </div>

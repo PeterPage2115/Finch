@@ -157,10 +157,10 @@ beforeEach(() => {
 
 ```typescript
 // ❌ Wrong - HTML5 validation blocks
-fireEvent.click(screen.getByRole('button', { name: /dodaj/i }));
+fireEvent.click(screen.getByRole('button', { name: /add/i }));
 
 // ✅ Correct - Bypasses HTML5 validation
-const form = screen.getByRole('button', { name: /dodaj/i }).closest('form')!;
+const form = screen.getByRole('button', { name: /add/i }).closest('form')!;
 fireEvent.submit(form);
 ```
 
@@ -175,7 +175,7 @@ it('should display error message on failed submission', async () => {
   
   // Wait for async state update
   await waitFor(() => {
-    expect(screen.getByText(/błąd/i)).toBeInTheDocument();
+  expect(screen.getByText(/error/i)).toBeInTheDocument();
   });
 });
 ```

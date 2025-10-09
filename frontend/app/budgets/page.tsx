@@ -73,7 +73,7 @@ export default function BudgetsPage() {
       setBudgets(budgetsWithProgress);
     } catch (err) {
       console.error('Error fetching budgets:', err);
-      setError(handleErrorMessage(err, 'Błąd podczas pobierania budżetów'));
+  setError(handleErrorMessage(err, 'Error while fetching budgets'));
     }
   }, [handleErrorMessage, token]);
 
@@ -87,7 +87,7 @@ export default function BudgetsPage() {
       setCategories(data);
     } catch (err) {
       console.error('Error fetching categories:', err);
-      setError((prev) => prev ?? handleErrorMessage(err, 'Błąd podczas pobierania kategorii'));
+  setError((prev) => prev ?? handleErrorMessage(err, 'Error while fetching categories'));
     }
   }, [handleErrorMessage, token]);
 
@@ -105,7 +105,7 @@ export default function BudgetsPage() {
     void Promise.all([fetchBudgetsData(), fetchCategoriesData()])
       .catch((err) => {
         console.error('Error loading budgets page data:', err);
-        setError(handleErrorMessage(err, 'Błąd podczas ładowania danych budżetów'));
+  setError(handleErrorMessage(err, 'Error while loading budget data'));
       })
       .finally(() => {
         setIsLoading(false);
@@ -114,7 +114,7 @@ export default function BudgetsPage() {
 
   const handleCreate = async (formData: CreateBudgetRequest) => {
     if (!token) {
-      throw new Error('Brak tokenu uwierzytelniającego');
+  throw new Error('Missing authentication token');
     }
 
     try {
@@ -124,7 +124,7 @@ export default function BudgetsPage() {
       setBudgets((prev) => [...prev, budgetWithProgress]);
       setShowForm(false);
     } catch (err) {
-      const message = handleErrorMessage(err, 'Błąd podczas tworzenia budżetu');
+  const message = handleErrorMessage(err, 'Error while creating the budget');
       throw new Error(message);
     }
   };
@@ -132,7 +132,7 @@ export default function BudgetsPage() {
   const handleUpdate = async (formData: CreateBudgetRequest) => {
     if (!editingBudget) return;
     if (!token) {
-      throw new Error('Brak tokenu uwierzytelniającego');
+  throw new Error('Missing authentication token');
     }
 
     try {
@@ -147,7 +147,7 @@ export default function BudgetsPage() {
       setEditingBudget(undefined);
       setShowForm(false);
     } catch (err) {
-      const message = handleErrorMessage(err, 'Błąd podczas aktualizacji budżetu');
+  const message = handleErrorMessage(err, 'Error while updating the budget');
       throw new Error(message);
     }
   };
@@ -167,7 +167,7 @@ export default function BudgetsPage() {
   const handleDelete = async () => {
     if (!deleteConfirm) return;
     if (!token) {
-      setError('Brak tokenu uwierzytelniającego');
+  setError('Missing authentication token');
       return;
     }
 
@@ -177,7 +177,7 @@ export default function BudgetsPage() {
       setDeleteConfirm(null);
     } catch (err) {
       console.error('Error deleting budget:', err);
-      setError(handleErrorMessage(err, 'Błąd podczas usuwania budżetu'));
+  setError(handleErrorMessage(err, 'Error while deleting the budget'));
     }
   };
 
@@ -199,7 +199,7 @@ export default function BudgetsPage() {
       <div className="max-w-7xl mx-auto mt-8">
         {/* Page Header */}
         <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Budżety</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Budgets</h1>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -211,7 +211,7 @@ export default function BudgetsPage() {
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg transition-colors"
           >
             <Plus size={20} />
-            Dodaj budżet
+            Add budget
           </motion.button>
         </div>
 
@@ -237,7 +237,7 @@ export default function BudgetsPage() {
         {/* Budgets List */}
         {isLoading ? (
           <div className="flex justify-center py-12">
-            <p className="text-gray-600 dark:text-gray-300">Ładowanie budżetów...</p>
+            <p className="text-gray-600 dark:text-gray-300">Loading budgets...</p>
           </div>
         ) : (
           <BudgetList
@@ -252,23 +252,23 @@ export default function BudgetsPage() {
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md w-full mx-4">
               <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-                Potwierdź usunięcie
+                Confirm deletion
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mb-6">
-                Czy na pewno chcesz usunąć budżet dla kategorii <strong>{deleteConfirm.category?.name}</strong>?
+                Are you sure you want to delete the budget for category <strong>{deleteConfirm.category?.name}</strong>?
               </p>
               <div className="flex gap-3">
                 <button
                   onClick={handleDelete}
                   className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600 text-white rounded-md transition-colors"
                 >
-                  Usuń
+                  Delete
                 </button>
                 <button
                   onClick={() => setDeleteConfirm(null)}
                   className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 >
-                  Anuluj
+                  Cancel
                 </button>
               </div>
             </div>

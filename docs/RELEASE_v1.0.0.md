@@ -76,8 +76,8 @@ onFocus={(e) => {
 
 ### 4. **Polish Characters Broken in PDF Export**
 **Problem:** 
-- "zł" → "z"
-- "Wypłata" → "Wy[garbage]ata"
+- PLN currency symbol rendered without the diacritic
+- The Polish word "Wyplata" rendered as "Wy[garbage]ata"
 - PDFKit default fonts don't support UTF-8
 
 **Solution:** Installed Liberation Sans font in Docker

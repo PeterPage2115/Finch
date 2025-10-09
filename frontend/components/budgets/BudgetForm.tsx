@@ -75,17 +75,17 @@ export default function BudgetForm({
     setError(null);
 
     if (!formData.categoryId) {
-      setError('Wybierz kategorię');
+      setError('Select a category');
       return;
     }
 
     if (formData.amount <= 0) {
-      setError('Kwota musi być większa niż 0');
+      setError('Amount must be greater than 0');
       return;
     }
 
     if (formData.period === 'CUSTOM' && !formData.endDate) {
-      setError('Dla niestandardowego okresu podaj datę końcową');
+      setError('Provide an end date for the custom period');
       return;
     }
 
@@ -94,19 +94,19 @@ export default function BudgetForm({
     try {
       await onSubmit(formData);
     } catch (err) {
-      const error = err as Error;
-      setError(error.message || 'Wystąpił błąd');
+  const error = err as Error;
+  setError(error.message || 'Something went wrong');
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const periodLabels: { [key in BudgetPeriod]: string } = {
-    'DAILY': 'Dzienny',
-    'WEEKLY': 'Tygodniowy',
-    'MONTHLY': 'Miesięczny',
-    'YEARLY': 'Roczny',
-    'CUSTOM': 'Niestandardowy',
+    DAILY: 'Daily',
+    WEEKLY: 'Weekly',
+    MONTHLY: 'Monthly',
+    YEARLY: 'Yearly',
+    CUSTOM: 'Custom',
   };
 
   const periodOptions: BudgetPeriod[] = ['DAILY', 'WEEKLY', 'MONTHLY', 'YEARLY', 'CUSTOM'];
@@ -114,7 +114,7 @@ export default function BudgetForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-        {isEditMode ? 'Edytuj budżet' : 'Nowy budżet'}
+  {isEditMode ? 'Edit budget' : 'New budget'}
       </h2>
 
       {error && (
@@ -126,7 +126,7 @@ export default function BudgetForm({
       {/* Category Selection */}
       <div>
         <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Kategoria <span className="text-red-500">*</span>
+          Category <span className="text-red-500">*</span>
         </label>
         <select
           id="categoryId"
@@ -136,7 +136,7 @@ export default function BudgetForm({
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           disabled={isSubmitting}
         >
-          <option value="">Wybierz kategorię</option>
+          <option value="">Select a category</option>
           {categories
             .filter((cat) => cat.type === 'EXPENSE')
             .map((cat) => (
@@ -150,7 +150,7 @@ export default function BudgetForm({
       {/* Amount */}
       <div>
         <label htmlFor="amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Kwota (zł) <span className="text-red-500">*</span>
+          Amount (PLN) <span className="text-red-500">*</span>
         </label>
         <input
           type="number"
@@ -161,7 +161,7 @@ export default function BudgetForm({
           value={formData.amount}
           onChange={(e) => setFormData({ ...formData, amount: parseFloat(e.target.value) || 0 })}
           className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="np. 1000.00"
+          placeholder="e.g. 1000.00"
           disabled={isSubmitting}
           autoFocus
         />
@@ -170,7 +170,7 @@ export default function BudgetForm({
       {/* Period */}
       <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Okres <span className="text-red-500">*</span>
+          Period <span className="text-red-500">*</span>
         </label>
         <div className="grid grid-cols-2 gap-3">
           {periodOptions.map((period) => (
@@ -200,7 +200,7 @@ export default function BudgetForm({
       {/* Start Date */}
       <div>
         <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Data rozpoczęcia <span className="text-red-500">*</span>
+          Start date <span className="text-red-500">*</span>
         </label>
         <input
           type="date"
@@ -216,7 +216,7 @@ export default function BudgetForm({
       {/* End Date */}
       <div>
         <label htmlFor="endDate" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-          Data zakończenia {formData.period === 'CUSTOM' && <span className="text-red-500">*</span>}
+          End date {formData.period === 'CUSTOM' && <span className="text-red-500">*</span>}
         </label>
         <input
           type="date"
@@ -229,7 +229,7 @@ export default function BudgetForm({
         />
         {formData.period !== 'CUSTOM' && (
           <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
-            Automatycznie obliczona na podstawie okresu
+            Automatically calculated based on the selected period
           </p>
         )}
       </div>
@@ -243,7 +243,7 @@ export default function BudgetForm({
           disabled={isSubmitting}
           className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-md focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {isSubmitting ? 'Zapisywanie...' : isEditMode ? 'Zapisz zmiany' : 'Utwórz budżet'}
+          {isSubmitting ? 'Saving...' : isEditMode ? 'Save changes' : 'Create budget'}
         </motion.button>
         <motion.button
           whileHover={{ scale: 1.02 }}
@@ -253,7 +253,7 @@ export default function BudgetForm({
           disabled={isSubmitting}
           className="px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Anuluj
+          Cancel
         </motion.button>
       </div>
     </form>

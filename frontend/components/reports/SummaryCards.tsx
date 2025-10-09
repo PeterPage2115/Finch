@@ -77,7 +77,7 @@ export default function SummaryCards({ summary, isLoading }: SummaryCardsProps) 
               {card.value.toFixed(2)} zł
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              {card.count} {card.count === 1 ? 'transakcja' : 'transakcje'}
+              {card.count} {card.count === 1 ? 'transaction' : 'transactions'}
             </p>
           </div>
         );

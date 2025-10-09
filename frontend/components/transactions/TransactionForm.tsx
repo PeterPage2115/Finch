@@ -50,15 +50,15 @@ export default function TransactionForm({
     const newErrors: Record<string, string> = {};
 
     if (formData.amount <= 0) {
-      newErrors.amount = 'Kwota musi być większa niż 0';
+      newErrors.amount = 'Amount must be greater than 0';
     }
 
     if (!formData.date) {
-      newErrors.date = 'Data jest wymagana';
+      newErrors.date = 'Date is required';
     }
 
     if (!formData.categoryId) {
-      newErrors.categoryId = 'Kategoria jest wymagana';
+      newErrors.categoryId = 'Category is required';
     }
 
     setErrors(newErrors);
@@ -90,14 +90,14 @@ export default function TransactionForm({
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">
-        {transaction ? 'Edytuj transakcję' : 'Nowa transakcja'}
+        {transaction ? 'Edit Transaction' : 'New Transaction'}
       </h3>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Typ transakcji */}
+        {/* Transaction Type */}
         <div>
           <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-            Typ transakcji
+            Transaction Type
           </label>
           <div className="grid grid-cols-2 gap-2">
             <button
@@ -110,7 +110,7 @@ export default function TransactionForm({
               }`}
             >
               <TrendingUp size={18} />
-              Przychód
+              Income
             </button>
             <button
               type="button"
@@ -122,15 +122,15 @@ export default function TransactionForm({
               }`}
             >
               <TrendingDown size={18} />
-              Wydatek
+              Expense
             </button>
           </div>
         </div>
 
-        {/* Kwota */}
+        {/* Amount */}
         <div>
           <label htmlFor="amount" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Kwota (zł)
+            Amount (PLN)
           </label>
           <input
             type="number"
@@ -156,10 +156,10 @@ export default function TransactionForm({
           )}
         </div>
 
-        {/* Kategoria */}
+        {/* Category */}
         <div>
           <label htmlFor="categoryId" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Kategoria
+            Category
           </label>
           <select
             id="categoryId"
@@ -170,7 +170,7 @@ export default function TransactionForm({
             }`}
             required
           >
-            <option value="">Wybierz kategorię</option>
+            <option value="">Select category</option>
             {filteredCategories.map((cat) => (
               <option key={cat.id} value={cat.id} className="bg-white dark:bg-gray-700">
                 {cat.name}
@@ -182,10 +182,10 @@ export default function TransactionForm({
           )}
         </div>
 
-        {/* Data */}
+        {/* Date */}
         <div>
           <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Data
+            Date
           </label>
           <input
             type="date"
@@ -202,10 +202,10 @@ export default function TransactionForm({
           )}
         </div>
 
-        {/* Opis */}
+        {/* Description */}
         <div>
           <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-            Opis (opcjonalny)
+            Description (optional)
           </label>
           <textarea
             id="description"
@@ -213,7 +213,7 @@ export default function TransactionForm({
             value={formData.description}
             onChange={(e) => setFormData({ ...formData, description: e.target.value })}
             className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder:text-gray-400 dark:placeholder:text-gray-500"
-            placeholder="Dodatkowe informacje o transakcji..."
+            placeholder="Additional information about the transaction..."
           />
         </div>
 
@@ -227,7 +227,7 @@ export default function TransactionForm({
             className="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition"
             disabled={isLoading}
           >
-            Anuluj
+            Cancel
           </motion.button>
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -236,7 +236,7 @@ export default function TransactionForm({
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 dark:bg-indigo-500 rounded-lg hover:bg-indigo-700 dark:hover:bg-indigo-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
             disabled={isLoading}
           >
-            {isLoading ? 'Zapisywanie...' : transaction ? 'Zaktualizuj' : 'Dodaj'}
+            {isLoading ? 'Saving...' : transaction ? 'Update' : 'Add'}
           </motion.button>
         </div>
       </form>

@@ -1,7 +1,7 @@
 /**
  * CategoryList Component
  * 
- * Wyświetla listę kategorii w formie kart z możliwością edycji i usuwania
+ * Displays category cards with edit and delete actions
  */
 
 'use client';
@@ -11,6 +11,7 @@ import { TransactionType } from '@/types/transaction';
 import { Pencil, Trash2, TrendingUp, TrendingDown } from 'lucide-react';
 import { CategoryIcon } from '@/components/ui/CategoryIcon';
 import { motion } from 'framer-motion';
+import { formatDate } from '@/lib/utils';
 
 interface CategoryListProps {
   categories: Category[];
@@ -38,16 +39,16 @@ export default function CategoryList({
       <div className="text-center py-12">
         <div className="text-6xl mb-4">📦</div>
         <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          Brak kategorii
+          No categories
         </h3>
         <p className="text-gray-600 dark:text-gray-400">
-          Dodaj swoją pierwszą kategorię, aby zacząć organizować finanse
+          Add your first category to start organizing your finances
         </p>
       </div>
     );
   }
 
-  // Grupuj kategorie po typie
+  // Group categories by type
   const incomeCategories = categories.filter(
     (cat) => cat.type === TransactionType.INCOME
   );
@@ -57,12 +58,12 @@ export default function CategoryList({
 
   return (
     <div className="space-y-8">
-      {/* Kategorie przychodów */}
+  {/* Income categories */}
       {incomeCategories.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <TrendingUp className="text-green-600 dark:text-green-400" size={24} />
-            <span>Przychody</span>
+            <span>Income</span>
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
               ({incomeCategories.length})
             </span>
@@ -80,12 +81,12 @@ export default function CategoryList({
         </div>
       )}
 
-      {/* Kategorie wydatków */}
+  {/* Expense categories */}
       {expenseCategories.length > 0 && (
         <div>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <TrendingDown className="text-red-600 dark:text-red-400" size={24} />
-            <span>Wydatki</span>
+            <span>Expenses</span>
             <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
               ({expenseCategories.length})
             </span>
@@ -107,7 +108,7 @@ export default function CategoryList({
 }
 
 /**
- * CategoryCard - pojedyncza karta kategorii
+ * CategoryCard - single category card component
  */
 interface CategoryCardProps {
   category: Category;
@@ -145,7 +146,7 @@ function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
               )}
             </div>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              {new Date(category.createdAt).toLocaleDateString('pl-PL')}
+              {formatDate(category.createdAt)}
             </p>
           </div>
         </div>
@@ -157,8 +158,8 @@ function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
             whileTap={{ scale: 0.9 }}
             onClick={() => onEdit(category)}
             className="p-2 text-gray-600 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
-            title="Edytuj"
-            aria-label={`Edytuj kategorię ${category.name}`}
+            title="Edit"
+            aria-label={`Edit category ${category.name}`}
           >
             <Pencil className="w-4 h-4" />
           </motion.button>
@@ -167,8 +168,8 @@ function CategoryCard({ category, onEdit, onDelete }: CategoryCardProps) {
             whileTap={{ scale: 0.9 }}
             onClick={() => onDelete(category)}
             className="p-2 text-gray-600 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
-            title="Usuń"
-            aria-label={`Usuń kategorię ${category.name}`}
+            title="Delete"
+            aria-label={`Delete category ${category.name}`}
           >
             <Trash2 className="w-4 h-4" />
           </motion.button>

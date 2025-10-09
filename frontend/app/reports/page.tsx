@@ -120,7 +120,7 @@ export default function ReportsPage() {
       <div className="max-w-7xl mx-auto mt-8">
         {/* Page Header */}
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Raporty</h1>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Reports</h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
             Analizuj swoje finanse i wydatki
           </p>
@@ -172,7 +172,7 @@ export default function ReportsPage() {
         {trendsComparison && (
           <div className="mb-6">
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-              Porównanie okresów
+              Periods Comparison
             </h2>
             <TrendsComparisonCards data={trendsComparison} />
           </div>

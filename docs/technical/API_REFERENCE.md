@@ -211,7 +211,7 @@ Content-Type: application/json
 **Response (200 OK):**
 ```json
 {
-  "message": "Hasło zostało pomyślnie zmienione"
+  "message": "Password changed successfully"
 }
 ```
 

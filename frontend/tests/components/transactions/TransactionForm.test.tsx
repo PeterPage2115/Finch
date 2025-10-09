@@ -46,36 +46,36 @@ describe('TransactionForm', () => {
   });
 
   describe('Rendering & Initial State', () => {
-    it('should render "Nowa transakcja" title in create mode', () => {
+    it('should render "New Transaction" title in create mode', () => {
       renderForm();
-      expect(screen.getByText('Nowa transakcja')).toBeInTheDocument();
+      expect(screen.getByText('New Transaction')).toBeInTheDocument();
     });
 
     it('should render all form fields', () => {
       renderForm();
       
       // Type buttons
-      expect(screen.getByRole('button', { name: /przychód/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /wydatek/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /income/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /expense/i })).toBeInTheDocument();
       
       // Input fields
-      expect(screen.getByLabelText('Kwota (zł)')).toBeInTheDocument();
-      expect(screen.getByLabelText('Kategoria')).toBeInTheDocument();
-      expect(screen.getByLabelText('Data')).toBeInTheDocument();
-      expect(screen.getByLabelText('Opis (opcjonalny)')).toBeInTheDocument();
+      expect(screen.getByLabelText('Amount (PLN)')).toBeInTheDocument();
+      expect(screen.getByLabelText('Category')).toBeInTheDocument();
+      expect(screen.getByLabelText('Date')).toBeInTheDocument();
+      expect(screen.getByLabelText('Description (optional)')).toBeInTheDocument();
     });
 
     it('should render action buttons', () => {
       renderForm();
       
-      expect(screen.getByRole('button', { name: /anuluj/i })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: /dodaj/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
     });
 
     it('should have EXPENSE type selected by default', () => {
       renderForm();
       
-      const expenseButton = screen.getByRole('button', { name: /wydatek/i });
+      const expenseButton = screen.getByRole('button', { name: /expense/i });
       expect(expenseButton).toHaveClass('border-red-500');
     });
   });
@@ -93,24 +93,24 @@ describe('TransactionForm', () => {
       updatedAt: '2025-10-07T10:00:00Z',
     };
 
-    it('should render "Edytuj transakcję" title when transaction provided', () => {
+    it('should render "Edit Transaction" title when transaction provided', () => {
       renderForm({ transaction: mockTransaction });
-      expect(screen.getByText('Edytuj transakcję')).toBeInTheDocument();
+      expect(screen.getByText('Edit Transaction')).toBeInTheDocument();
     });
 
-    it('should pre-fill form fields with transaction data', () => {
+    it('should pre-fill form fields with transaction Date', () => {
       renderForm({ transaction: mockTransaction });
       
-      expect(screen.getByLabelText('Kwota (zł)')).toHaveValue(123.45);
-      expect(screen.getByLabelText('Kategoria')).toHaveValue('3');
-      expect(screen.getByLabelText('Opis (opcjonalny)')).toHaveValue('Test transaction');
-      expect(screen.getByLabelText('Data')).toHaveValue('2025-10-07');
+      expect(screen.getByLabelText('Amount (PLN)')).toHaveValue(123.45);
+      expect(screen.getByLabelText('Category')).toHaveValue('3');
+      expect(screen.getByLabelText('Description (optional)')).toHaveValue('Test transaction');
+      expect(screen.getByLabelText('Date')).toHaveValue('2025-10-07');
     });
 
-    it('should show "Zaktualizuj" button instead of "Dodaj"', () => {
+    it('should show "Update" button instead of "Dodaj"', () => {
       renderForm({ transaction: mockTransaction });
       
-      expect(screen.getByRole('button', { name: /zaktualizuj/i })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: /Update/i })).toBeInTheDocument();
       expect(screen.queryByRole('button', { name: /^dodaj$/i })).not.toBeInTheDocument();
     });
   });
@@ -120,9 +120,9 @@ describe('TransactionForm', () => {
       renderForm();
       
       // Click INCOME button
-      fireEvent.click(screen.getByRole('button', { name: /przychód/i }));
+      fireEvent.click(screen.getByRole('button', { name: /income/i }));
       
-      const categorySelect = screen.getByLabelText('Kategoria') as HTMLSelectElement;
+      const categorySelect = screen.getByLabelText('Category') as HTMLSelectElement;
       const options = Array.from(categorySelect.options).filter(opt => opt.value !== '');
       
       expect(options).toHaveLength(2);
@@ -134,7 +134,7 @@ describe('TransactionForm', () => {
       renderForm();
       
       // EXPENSE is default, verify categories
-      const categorySelect = screen.getByLabelText('Kategoria') as HTMLSelectElement;
+      const categorySelect = screen.getByLabelText('Category') as HTMLSelectElement;
       const options = Array.from(categorySelect.options).filter(opt => opt.value !== '');
       
       expect(options).toHaveLength(8);
@@ -145,8 +145,8 @@ describe('TransactionForm', () => {
     it('should apply correct styling to selected type button', () => {
       renderForm();
       
-      const incomeButton = screen.getByRole('button', { name: /przychód/i });
-      const expenseButton = screen.getByRole('button', { name: /wydatek/i });
+      const incomeButton = screen.getByRole('button', { name: /income/i });
+      const expenseButton = screen.getByRole('button', { name: /expense/i });
       
       // Initially EXPENSE selected
       expect(expenseButton).toHaveClass('border-red-500');
@@ -162,14 +162,14 @@ describe('TransactionForm', () => {
     it('should reset categoryId when type changes', () => {
       renderForm();
       
-      const categorySelect = screen.getByLabelText('Kategoria') as HTMLSelectElement;
+      const categorySelect = screen.getByLabelText('Category') as HTMLSelectElement;
       
       // Select EXPENSE category
       fireEvent.change(categorySelect, { target: { value: '3' } });
       expect(categorySelect.value).toBe('3');
       
       // Switch to INCOME
-      fireEvent.click(screen.getByRole('button', { name: /przychód/i }));
+      fireEvent.click(screen.getByRole('button', { name: /income/i }));
       
       // CategoryId should be reset
       expect(categorySelect.value).toBe('');
@@ -181,11 +181,11 @@ describe('TransactionForm', () => {
       renderForm();
       
       // Submit form directly to bypass HTML5 validation
-      const form = screen.getByRole('button', { name: /dodaj/i }).closest('form')!;
+      const form = screen.getByRole('button', { name: /add/i }).closest('form')!;
       fireEvent.submit(form);
       
       await waitFor(() => {
-        expect(screen.getByText('Kwota musi być większa niż 0')).toBeInTheDocument();
+        expect(screen.getByText('Amount must be greater than 0')).toBeInTheDocument();
       });
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
@@ -193,15 +193,15 @@ describe('TransactionForm', () => {
     it('should show error for zero amount', async () => {
       renderForm();
       
-      const amountInput = screen.getByLabelText('Kwota (zł)');
+      const amountInput = screen.getByLabelText('Amount (PLN)');
       fireEvent.change(amountInput, { target: { value: '0' } });
       
       // Submit form directly to bypass HTML5 validation
-      const form = screen.getByRole('button', { name: /dodaj/i }).closest('form')!;
+      const form = screen.getByRole('button', { name: /add/i }).closest('form')!;
       fireEvent.submit(form);
       
       await waitFor(() => {
-        expect(screen.getByText('Kwota musi być większa niż 0')).toBeInTheDocument();
+        expect(screen.getByText('Amount must be greater than 0')).toBeInTheDocument();
       });
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
@@ -210,15 +210,15 @@ describe('TransactionForm', () => {
       renderForm();
       
       // Fill amount and date, but not category
-      fireEvent.change(screen.getByLabelText('Kwota (zł)'), { target: { value: '50' } });
-      fireEvent.change(screen.getByLabelText('Data'), { target: { value: '2025-10-07' } });
+      fireEvent.change(screen.getByLabelText('Amount (PLN)'), { target: { value: '50' } });
+      fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2025-10-07' } });
       
       // Submit form directly to bypass HTML5 validation
-      const form = screen.getByRole('button', { name: /dodaj/i }).closest('form')!;
+      const form = screen.getByRole('button', { name: /add/i }).closest('form')!;
       fireEvent.submit(form);
       
       await waitFor(() => {
-        expect(screen.getByText('Kategoria jest wymagana')).toBeInTheDocument();
+        expect(screen.getByText('Category is required')).toBeInTheDocument();
       });
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
@@ -227,10 +227,10 @@ describe('TransactionForm', () => {
       renderForm();
       
       // Fill amount and category, but clear date
-      fireEvent.change(screen.getByLabelText('Kwota (zł)'), { target: { value: '50' } });
-      fireEvent.change(screen.getByLabelText('Kategoria'), { target: { value: '3' } });
+      fireEvent.change(screen.getByLabelText('Amount (PLN)'), { target: { value: '50' } });
+      fireEvent.change(screen.getByLabelText('Category'), { target: { value: '3' } });
       
-      const dateInput = screen.getByLabelText('Data');
+      const dateInput = screen.getByLabelText('Date');
       fireEvent.change(dateInput, { target: { value: '' } });
       
       // Wait for state update before submitting
@@ -239,11 +239,11 @@ describe('TransactionForm', () => {
       });
       
       // Submit form directly to bypass HTML5 validation
-      const form = screen.getByRole('button', { name: /dodaj/i }).closest('form')!;
+      const form = screen.getByRole('button', { name: /add/i }).closest('form')!;
       fireEvent.submit(form);
       
       await waitFor(() => {
-        expect(screen.getByText('Data jest wymagana')).toBeInTheDocument();
+        expect(screen.getByText('Date is required')).toBeInTheDocument();
       });
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
@@ -252,7 +252,7 @@ describe('TransactionForm', () => {
       renderForm();
       
       // Clear date field (amount is 0 by default, category empty by default)
-      const dateInput = screen.getByLabelText('Data');
+      const dateInput = screen.getByLabelText('Date');
       fireEvent.change(dateInput, { target: { value: '' } });
       
       // Wait for state update
@@ -261,13 +261,13 @@ describe('TransactionForm', () => {
       });
       
       // Submit form directly to bypass HTML5 validation
-      const form = screen.getByRole('button', { name: /dodaj/i }).closest('form')!;
+      const form = screen.getByRole('button', { name: /add/i }).closest('form')!;
       fireEvent.submit(form);
       
       await waitFor(() => {
-        expect(screen.getByText('Kwota musi być większa niż 0')).toBeInTheDocument();
-        expect(screen.getByText('Kategoria jest wymagana')).toBeInTheDocument();
-        expect(screen.getByText('Data jest wymagana')).toBeInTheDocument();
+        expect(screen.getByText('Amount must be greater than 0')).toBeInTheDocument();
+        expect(screen.getByText('Category is required')).toBeInTheDocument();
+        expect(screen.getByText('Date is required')).toBeInTheDocument();
       });
       expect(mockOnSubmit).not.toHaveBeenCalled();
     });
@@ -276,7 +276,7 @@ describe('TransactionForm', () => {
       renderForm();
       
       // Try to submit invalid form
-      const submitButton = screen.getByRole('button', { name: /dodaj/i });
+      const submitButton = screen.getByRole('button', { name: /add/i });
       fireEvent.click(submitButton);
       
       expect(mockOnSubmit).not.toHaveBeenCalled();
@@ -284,17 +284,17 @@ describe('TransactionForm', () => {
   });
 
   describe('Form Submission', () => {
-    it('should call onSubmit with correct data structure when form is valid', async () => {
+    it('should call onSubmit with correct Date structure when form is valid', async () => {
       renderForm();
       
       // Fill form
-      fireEvent.change(screen.getByLabelText('Kwota (zł)'), { target: { value: '50.75' } });
-      fireEvent.change(screen.getByLabelText('Kategoria'), { target: { value: '3' } });
-      fireEvent.change(screen.getByLabelText('Data'), { target: { value: '2025-10-07' } });
-      fireEvent.change(screen.getByLabelText('Opis (opcjonalny)'), { target: { value: 'Test description' } });
+      fireEvent.change(screen.getByLabelText('Amount (PLN)'), { target: { value: '50.75' } });
+      fireEvent.change(screen.getByLabelText('Category'), { target: { value: '3' } });
+      fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2025-10-07' } });
+      fireEvent.change(screen.getByLabelText('Description (optional)'), { target: { value: 'Test description' } });
       
       // Submit
-      const submitButton = screen.getByRole('button', { name: /dodaj/i });
+      const submitButton = screen.getByRole('button', { name: /add/i });
       fireEvent.click(submitButton);
       
       await waitFor(() => {
@@ -311,11 +311,11 @@ describe('TransactionForm', () => {
     it('should convert amount to Number type', async () => {
       renderForm();
       
-      fireEvent.change(screen.getByLabelText('Kwota (zł)'), { target: { value: '123.45' } });
-      fireEvent.change(screen.getByLabelText('Kategoria'), { target: { value: '3' } });
-      fireEvent.change(screen.getByLabelText('Data'), { target: { value: '2025-10-07' } });
+      fireEvent.change(screen.getByLabelText('Amount (PLN)'), { target: { value: '123.45' } });
+      fireEvent.change(screen.getByLabelText('Category'), { target: { value: '3' } });
+      fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2025-10-07' } });
       
-      fireEvent.click(screen.getByRole('button', { name: /dodaj/i }));
+      fireEvent.click(screen.getByRole('button', { name: /add/i }));
       
       await waitFor(() => {
         expect(mockOnSubmit).toHaveBeenCalledWith(
@@ -332,11 +332,11 @@ describe('TransactionForm', () => {
     it('should convert date to ISO 8601 format', async () => {
       renderForm();
       
-      fireEvent.change(screen.getByLabelText('Kwota (zł)'), { target: { value: '50' } });
-      fireEvent.change(screen.getByLabelText('Kategoria'), { target: { value: '3' } });
-      fireEvent.change(screen.getByLabelText('Data'), { target: { value: '2025-10-07' } });
+      fireEvent.change(screen.getByLabelText('Amount (PLN)'), { target: { value: '50' } });
+      fireEvent.change(screen.getByLabelText('Category'), { target: { value: '3' } });
+      fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2025-10-07' } });
       
-      fireEvent.click(screen.getByRole('button', { name: /dodaj/i }));
+      fireEvent.click(screen.getByRole('button', { name: /add/i }));
       
       await waitFor(() => {
         expect(mockOnSubmit).toHaveBeenCalledWith(
@@ -350,7 +350,7 @@ describe('TransactionForm', () => {
     it('should show loading state during submission', () => {
       renderForm({ isLoading: true });
       
-      const submitButton = screen.getByRole('button', { name: /zapisywanie/i });
+      const submitButton = screen.getByRole('button', { name: /saving/i });
       expect(submitButton).toBeInTheDocument();
       expect(submitButton).toBeDisabled();
     });
@@ -358,7 +358,7 @@ describe('TransactionForm', () => {
     it('should disable cancel button during loading', () => {
       renderForm({ isLoading: true });
       
-      const cancelButton = screen.getByRole('button', { name: /anuluj/i });
+      const cancelButton = screen.getByRole('button', { name: /cancel/i });
       expect(cancelButton).toBeDisabled();
     });
   });
@@ -367,12 +367,12 @@ describe('TransactionForm', () => {
     it('should allow description field to be empty', async () => {
       renderForm();
       
-      fireEvent.change(screen.getByLabelText('Kwota (zł)'), { target: { value: '50' } });
-      fireEvent.change(screen.getByLabelText('Kategoria'), { target: { value: '3' } });
-      fireEvent.change(screen.getByLabelText('Data'), { target: { value: '2025-10-07' } });
+      fireEvent.change(screen.getByLabelText('Amount (PLN)'), { target: { value: '50' } });
+      fireEvent.change(screen.getByLabelText('Category'), { target: { value: '3' } });
+      fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2025-10-07' } });
       // Leave description empty
       
-      fireEvent.click(screen.getByRole('button', { name: /dodaj/i }));
+      fireEvent.click(screen.getByRole('button', { name: /add/i }));
       
       await waitFor(() => {
         expect(mockOnSubmit).toHaveBeenCalledWith(
@@ -386,14 +386,14 @@ describe('TransactionForm', () => {
     it('should pass description value to onSubmit', async () => {
       renderForm();
       
-      fireEvent.change(screen.getByLabelText('Kwota (zł)'), { target: { value: '50' } });
-      fireEvent.change(screen.getByLabelText('Kategoria'), { target: { value: '3' } });
-      fireEvent.change(screen.getByLabelText('Data'), { target: { value: '2025-10-07' } });
-      fireEvent.change(screen.getByLabelText('Opis (opcjonalny)'), { 
+      fireEvent.change(screen.getByLabelText('Amount (PLN)'), { target: { value: '50' } });
+      fireEvent.change(screen.getByLabelText('Category'), { target: { value: '3' } });
+      fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2025-10-07' } });
+      fireEvent.change(screen.getByLabelText('Description (optional)'), { 
         target: { value: 'My custom description' } 
       });
       
-      fireEvent.click(screen.getByRole('button', { name: /dodaj/i }));
+      fireEvent.click(screen.getByRole('button', { name: /add/i }));
       
       await waitFor(() => {
         expect(mockOnSubmit).toHaveBeenCalledWith(
@@ -408,29 +408,29 @@ describe('TransactionForm', () => {
       renderForm();
       
       // Trigger validation error
-      const form = screen.getByRole('button', { name: /dodaj/i }).closest('form')!;
+      const form = screen.getByRole('button', { name: /add/i }).closest('form')!;
       fireEvent.submit(form);
       
       await waitFor(() => {
-        expect(screen.getByText('Kwota musi być większa niż 0')).toBeInTheDocument();
+        expect(screen.getByText('Amount must be greater than 0')).toBeInTheDocument();
       });
       
       // Fix the error
-      fireEvent.change(screen.getByLabelText('Kwota (zł)'), { target: { value: '50' } });
-      fireEvent.change(screen.getByLabelText('Kategoria'), { target: { value: '3' } });
-      fireEvent.change(screen.getByLabelText('Data'), { target: { value: '2025-10-07' } });
+      fireEvent.change(screen.getByLabelText('Amount (PLN)'), { target: { value: '50' } });
+      fireEvent.change(screen.getByLabelText('Category'), { target: { value: '3' } });
+      fireEvent.change(screen.getByLabelText('Date'), { target: { value: '2025-10-07' } });
       fireEvent.submit(form);
       
       // Error should be cleared
       await waitFor(() => {
-        expect(screen.queryByText('Kwota musi być większa niż 0')).not.toBeInTheDocument();
+        expect(screen.queryByText('Amount must be greater than 0')).not.toBeInTheDocument();
       });
     });
 
     it('should call onCancel when cancel button clicked', () => {
       renderForm();
       
-      const cancelButton = screen.getByRole('button', { name: /anuluj/i });
+      const cancelButton = screen.getByRole('button', { name: /cancel/i });
       fireEvent.click(cancelButton);
       
       expect(mockOnCancel).toHaveBeenCalledTimes(1);

@@ -27,20 +27,20 @@ export default function Home() {
           </h1>
         </div>
         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8">
-          Zarządzaj swoimi finansami w prosty sposób
+          Manage your finances in a simple way
         </p>
         <div className="flex gap-4 justify-center flex-wrap mt-8">
           <Link 
             href="/login" 
             className="px-8 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium text-lg shadow-lg"
           >
-            Zaloguj się
+            Sign In
           </Link>
           <Link 
             href="/register" 
             className="px-8 py-3 bg-white text-indigo-600 rounded-lg hover:bg-gray-50 transition-colors font-medium text-lg border-2 border-indigo-600 shadow-lg"
           >
-            Załóż konto
+            Create Account
           </Link>
         </div>
 
@@ -51,10 +51,10 @@ export default function Home() {
               <BarChart2 size={28} className="text-indigo-600 dark:text-indigo-400" />
             </div>
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-              Śledź transakcje
+              Track Transactions
             </h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Dodawaj przychody i wydatki, kategoryzuj je i przeglądaj historię
+              Add income and expenses, categorize them and review history
             </p>
           </div>
 
@@ -63,10 +63,10 @@ export default function Home() {
               <Briefcase size={28} className="text-indigo-600 dark:text-indigo-400" />
             </div>
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-              Zarządzaj budżetem
+              Manage Budget
             </h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Ustaw limity wydatków i monitoruj postępy w realizacji celów
+              Set spending limits and monitor progress toward your goals
             </p>
           </div>
 
@@ -75,10 +75,10 @@ export default function Home() {
               <Lock size={28} className="text-indigo-600 dark:text-indigo-400" />
             </div>
             <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-2">
-              Prywatność przede wszystkim
+              Privacy First
             </h3>
             <p className="text-gray-600 dark:text-gray-300">
-              Twoje dane pozostają u Ciebie - self-hosted i open source
+              Your data stays with you - self-hosted and open source
             </p>
           </div>
         </div>

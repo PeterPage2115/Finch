@@ -107,7 +107,7 @@ export default function AppNavbar() {
                     : 'text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400'
                 }`}
               >
-                Kategorie
+                Categories
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -119,7 +119,7 @@ export default function AppNavbar() {
                     : 'text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400'
                 }`}
               >
-                Budżety
+                Budgets
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -131,7 +131,7 @@ export default function AppNavbar() {
                     : 'text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400'
                 }`}
               >
-                Raporty
+                Reports
               </motion.button>
               <motion.button
                 whileHover={{ scale: 1.05 }}
@@ -143,7 +143,7 @@ export default function AppNavbar() {
                     : 'text-gray-700 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400'
                 }`}
               >
-                Profil
+                Profile
               </motion.button>
             </div>
           </div>
@@ -254,7 +254,7 @@ export default function AppNavbar() {
                       : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  Kategorie
+                  Categories
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -266,7 +266,7 @@ export default function AppNavbar() {
                       : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  Budżety
+                  Budgets
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -278,7 +278,7 @@ export default function AppNavbar() {
                       : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  Raporty
+                  Reports
                 </motion.button>
                 <motion.button
                   whileHover={{ scale: 1.02 }}
@@ -290,7 +290,7 @@ export default function AppNavbar() {
                       : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800'
                   }`}
                 >
-                  Profil
+                  Profile
                 </motion.button>
               </nav>
 

@@ -1,4 +1,4 @@
-# 📡 API Documentation - Tracker Kasy
+# 📡 API Documentation - Finance Tracker
 
 **Base URL:** `http://localhost:3001`
 
@@ -8,7 +8,7 @@
 
 ### 1. Register User
 
-Rejestracja nowego użytkownika w systemie.
+Registers a new user in the system.
 
 **Endpoint:** `POST /auth/register`
 
@@ -43,7 +43,7 @@ Rejestracja nowego użytkownika w systemie.
 ```json
 {
   "statusCode": 409,
-  "message": "Użytkownik o tym adresie email już istnieje",
+  "message": "A user with this email already exists",
   "error": "Conflict"
 }
 ```
@@ -53,8 +53,8 @@ Rejestracja nowego użytkownika w systemie.
 {
   "statusCode": 400,
   "message": [
-    "Nieprawidłowy adres email",
-    "Hasło musi mieć co najmniej 8 znaków"
+  "Email must be a valid email address",
+  "Password must be at least 8 characters long"
   ],
   "error": "Bad Request"
 }
@@ -75,7 +75,7 @@ curl -X POST http://localhost:3001/auth/register \
 
 ### 2. Login User
 
-Logowanie użytkownika i uzyskanie JWT tokenu.
+Authenticates a user and returns a JWT token.
 
 **Endpoint:** `POST /auth/login`
 
@@ -108,7 +108,7 @@ Logowanie użytkownika i uzyskanie JWT tokenu.
 ```json
 {
   "statusCode": 401,
-  "message": "Nieprawidłowy email lub hasło",
+  "message": "Invalid email or password",
   "error": "Unauthorized"
 }
 ```
@@ -118,8 +118,8 @@ Logowanie użytkownika i uzyskanie JWT tokenu.
 {
   "statusCode": 400,
   "message": [
-    "Nieprawidłowy adres email",
-    "Hasło jest wymagane"
+  "Email must be a valid email address",
+  "Password is required"
   ],
   "error": "Bad Request"
 }
@@ -139,7 +139,7 @@ curl -X POST http://localhost:3001/auth/login \
 
 ### 3. Get Current User Profile
 
-Pobranie profilu zalogowanego użytkownika. **Wymaga uwierzytelnienia.**
+Retrieves the profile of the authenticated user. **Requires authentication.**
 
 **Endpoint:** `GET /auth/me`
 
@@ -181,7 +181,7 @@ curl -X GET http://localhost:3001/auth/me \
 
 ### Token Structure
 
-Tokeny JWT są generowane z następującą strukturą payloadu:
+JWT tokens are generated with the following payload structure:
 
 ```json
 {
@@ -192,11 +192,11 @@ Tokeny JWT są generowane z następującą strukturą payloadu:
 }
 ```
 
-**Pola:**
+**Fields:**
 - `sub`: User ID (UUID)
-- `email`: Email użytkownika
-- `iat`: Issued At (timestamp)
-- `exp`: Expiration Time (timestamp)
+- `email`: User email
+- `iat`: Issued at (timestamp)
+- `exp`: Expiration time (timestamp)
 
 ### Token Configuration
 
@@ -206,7 +206,7 @@ Tokeny JWT są generowane z następującą strukturą payloadu:
 
 ### Using JWT in Requests
 
-Wszystkie chronione endpointy wymagają tokenu JWT w nagłówku `Authorization`:
+All protected endpoints require a JWT token in the `Authorization` header:
 
 ```
 Authorization: Bearer <your-jwt-token>
@@ -232,20 +232,20 @@ curl -H "Authorization: Bearer YOUR_TOKEN_HERE" \
 ## 🛡️ Security Notes
 
 1. **Password Security:**
-   - Hasła są hashowane używając bcrypt z 10 salt rounds
-   - Nigdy nie są przechowywane ani zwracane w plain text
+  - Passwords are hashed with bcrypt using 10 salt rounds
+  - They are never stored or returned in plain text
 
 2. **Token Storage:**
-   - Frontend powinien przechowywać token w `localStorage` lub `httpOnly cookies`
-   - Token powinien być wysyłany w każdym requescie do chronionych endpointów
+  - The frontend should store the token in `localStorage` or `httpOnly cookies`
+  - The token must be sent with every request to protected endpoints
 
 3. **HTTPS:**
-   - W produkcji zawsze używaj HTTPS
-   - Nigdy nie wysyłaj tokenów przez niezabezpieczone połączenia
+  - Always use HTTPS in production
+  - Never send tokens over unsecured connections
 
 4. **Token Refresh:**
-   - Obecnie brak mechanizmu refresh token (planowane w przyszłości)
-   - Po wygaśnięciu tokenu użytkownik musi się zalogować ponownie
+  - Refresh tokens are not implemented yet (planned for the future)
+  - After a token expires, the user needs to log in again
 
 ---
 
@@ -285,7 +285,7 @@ $token = ($response.Content | ConvertFrom-Json).accessToken
 
 ### 1. Create Budget
 
-Tworzy nowy budżet dla użytkownika.
+Creates a new budget for the user.
 
 **Endpoint:** `POST /budgets`
 
@@ -315,9 +315,9 @@ Tworzy nowy budżet dla użytkownika.
 - `endDate`: Valid ISO date, calculated automatically for MONTHLY/YEARLY (optional for non-CUSTOM)
 
 **Business Rules:**
-- User cannot have duplicate budgets: unique `(userId, categoryId, startDate)`
-- For MONTHLY period: `endDate = last day of month`
-- For YEARLY period: `endDate = last day of year`
+- A user cannot create duplicate budgets: unique `(userId, categoryId, startDate)`
+- For MONTHLY period: `endDate = last day of the month`
+- For YEARLY period: `endDate = last day of the year`
 
 **Success Response (201 Created):**
 ```json
@@ -333,7 +333,7 @@ Tworzy nowy budżet dla użytkownika.
   "updatedAt": "2025-10-06T12:00:00.000Z",
   "category": {
     "id": "9bfc1ecc-e1b5-4870-86b1-680394a906df",
-    "name": "Jedzenie",
+  "name": "Food",
     "type": "EXPENSE",
     "color": "#10B981",
     "icon": "ShoppingCart"
@@ -346,8 +346,8 @@ Tworzy nowy budżet dla użytkownika.
 ```
 
 **Alerts Array:**
-- `"80%"` - gdy progress >= 80% i < 100%
-- `"100%"` - gdy progress >= 100%
+- `"80%"` - when progress >= 80% and < 100%
+- `"100%"` - when progress >= 100%
 
 **Error Responses:**
 
@@ -364,7 +364,7 @@ Tworzy nowy budżet dla użytkownika.
 ```json
 {
   "statusCode": 409,
-  "message": "Budżet dla tej kategorii w tym okresie już istnieje",
+  "message": "A budget for this category already exists in this period",
   "error": "Conflict"
 }
 ```
@@ -373,7 +373,7 @@ Tworzy nowy budżet dla użytkownika.
 
 ### 2. Get All Budgets
 
-Pobiera wszystkie budżety użytkownika z opcjonalnym filtrowaniem.
+Returns all budgets for the user with optional filters.
 
 **Endpoint:** `GET /budgets?period=MONTHLY&startDate=2025-10-01`
 
@@ -401,7 +401,7 @@ Pobiera wszystkie budżety użytkownika z opcjonalnym filtrowaniem.
     "endDate": "2025-10-31T23:59:59.999Z",
     "category": {
       "id": "category-uuid-1",
-      "name": "Jedzenie",
+  "name": "Food",
       "type": "EXPENSE",
       "color": "#10B981",
       "icon": "ShoppingCart"
@@ -437,7 +437,7 @@ Pobiera wszystkie budżety użytkownika z opcjonalnym filtrowaniem.
 
 ### 3. Get Budget by ID
 
-Pobiera szczegóły konkretnego budżetu.
+Retrieves the details of a single budget.
 
 **Endpoint:** `GET /budgets/:id`
 
@@ -460,7 +460,7 @@ Pobiera szczegóły konkretnego budżetu.
   "endDate": "2025-10-31T23:59:59.999Z",
   "category": {
     "id": "category-uuid",
-    "name": "Jedzenie",
+  "name": "Food",
     "type": "EXPENSE",
     "color": "#10B981",
     "icon": "ShoppingCart"
@@ -478,7 +478,7 @@ Pobiera szczegóły konkretnego budżetu.
 ```json
 {
   "statusCode": 404,
-  "message": "Budżet nie został znaleziony",
+  "message": "Budget not found",
   "error": "Not Found"
 }
 ```
@@ -487,7 +487,7 @@ Pobiera szczegóły konkretnego budżetu.
 
 ### 4. Update Budget
 
-Aktualizuje istniejący budżet.
+Updates an existing budget.
 
 **Endpoint:** `PATCH /budgets/:id`
 
@@ -522,7 +522,7 @@ Aktualizuje istniejący budżet.
   "endDate": "2025-11-30T23:59:59.999Z",
   "category": {
     "id": "category-uuid",
-    "name": "Jedzenie",
+  "name": "Food",
     "type": "EXPENSE",
     "color": "#10B981",
     "icon": "ShoppingCart"
@@ -538,7 +538,7 @@ Aktualizuje istniejący budżet.
 
 ### 5. Delete Budget
 
-Usuwa budżet.
+Deletes a budget.
 
 **Endpoint:** `DELETE /budgets/:id`
 
@@ -559,7 +559,7 @@ Usuwa budżet.
 ```json
 {
   "statusCode": 404,
-  "message": "Budżet nie został znaleziony",
+  "message": "Budget not found",
   "error": "Not Found"
 }
 ```

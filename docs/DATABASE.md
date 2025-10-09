@@ -1,150 +1,150 @@
-# 📊 Schemat Bazy Danych - Tracker Kasy
+# 📊 Database Schema - Finance Tracker
 
-## Przegląd
+## Overview
 
-Aplikacja używa **PostgreSQL** jako bazy danych oraz **Prisma ORM** do zarządzania schematem i migracjami.
+The application uses **PostgreSQL** as the database engine and **Prisma ORM** to manage the schema and migrations.
 
-## 🗄️ Modele Danych
+## 🗄️ Data Models
 
-### 1. **User** (Użytkownik)
+### 1. **User**
 
-Tabela przechowująca informacje o użytkownikach aplikacji.
+Stores information about every user account in the system.
 
-| Pole        | Typ       | Opis                                      |
-|-------------|-----------|-------------------------------------------|
-| `id`        | String    | UUID - unikalny identyfikator (PK)        |
-| `email`     | String    | Adres email (unique, wymagany)            |
-| `password`  | String    | Hash hasła (bcrypt)                       |
-| `name`      | String?   | Imię i nazwisko (opcjonalne)              |
-| `createdAt` | DateTime  | Data utworzenia konta                     |
-| `updatedAt` | DateTime  | Data ostatniej aktualizacji               |
+| Field       | Type      | Description                                  |
+|-------------|-----------|----------------------------------------------|
+| `id`        | String    | UUID – unique identifier (PK)                |
+| `email`     | String    | Email address (unique, required)             |
+| `password`  | String    | Password hash (bcrypt)                       |
+| `name`      | String?   | Display name (optional)                      |
+| `createdAt` | DateTime  | Account creation timestamp                   |
+| `updatedAt` | DateTime  | Last update timestamp                        |
 
-**Relacje:**
-- Użytkownik może mieć wiele transakcji (`transactions`)
-- Użytkownik może mieć wiele kategorii (`categories`)
-- Użytkownik może mieć wiele budżetów (`budgets`)
+**Relationships:**
+- One user has many transactions (`transactions`)
+- One user has many categories (`categories`)
+- One user has many budgets (`budgets`)
 
 **Constraints:**
-- `email` - unikalny w całej tabeli
-- Wszystkie powiązane dane są usuwane przy usunięciu użytkownika (`CASCADE`)
+- `email` must be unique across the table
+- Deleting a user cascades to all related entities (`CASCADE`)
 
 ---
 
-### 2. **Category** (Kategoria)
+### 2. **Category**
 
-Kategorie służą do klasyfikowania transakcji (np. "Jedzenie", "Transport", "Wynagrodzenie").
+Categories classify transactions (for example: "Food", "Transport", "Salary").
 
-| Pole        | Typ           | Opis                                          |
-|-------------|---------------|-----------------------------------------------|
-| `id`        | String        | UUID - unikalny identyfikator (PK)            |
-| `name`      | String        | Nazwa kategorii                               |
-| `type`      | CategoryType  | Typ: `INCOME` lub `EXPENSE` (domyślnie EXPENSE) |
-| `color`     | String?       | Kolor hex dla UI (np. "#3B82F6")             |
-| `icon`      | String?       | Nazwa ikony lub emoji (np. "🍔")             |
-| `userId`    | String        | ID użytkownika (FK → User)                    |
-| `createdAt` | DateTime      | Data utworzenia                               |
-| `updatedAt` | DateTime      | Data ostatniej aktualizacji                   |
+| Field        | Type          | Description                                      |
+|--------------|---------------|--------------------------------------------------|
+| `id`         | String        | UUID – unique identifier (PK)                    |
+| `name`       | String        | Category name                                    |
+| `type`       | CategoryType  | `INCOME` or `EXPENSE` (defaults to `EXPENSE`)    |
+| `color`      | String?       | Hex color for the UI (e.g., `#3B82F6`)           |
+| `icon`       | String?       | Icon or emoji name (e.g., `"🍔"`)              |
+| `userId`     | String        | User ID (FK → User)                              |
+| `createdAt`  | DateTime      | Creation timestamp                               |
+| `updatedAt`  | DateTime      | Last update timestamp                            |
 
 **Enums:**
 ```prisma
 enum CategoryType {
-  INCOME   // Przychód
-  EXPENSE  // Wydatek
+  INCOME   // Income
+  EXPENSE  // Expense
 }
 ```
 
-**Relacje:**
-- Kategoria należy do jednego użytkownika (`user`)
-- Kategoria może mieć wiele transakcji (`transactions`)
-- Kategoria może mieć wiele budżetów (`budgets`)
+**Relationships:**
+- Each category belongs to a single user (`user`)
+- A category can have many transactions (`transactions`)
+- A category can have many budgets (`budgets`)
 
 **Constraints:**
-- `(userId, name, type)` - unique constraint (użytkownik nie może mieć dwóch kategorii o tej samej nazwie i typie)
-- Usunięcie użytkownika usuwa wszystkie jego kategorie (`CASCADE`)
-- Nie można usunąć kategorii jeśli istnieją powiązane transakcje (`RESTRICT`)
+- `(userId, name, type)` must be unique (a user cannot duplicate a category with the same name and type)
+- Deleting a user cascades to the user's categories (`CASCADE`)
+- A category cannot be deleted while related transactions exist (`RESTRICT`)
 
 ---
 
-### 3. **Transaction** (Transakcja)
+### 3. **Transaction**
 
-Pojedyncza transakcja finansowa (przychód lub wydatek).
+Represents a single financial transaction (income or expense).
 
-| Pole          | Typ              | Opis                                          |
-|---------------|------------------|-----------------------------------------------|
-| `id`          | String           | UUID - unikalny identyfikator (PK)            |
-| `amount`      | Decimal(12,2)    | Kwota transakcji (12 cyfr, 2 po przecinku)    |
-| `description` | String?          | Opis transakcji (opcjonalny)                  |
-| `date`        | DateTime         | Data transakcji (domyślnie: teraz)            |
-| `type`        | TransactionType  | Typ: `INCOME` lub `EXPENSE`                   |
-| `userId`      | String           | ID użytkownika (FK → User)                    |
-| `categoryId`  | String           | ID kategorii (FK → Category)                  |
-| `createdAt`   | DateTime         | Data utworzenia rekordu                       |
-| `updatedAt`   | DateTime         | Data ostatniej aktualizacji                   |
+| Field          | Type             | Description                                          |
+|----------------|------------------|------------------------------------------------------|
+| `id`           | String           | UUID – unique identifier (PK)                        |
+| `amount`       | Decimal(12,2)    | Transaction amount                                   |
+| `description`  | String?          | Optional description                                 |
+| `date`         | DateTime         | Transaction date (defaults to now)                   |
+| `type`         | TransactionType  | `INCOME` or `EXPENSE`                                |
+| `userId`       | String           | User ID (FK → User)                                  |
+| `categoryId`   | String           | Category ID (FK → Category)                          |
+| `createdAt`    | DateTime         | Creation timestamp                                   |
+| `updatedAt`    | DateTime         | Last update timestamp                                |
 
 **Enums:**
 ```prisma
 enum TransactionType {
-  INCOME   // Przychód
-  EXPENSE  // Wydatek
+  INCOME   // Income
+  EXPENSE  // Expense
 }
 ```
 
-**Relacje:**
-- Transakcja należy do jednego użytkownika (`user`)
-- Transakcja należy do jednej kategorii (`category`)
+**Relationships:**
+- Every transaction belongs to exactly one user (`user`)
+- Every transaction belongs to exactly one category (`category`)
 
-**Indeksy:**
-- `(userId, date DESC)` - szybkie zapytania o transakcje użytkownika posortowane po dacie
-- `(categoryId)` - szybkie zapytania o transakcje w danej kategorii
+**Indexes:**
+- `(userId, date DESC)` – fast queries for user transactions sorted by date
+- `(categoryId)` – fast queries for transactions per category
 
 **Constraints:**
-- Usunięcie użytkownika usuwa wszystkie jego transakcje (`CASCADE`)
-- Nie można usunąć kategorii jeśli istnieją powiązane transakcje (`RESTRICT`)
+- Deleting a user cascades to the user's transactions (`CASCADE`)
+- A category cannot be deleted while related transactions exist (`RESTRICT`)
 
 ---
 
-### 4. **Budget** (Budżet)
+### 4. **Budget**
 
-Budżet określa limit wydatków dla danej kategorii w określonym okresie.
+Defines a spending limit for a given category within a specific period.
 
-| Pole         | Typ           | Opis                                          |
-|--------------|---------------|-----------------------------------------------|
-| `id`         | String        | UUID - unikalny identyfikator (PK)            |
-| `amount`     | Decimal(12,2) | Kwota limitu budżetu                          |
-| `period`     | BudgetPeriod  | Okres: DAILY, WEEKLY, MONTHLY, YEARLY, CUSTOM |
-| `startDate`  | DateTime      | Data rozpoczęcia okresu                       |
-| `endDate`    | DateTime      | Data zakończenia okresu                       |
-| `userId`     | String        | ID użytkownika (FK → User)                    |
-| `categoryId` | String        | ID kategorii (FK → Category)                  |
-| `createdAt`  | DateTime      | Data utworzenia                               |
-| `updatedAt`  | DateTime      | Data ostatniej aktualizacji                   |
+| Field         | Type           | Description                                      |
+|---------------|----------------|--------------------------------------------------|
+| `id`          | String         | UUID – unique identifier (PK)                    |
+| `amount`      | Decimal(12,2)  | Budget limit                                     |
+| `period`      | BudgetPeriod   | DAILY, WEEKLY, MONTHLY, YEARLY, or CUSTOM        |
+| `startDate`   | DateTime       | Period start date                                |
+| `endDate`     | DateTime       | Period end date                                  |
+| `userId`      | String         | User ID (FK → User)                              |
+| `categoryId`  | String         | Category ID (FK → Category)                      |
+| `createdAt`   | DateTime       | Creation timestamp                               |
+| `updatedAt`   | DateTime       | Last update timestamp                            |
 
 **Enums:**
 ```prisma
 enum BudgetPeriod {
-  DAILY    // Dzienny
-  WEEKLY   // Tygodniowy
-  MONTHLY  // Miesięczny (domyślny)
-  YEARLY   // Roczny
-  CUSTOM   // Niestandardowy
+  DAILY    // Daily
+  WEEKLY   // Weekly
+  MONTHLY  // Monthly (default)
+  YEARLY   // Yearly
+  CUSTOM   // Custom
 }
 ```
 
-**Relacje:**
-- Budżet należy do jednego użytkownika (`user`)
-- Budżet dotyczy jednej kategorii (`category`)
+**Relationships:**
+- Each budget belongs to one user (`user`)
+- Each budget targets one category (`category`)
 
-**Indeksy:**
-- `(userId, startDate)` - szybkie zapytania o budżety użytkownika w danym okresie
+**Indexes:**
+- `(userId, startDate)` – optimized queries for budgets per user and period
 
 **Constraints:**
-- `(userId, categoryId, startDate)` - unique constraint (jeden budżet na kategorię w danym okresie)
-- Usunięcie użytkownika usuwa wszystkie jego budżety (`CASCADE`)
-- Nie można usunąć kategorii jeśli istnieją powiązane budżety (`RESTRICT`)
+- `(userId, categoryId, startDate)` must be unique (no duplicate budgets for a category in the same period)
+- Deleting a user cascades to the user's budgets (`CASCADE`)
+- A category cannot be deleted while related budgets exist (`RESTRICT`)
 
 ---
 
-## 🔗 Diagram Relacji
+## 🔗 Relationship Diagram
 
 ```
 ┌─────────────┐
@@ -166,31 +166,31 @@ enum BudgetPeriod {
        └──────────────────────────────────────────────┘
 ```
 
-**Legenda:**
-- `1:N` - relacja jeden-do-wielu
-- `CASCADE` - usunięcie rodzica usuwa dzieci
-- `RESTRICT` - nie można usunąć rodzica jeśli istnieją dzieci
+**Legend:**
+- `1:N` – one-to-many relationship
+- `CASCADE` – deleting a parent removes its children
+- `RESTRICT` – a parent cannot be removed while children exist
 
 ---
 
-## 🛠️ Migracje
+## 🛠️ Migrations
 
-### Pierwsza migracja: `20251002173625_init`
+### Initial migration: `20251002173625_init`
 
-Tworzy kompletny schemat bazy danych:
-- 4 tabele: `users`, `categories`, `transactions`, `budgets`
-- 3 typy enum: `CategoryType`, `TransactionType`, `BudgetPeriod`
-- Wszystkie indeksy i constraints
-- Klucze obce z odpowiednimi strategiami `ON DELETE`
+Creates the entire database schema:
+- 4 tables: `users`, `categories`, `transactions`, `budgets`
+- 3 enum types: `CategoryType`, `TransactionType`, `BudgetPeriod`
+- All indexes and constraints
+- Foreign keys with appropriate `ON DELETE` strategies
 
-### Uruchamianie migracji
+### Running migrations
 
-**W kontenerze Docker (produkcja):**
+**In Docker (production-like):**
 ```bash
 docker-compose exec backend npx prisma migrate deploy
 ```
 
-**Lokalnie (development):**
+**Locally (development):**
 ```bash
 cd backend
 npx prisma migrate dev
@@ -198,14 +198,14 @@ npx prisma migrate dev
 
 ---
 
-## 🌱 Dane Testowe (Seed) - Opcjonalne
+## 🌱 Sample Data (Optional Seed)
 
-> **Note:** Seed files are not included in the repository (development only).  
-> You can create your own `backend/prisma/seed.ts` locally for testing purposes.
+> **Note:** Seed files are not committed to the repository (development only).
+> Create your own `backend/prisma/seed.ts` locally if you want test data.
 
-### Example Seed Structure
+### Example seed structure
 
-If you want to create test data locally, create `backend/prisma/seed.ts`:
+If you want to seed data locally, create `backend/prisma/seed.ts`:
 
 ```typescript
 import { PrismaClient } from '@prisma/client';
@@ -230,7 +230,7 @@ async function main() {
   await prisma.category.create({
     data: {
       userId: user.id,
-      name: 'Jedzenie',
+      name: 'Food',
       type: 'EXPENSE',
       icon: 'UtensilsCrossed',
       color: '#ef4444',
@@ -251,41 +251,41 @@ main()
   });
 ```
 
-### Running Seed (if created locally)
+### Running the seed (if created locally)
 
 **Locally:**
 ```bash
 cd backend
-DATABASE_URL="postgresql://tracker_user:tracker_password@localhost:5432/tracker_kasy?schema=public" npx prisma db seed
+DATABASE_URL="postgresql://tracker_user:tracker_password@localhost:5432/finance_tracker?schema=public" npx prisma db seed
 ```
 
-**In Docker container:**
+**In Docker:**
 ```bash
 docker-compose exec backend npx prisma db seed
 ```
 
 ---
 
-## 📝 Najlepsze Praktyki
+## 📝 Best Practices
 
-1. **UUID jako Primary Key** - lepsze niż auto-increment dla distributed systems
-2. **Decimal dla kwot** - unikamy problemów z zaokrągleniem float/double
-3. **Indeksy na często używanych zapytaniach** - `(userId, date DESC)` dla listy transakcji
-4. **Soft delete?** - Nie. Trzymamy się prostoty (KISS). Jeśli będzie potrzeba, dodamy później.
-5. **Timestamps** - Każda tabela ma `createdAt` i `updatedAt`
+1. **UUID as the primary key** – better than auto-increment for distributed systems
+2. **Decimals for monetary values** – avoid floating-point rounding errors
+3. **Indexes on common queries** – `(userId, date DESC)` for recent transactions
+4. **No soft delete** – we keep the schema simple (KISS). Add it later if needed.
+5. **Timestamps everywhere** – every table has `createdAt` and `updatedAt`
 6. **Cascade vs Restrict:**
-   - `CASCADE` na User → usunięcie konta czyści wszystkie dane
-   - `RESTRICT` na Category → nie można usunąć kategorii z transakcjami/budżetami
+   - `CASCADE` on User → removing an account wipes related data
+   - `RESTRICT` on Category → cannot remove a category with transactions/budgets
 
 ---
 
-## 🔍 Przykładowe Zapytania
+## 🔍 Example Queries
 
-### Wszystkie transakcje użytkownika w danym miesiącu:
+### All transactions for a user in a given month
 ```typescript
 const transactions = await prisma.transaction.findMany({
   where: {
-    userId: userId,
+    userId,
     date: {
       gte: startOfMonth,
       lte: endOfMonth,
@@ -300,12 +300,12 @@ const transactions = await prisma.transaction.findMany({
 });
 ```
 
-### Suma wydatków per kategoria:
+### Total expenses per category
 ```typescript
 const expenses = await prisma.transaction.groupBy({
   by: ['categoryId'],
   where: {
-    userId: userId,
+    userId,
     type: 'EXPENSE',
   },
   _sum: {
@@ -314,12 +314,12 @@ const expenses = await prisma.transaction.groupBy({
 });
 ```
 
-### Sprawdzenie wykorzystania budżetu:
+### Budget usage calculation
 ```typescript
 const budget = await prisma.budget.findFirst({
   where: {
-    userId: userId,
-    categoryId: categoryId,
+    userId,
+    categoryId,
     startDate: { lte: new Date() },
     endDate: { gte: new Date() },
   },
@@ -327,8 +327,8 @@ const budget = await prisma.budget.findFirst({
 
 const spent = await prisma.transaction.aggregate({
   where: {
-    userId: userId,
-    categoryId: categoryId,
+    userId,
+    categoryId,
     type: 'EXPENSE',
     date: {
       gte: budget.startDate,
@@ -345,16 +345,16 @@ const remaining = budget.amount - (spent._sum.amount || 0);
 
 ---
 
-## 🚀 Następne Kroki
+## 🚀 Next Steps
 
-Po zakończeniu Fazy 2.1, następne będą:
-- **Faza 3:** System uwierzytelniania (Auth)
-- **Faza 4:** CRUD dla kategorii
-- **Faza 5:** CRUD dla transakcji
-- **Faza 6:** CRUD dla budżetów
-- **Faza 7:** Dashboard i statystyki
+After completing Phase 2.1, the roadmap continues with:
+- **Phase 3:** Authentication system
+- **Phase 4:** Category CRUD
+- **Phase 5:** Transaction CRUD
+- **Phase 6:** Budget CRUD
+- **Phase 7:** Dashboard and analytics
 
 ---
 
-**Ostatnia aktualizacja:** 2 października 2025  
-**Status:** Faza 2.1 zakończona ✅
+**Last updated:** October 2, 2025  
+**Status:** Phase 2.1 completed ✅
