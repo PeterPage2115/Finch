@@ -1,4 +1,4 @@
-# 📊 Database Schema - Finance Tracker
+# 📊 Database Schema - Finch
 
 ## Overview
 
@@ -256,7 +256,7 @@ main()
 **Locally:**
 ```bash
 cd backend
-DATABASE_URL="postgresql://tracker_user:tracker_password@localhost:5432/finance_tracker?schema=public" npx prisma db seed
+DATABASE_URL="postgresql://Finch_user_db:Finch_password_db@localhost:5432/finance_Finch?schema=public" npx prisma db seed
 ```
 
 **In Docker:**

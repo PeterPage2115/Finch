@@ -1,6 +1,6 @@
 # 🛠️ Tech Stack
 
-> **Overview of technologies, frameworks, and libraries used in Tracker Kasy**
+> **Overview of technologies, frameworks, and libraries used in Finch**
 
 ---
 

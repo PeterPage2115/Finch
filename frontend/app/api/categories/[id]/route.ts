@@ -39,7 +39,7 @@ export async function GET(
   } catch (error) {
     console.error('❌ [API] Error fetching category:', error);
     return NextResponse.json(
-      { message: 'Błąd podczas pobierania kategorii' },
+      { message: 'Error fetching category' },
       { status: 500 }
     );
   }
@@ -85,7 +85,7 @@ export async function PATCH(
   } catch (error) {
     console.error('❌ [API] Error updating category:', error);
     return NextResponse.json(
-      { message: 'Błąd podczas aktualizacji kategorii' },
+      { message: 'Error updating category' },
       { status: 500 }
     );
   }
@@ -129,11 +129,11 @@ export async function DELETE(
       return NextResponse.json(data);
     }
 
-    return NextResponse.json({ message: 'Kategoria usunięta' });
+    return NextResponse.json({ message: 'Category deleted' });
   } catch (error) {
     console.error('❌ [API] Error deleting category:', error);
     return NextResponse.json(
-      { message: 'Błąd podczas usuwania kategorii' },
+      { message: 'Error deleting category' },
       { status: 500 }
     );
   }

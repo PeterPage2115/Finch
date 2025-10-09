@@ -1,4 +1,4 @@
-# 📡 API Documentation - Finance Tracker
+# 📡 API Documentation - Finch
 
 **Base URL:** `http://localhost:3001`
 

@@ -1,4 +1,4 @@
-# Backend - Tracker Kasy
+# Backend - Finch
 
 API backend zbudowane z NestJS i Prisma ORM.
 

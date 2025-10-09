@@ -48,11 +48,11 @@ export async function POST(request: NextRequest) {
     });
     
   } catch (error) {
-    console.error('❌ [API Route] Błąd podczas proxy do backend:', error);
+    console.error('❌ [API Route] Error during proxy to backend:', error);
     
     return NextResponse.json(
       { 
-        message: 'Błąd połączenia z serwerem',
+        message: 'Server connection error',
         error: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }

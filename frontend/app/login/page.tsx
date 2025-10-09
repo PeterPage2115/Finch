@@ -22,7 +22,7 @@ export default function LoginPage() {
   // Obserwuj zmianę stanu autentykacji i przekieruj gdy stan się zmieni
   useEffect(() => {
     if (loginSuccess && isAuthenticated) {
-      console.log('✅ [LOGIN] Stan autentykacji potwierdzony, przekierowanie...');
+      console.log('✅ [LOGIN] Authentication state confirmed, redirecting...');
       // Użyj window.location.href dla pełnego przeładowania - unika race condition z middleware
       window.location.href = '/dashboard';
     }
@@ -30,7 +30,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('🔵 [LOGIN] Rozpoczęcie procesu logowania');
+    console.log('🔵 [LOGIN] Starting login process');
     console.log('📧 [LOGIN] Email:', formData.email);
     
     setError('');
@@ -38,16 +38,16 @@ export default function LoginPage() {
     setLoginSuccess(false);
 
     try {
-      console.log('📡 [LOGIN] Wysyłanie żądania do API...');
+      console.log('📡 [LOGIN] Sending request to API...');
       const response = await authApi.login(formData);
-      console.log('✅ [LOGIN] Odpowiedź z API otrzymana:', {
+      console.log('✅ [LOGIN] API response received:', {
         user: response.user,
         hasToken: !!response.accessToken,
         tokenLength: response.accessToken?.length
       });
       
-      console.log('💾 [LOGIN] Zapisywanie danych do store...');
-      // Zapisz dane w store
+      console.log('💾 [LOGIN] Saving data to store...');
+      // Save data to store
       setAuth(
         {
           id: response.user.id,
@@ -58,20 +58,20 @@ export default function LoginPage() {
         },
         { accessToken: response.accessToken }
       );
-      console.log('✅ [LOGIN] Dane zapisane w store');
+      console.log('✅ [LOGIN] Data saved to store');
 
-      // Ustaw flagę sukcesu - useEffect obsłuży przekierowanie
+      // Set success flag - useEffect will handle redirect
       setLoginSuccess(true);
-      console.log('🎯 [LOGIN] Flaga loginSuccess ustawiona - czekam na useEffect...');
+      console.log('🎯 [LOGIN] loginSuccess flag set - waiting for useEffect...');
     } catch (err) {
-      console.error('❌ [LOGIN] Błąd podczas logowania:', err);
-      console.error('❌ [LOGIN] Szczegóły błędu:', {
+      console.error('❌ [LOGIN] Login error:', err);
+      console.error('❌ [LOGIN] Error details:', {
         message: (err as Error).message,
         name: (err as Error).name,
         stack: (err as Error).stack
       });
       const error = err as Error;
-      setError(error.message || 'Nieprawidłowy email lub hasło');
+      setError(error.message || 'Invalid email or password');
       setIsLoading(false);
     }
     // Note: nie ustawiamy isLoading=false w try, bo przekierowanie nastąpi
@@ -90,8 +90,8 @@ export default function LoginPage() {
       <button
         onClick={toggleTheme}
         className="fixed top-4 right-4 z-50 p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all hover:scale-110 active:scale-95 border border-gray-200 dark:border-gray-700"
-        title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
-        aria-label="Przełącz tryb ciemny/jasny"
+        title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+        aria-label="Toggle dark/light mode"
       >
         {theme === 'dark' ? (
           <Sun className="w-6 h-6 text-yellow-500" />
@@ -107,11 +107,11 @@ export default function LoginPage() {
             <div className="flex items-center justify-center gap-3 mb-2">
               <Wallet className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Tracker Kasy
+                Finch
               </h2>
             </div>
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-              Zaloguj się do swojego konta
+              Sign in to your account
             </p>
           </div>
 
@@ -130,7 +130,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               >
-                Adres email
+                Email Address
               </label>
               <input
                 id="email"
@@ -152,7 +152,7 @@ export default function LoginPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               >
-                Hasło
+                Password
               </label>
               <input
                 id="password"
@@ -196,10 +196,10 @@ export default function LoginPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Logowanie...
+                  Logging in...
                 </>
               ) : (
-                'Zaloguj się'
+                'Log In'
               )}
             </button>
           </form>

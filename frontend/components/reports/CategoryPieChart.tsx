@@ -135,7 +135,7 @@ function CategoryPieChart({ categories, isLoading }: CategoryPieChartProps) {
                 {cat.total.toFixed(2)} zł
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400">
-                {cat.percentage.toFixed(1)}% ({cat.transactionCount} transakcji)
+                {cat.percentage.toFixed(1)}% ({cat.transactionCount} transactions)
               </p>
             </div>
           </div>

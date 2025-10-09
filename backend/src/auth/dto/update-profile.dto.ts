@@ -9,11 +9,13 @@ import {
 export class UpdateProfileDto {
   @IsOptional()
   @IsString()
-  @MinLength(2, { message: 'Imię musi mieć co najmniej 2 znaki' })
-  @MaxLength(100, { message: 'Imię nie może być dłuższe niż 100 znaków' })
+  @MinLength(2, { message: 'The name must have at least 2 characters' })
+  @MaxLength(100, {
+    message: 'The name must not be longer than 100 characters',
+  })
   name?: string;
 
   @IsOptional()
-  @IsEmail({}, { message: 'Podaj prawidłowy adres email' })
+  @IsEmail({}, { message: 'Please provide a valid email address' })
   email?: string;
 }

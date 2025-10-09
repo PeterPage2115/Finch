@@ -129,7 +129,7 @@ export class AuthService {
       });
 
       if (existingUser && existingUser.id !== userId) {
-        throw new ConflictException('Podany adres email jest już używany');
+        throw new ConflictException('Your email address is already in use');
       }
     }
 

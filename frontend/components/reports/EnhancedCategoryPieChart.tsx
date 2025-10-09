@@ -26,10 +26,13 @@ export default function EnhancedCategoryPieChart({
 }: EnhancedCategoryPieChartProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
+  const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
+  const currency = 'USD'; // Can be made configurable via props
+
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pl-PL', {
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
-      currency: 'PLN',
+      currency: currency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(value);
@@ -73,10 +76,10 @@ export default function EnhancedCategoryPieChart({
         <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-3 shadow-lg">
           <p className="font-semibold text-gray-900 dark:text-white">{data.name}</p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Kwota: <span className="font-medium">{formatCurrency(data.value)}</span>
+            Amount: <span className="font-medium">{formatCurrency(data.value)}</span>
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Procent: <span className="font-medium">{data.percentage.toFixed(1)}%</span>
+            Percentage: <span className="font-medium">{data.percentage.toFixed(1)}%</span>
           </p>
           <p className="text-sm text-gray-600 dark:text-gray-400">
             Transactions: <span className="font-medium">{data.count}</span>
@@ -119,7 +122,7 @@ export default function EnhancedCategoryPieChart({
   return (
     <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
       <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-        Rozkład wydatków według kategorii
+        Expense Breakdown by Category
       </h3>
       <ResponsiveContainer width="100%" height={400}>
         <PieChart>
@@ -175,7 +178,7 @@ export default function EnhancedCategoryPieChart({
       {onCategoryClick && (
         <p className="mt-4 text-center text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center gap-1">
           <Info size={14} />
-          Kliknij na segment aby zobaczyć szczegóły
+          Click on a segment to view details
         </p>
       )}
     </div>

@@ -29,7 +29,7 @@ export default function ResetPasswordPage({
     if (newPassword.length < 8) {
       setMessage({
         type: 'error',
-        text: 'Hasło musi mieć minimum 8 znaków',
+        text: 'Password must be at least 8 characters',
       });
       setIsSubmitting(false);
       return;
@@ -48,7 +48,7 @@ export default function ResetPasswordPage({
     if (!passwordRegex.test(newPassword)) {
       setMessage({
         type: 'error',
-        text: 'Hasło musi zawierać małą literę, wielką literę i cyfrę',
+        text: 'Password must contain lowercase, uppercase, and a digit',
       });
       setIsSubmitting(false);
       return;
@@ -76,7 +76,7 @@ export default function ResetPasswordPage({
           type: 'success',
           text:
             data.message ||
-            'Hasło zostało pomyślnie zresetowane. Przekierowanie do logowania...',
+            'Password successfully reset. Redirecting to login...',
         });
         setNewPassword('');
         setConfirmPassword('');
@@ -88,14 +88,14 @@ export default function ResetPasswordPage({
       } else {
         setMessage({
           type: 'error',
-          text: data.message || 'Token jest nieprawidłowy lub wygasł',
+          text: data.message || 'Token is invalid or expired',
         });
       }
     } catch (error) {
       console.error('Reset password error:', error);
       setMessage({
         type: 'error',
-        text: 'Nie udało się połączyć z serwerem.',
+        text: 'Failed to connect to the server.',
       });
     } finally {
       setIsSubmitting(false);
@@ -109,9 +109,9 @@ export default function ResetPasswordPage({
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">
-              Zresetuj hasło
+              Reset Password
             </h1>
-            <p className="text-gray-400">Wprowadź nowe hasło do swojego konta</p>
+            <p className="text-gray-400">Enter a new password for your account</p>
           </div>
 
           {/* Success/Error Message */}
@@ -134,7 +134,7 @@ export default function ResetPasswordPage({
                 htmlFor="newPassword"
                 className="block text-sm font-medium text-gray-300 mb-2"
               >
-                Nowe hasło
+                New Password
               </label>
               <input
                 type="password"
@@ -143,11 +143,11 @@ export default function ResetPasswordPage({
                 onChange={(e) => setNewPassword(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="Minimum 8 znaków"
+                placeholder="Minimum 8 characters"
                 disabled={isSubmitting || message?.type === 'success'}
               />
               <p className="mt-2 text-xs text-gray-400">
-                Hasło musi zawierać: małą literę, wielką literę i cyfrę
+                Password must contain: lowercase, uppercase, and a digit
               </p>
             </div>
 
@@ -156,7 +156,7 @@ export default function ResetPasswordPage({
                 htmlFor="confirmPassword"
                 className="block text-sm font-medium text-gray-300 mb-2"
               >
-                Potwierdź nowe hasło
+                Confirm New Password
               </label>
               <input
                 type="password"
@@ -165,7 +165,7 @@ export default function ResetPasswordPage({
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                placeholder="Powtórz nowe hasło"
+                placeholder="Repeat new password"
                 disabled={isSubmitting || message?.type === 'success'}
               />
             </div>
@@ -176,10 +176,10 @@ export default function ResetPasswordPage({
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting
-                ? 'Resetowanie...'
+                ? 'Resetting...'
                 : message?.type === 'success'
-                  ? 'Sukces! Przekierowanie...'
-                  : 'Zresetuj hasło'}
+                  ? 'Success! Redirecting...'
+                  : 'Reset Password'}
             </button>
           </form>
 
@@ -189,7 +189,7 @@ export default function ResetPasswordPage({
               href="/login"
               className="text-sm text-gray-400 hover:text-white transition-colors"
             >
-              Powrót do logowania
+              Back to Login
             </Link>
           </div>
         </div>

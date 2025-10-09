@@ -2,20 +2,20 @@ services:
   # PostgreSQL Database
   db:
     image: postgres:16-alpine
-    container_name: tracker_kasy_db
+    container_name: Finch_db
     restart: unless-stopped
     environment:
-      POSTGRES_USER: tracker_user
-      POSTGRES_PASSWORD: tracker_password
-      POSTGRES_DB: tracker_kasy
+      POSTGRES_USER: Finch_user_db
+      POSTGRES_PASSWORD: Finch_password_db
+      POSTGRES_DB: Finch_db
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - tracker_network
+      - Finch_network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U tracker_user -d tracker_kasy"]
+      test: ["CMD-SHELL", "pg_isready -U Finch_user_db -d Finch_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -25,10 +25,10 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: tracker_kasy_backend
+    container_name: Finch_backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: "postgresql://tracker_user:tracker_password@db:5432/tracker_kasy?schema=public"
+      DATABASE_URL: "postgresql://Finch_user_db:Finch_password_db@db:5432/Finch?schema=public"
       JWT_SECRET: "${JWT_SECRET:-change-this-to-a-secure-random-string-in-production}"
       JWT_EXPIRATION: "7d"
       PORT: 3001
@@ -40,7 +40,7 @@ services:
       db:
         condition: service_healthy
     networks:
-      - tracker_network
+      - Finch_network
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://0.0.0.0:3001/"]
       interval: 30s
@@ -54,7 +54,7 @@ services:
       context: ./frontend
       # Używamy Dockerfile.dev dla developmentu (hot reload)
       dockerfile: Dockerfile.dev
-    container_name: tracker_kasy_frontend
+    container_name: Finch_frontend
     restart: unless-stopped
     environment:
       # Backend URL używane przez Next.js API Routes (server-side only)
@@ -71,7 +71,7 @@ services:
     depends_on:
       - backend
     networks:
-      - tracker_network
+      - Finch_network
     healthcheck:
       test: ["CMD", "sh", "-c", "ps aux | grep -v grep | grep -q 'next-server' || exit 1"]
       interval: 30s
@@ -83,10 +83,10 @@ services:
 volumes:
   pgdata:
     driver: local
-    name: tracker_kasy_pgdata
+    name: Finch_pgdata
 
 # Networks
 networks:
-  tracker_network:
+  Finch_network:
     driver: bridge
-    name: tracker_kasy_network
+    name: Finch_network

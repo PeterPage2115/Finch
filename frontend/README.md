@@ -1,4 +1,4 @@
-# Frontend - Finance Tracker
+# Frontend - Finch
 
 Frontend application built with Next.js 14+, TypeScript, and Tailwind CSS.
 

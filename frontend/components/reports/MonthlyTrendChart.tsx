@@ -63,7 +63,7 @@ export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
   return (
     <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm">
       <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-        Trendy miesięczne
+        Monthly Trends
       </h3>
       <ResponsiveContainer width="100%" height={300}>
         <LineChart
@@ -114,9 +114,9 @@ export function MonthlyTrendChart({ data }: MonthlyTrendChartProps) {
             wrapperStyle={{ fontSize: '14px' }}
             formatter={(value: string) => {
               const labels: Record<string, string> = {
-                income: 'Przychody',
-                expenses: 'Wydatki',
-                balance: 'Bilans',
+                income: 'Income',
+                expenses: 'Expenses',
+                balance: 'Balance',
               };
               return labels[value] || value;
             }}

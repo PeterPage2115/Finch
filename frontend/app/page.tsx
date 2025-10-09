@@ -23,7 +23,7 @@ export default function Home() {
         <div className="flex items-center justify-center gap-4 mb-6">
           <Wallet className="w-16 h-16 md:w-20 md:h-20 text-indigo-600 dark:text-indigo-400" />
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white">
-            Tracker Kasy
+            Finch
           </h1>
         </div>
         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8">

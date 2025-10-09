@@ -125,11 +125,11 @@ export class EmailService implements OnModuleInit {
 </head>
 <body>
   <div class="container">
-    <h2>🔐 Reset hasła - Tracker Kasy</h2>
+    <h2>🔐 Reset hasła - Finch</h2>
     
     <p>Witaj!</p>
     
-    <p>Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta w aplikacji <strong>Tracker Kasy</strong>.</p>
+    <p>Otrzymaliśmy prośbę o zresetowanie hasła do Twojego konta w aplikacji <strong>Finch</strong>.</p>
     
     <p>Kliknij poniższy przycisk, aby ustawić nowe hasło:</p>
     
@@ -146,7 +146,7 @@ export class EmailService implements OnModuleInit {
     <p>Jeśli nie prosiłeś o reset hasła, zignoruj tę wiadomość. Twoje konto pozostanie bezpieczne.</p>
     
     <div class="footer">
-      <p>Tracker Kasy - Twoje finanse pod kontrolą</p>
+      <p>Finch - Twoje finanse pod kontrolą</p>
       <p>Ta wiadomość została wygenerowana automatycznie. Prosimy nie odpowiadać.</p>
     </div>
   </div>
@@ -155,9 +155,9 @@ export class EmailService implements OnModuleInit {
     `;
 
     const info: SentMessageInfo = await this.transporter.sendMail({
-      from: '"Tracker Kasy" <noreply@trackerkasy.com>',
+      from: '"Finch" <noreply@Finchkasy.com>',
       to: email,
-      subject: 'Reset hasła - Tracker Kasy',
+      subject: 'Reset hasła - Finch',
       html: htmlTemplate,
     });
 

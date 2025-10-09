@@ -86,7 +86,7 @@ export default function ReportsPage() {
       setMonthlyTrend(monthlyData);
     } catch (err) {
       console.error('Error fetching reports:', err);
-      setError(err instanceof Error ? err.message : 'Błąd podczas pobierania raportów');
+      setError(err instanceof Error ? err.message : 'Error fetching reports');
     } finally {
       setIsLoading(false);
     }
@@ -122,7 +122,7 @@ export default function ReportsPage() {
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Reports</h1>
           <p className="mt-2 text-gray-600 dark:text-gray-400">
-            Analizuj swoje finanse i wydatki
+            Analyze your finances and expenses
           </p>
         </div>
 

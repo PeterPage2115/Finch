@@ -31,7 +31,7 @@ export default function SummaryCards({ summary, isLoading }: SummaryCardsProps) 
 
   const cards = [
     {
-      title: 'Przychody',
+      title: 'Income',
       value: summary.totalIncome,
       count: summary.transactionCount.income,
       icon: TrendingUp,
@@ -39,7 +39,7 @@ export default function SummaryCards({ summary, isLoading }: SummaryCardsProps) 
       bgColor: 'bg-green-50 dark:bg-green-900/30',
     },
     {
-      title: 'Wydatki',
+      title: 'Expenses',
       value: summary.totalExpenses,
       count: summary.transactionCount.expenses,
       icon: TrendingDown,
@@ -47,7 +47,7 @@ export default function SummaryCards({ summary, isLoading }: SummaryCardsProps) 
       bgColor: 'bg-red-50 dark:bg-red-900/30',
     },
     {
-      title: 'Bilans',
+      title: 'Balance',
       value: summary.balance,
       count: summary.transactionCount.income + summary.transactionCount.expenses,
       icon: DollarSign,

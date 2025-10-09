@@ -41,7 +41,7 @@ export default function ProfilePage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Nie udało się zaktualizować profilu');
+        throw new Error(error.message || 'Failed to update profile');
       }
 
       const updatedUser = await response.json();
@@ -49,10 +49,10 @@ export default function ProfilePage() {
       // Update store
       useAuthStore.setState({ user: updatedUser });
 
-      setProfileSuccess('Profil został pomyślnie zaktualizowany');
+      setProfileSuccess('Profile successfully updated');
       setIsEditingProfile(false);
     } catch (err: unknown) {
-      setProfileError(err instanceof Error ? err.message : 'Wystąpił błąd');
+      setProfileError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -63,12 +63,12 @@ export default function ProfilePage() {
 
     // Validation
     if (newPassword !== confirmPassword) {
-      setPasswordError('Nowe hasła nie pasują do siebie');
+      setPasswordError('New passwords do not match');
       return;
     }
 
     if (newPassword.length < 8) {
-      setPasswordError('Nowe hasło musi mieć co najmniej 8 znaków');
+      setPasswordError('New password must be at least 8 characters');
       return;
     }
 
@@ -85,16 +85,16 @@ export default function ProfilePage() {
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.message || 'Nie udało się zmienić hasła');
+        throw new Error(error.message || 'Failed to change password');
       }
 
-      setPasswordSuccess('Hasło zostało pomyślnie zmienione');
+      setPasswordSuccess('Password successfully changed');
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
       setIsChangingPassword(false);
     } catch (err: unknown) {
-      setPasswordError(err instanceof Error ? err.message : 'Wystąpił błąd');
+      setPasswordError(err instanceof Error ? err.message : 'An error occurred');
     }
   };
 
@@ -103,7 +103,7 @@ export default function ProfilePage() {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
         <AppNavbar />
         <div className="container mx-auto px-4 py-8">
-          <p className="text-gray-900 dark:text-white">Ładowanie...</p>
+          <p className="text-gray-900 dark:text-white">Loading...</p>
         </div>
       </div>
     );
@@ -118,13 +118,13 @@ export default function ProfilePage() {
       {/* Profile Information Section */}
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Informacje o profilu</h2>
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Profile Information</h2>
           {!isEditingProfile && (
             <button
               onClick={() => setIsEditingProfile(true)}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
             >
-              Edytuj
+              Edit
             </button>
           )}
         </div>
@@ -144,8 +144,8 @@ export default function ProfilePage() {
         {!isEditingProfile ? (
           <div className="space-y-3">
             <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Imię</label>
-              <p className="mt-1 text-lg text-gray-900 dark:text-white">{user.name || 'Nie podano'}</p>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+              <p className="mt-1 text-lg text-gray-900 dark:text-white">{user.name || 'Not provided'}</p>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
@@ -156,7 +156,7 @@ export default function ProfilePage() {
           <form onSubmit={handleProfileSubmit} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Imię
+                Name
               </label>
               <input
                 type="text"
@@ -188,7 +188,7 @@ export default function ProfilePage() {
                 type="submit"
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
               >
-                Zapisz zmiany
+                Save Changes
               </button>
               <button
                 type="button"
@@ -201,7 +201,7 @@ export default function ProfilePage() {
                 }}
                 className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
               >
-                Anuluj
+                Cancel
               </button>
             </div>
           </form>
@@ -217,7 +217,7 @@ export default function ProfilePage() {
               onClick={() => setIsChangingPassword(true)}
               className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
             >
-              Zmień hasło
+              Change Password
             </button>
           )}
         </div>
@@ -238,7 +238,7 @@ export default function ProfilePage() {
           <form onSubmit={handlePasswordSubmit} className="space-y-4">
             <div>
               <label htmlFor="oldPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Obecne hasło
+                Current Password
               </label>
               <input
                 type="password"
@@ -253,7 +253,7 @@ export default function ProfilePage() {
 
             <div>
               <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Nowe hasło
+                New Password
               </label>
               <input
                 type="password"
@@ -271,7 +271,7 @@ export default function ProfilePage() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Potwierdź nowe hasło
+                Confirm New Password
               </label>
               <input
                 type="password"
@@ -289,7 +289,7 @@ export default function ProfilePage() {
                 type="submit"
                 className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
               >
-                Zmień hasło
+                Change Password
               </button>
               <button
                 type="button"
@@ -303,7 +303,7 @@ export default function ProfilePage() {
                 }}
                 className="px-4 py-2 bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
               >
-                Anuluj
+                Cancel
               </button>
             </div>
           </form>

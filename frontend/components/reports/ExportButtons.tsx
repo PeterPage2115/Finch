@@ -28,7 +28,7 @@ export function ExportButtons({ startDate, endDate, token }: ExportButtonsProps)
       );
 
       if (!response.ok) {
-        throw new Error('Błąd podczas eksportu CSV');
+        throw new Error('Error exporting CSV');
       }
 
       const blob = await response.blob();
@@ -42,10 +42,10 @@ export function ExportButtons({ startDate, endDate, token }: ExportButtonsProps)
       window.URL.revokeObjectURL(url);
 
       // Show success message (simple alert for now)
-      alert('CSV został pobrany pomyślnie!');
+      alert('CSV downloaded successfully!');
     } catch (error) {
       console.error('Error exporting CSV:', error);
-      alert('Błąd podczas eksportu CSV');
+      alert('Error exporting CSV');
     } finally {
       setIsExportingCSV(false);
     }
@@ -65,24 +65,24 @@ export function ExportButtons({ startDate, endDate, token }: ExportButtonsProps)
       );
 
       if (!response.ok) {
-        throw new Error('Błąd podczas eksportu PDF');
+        throw new Error('Error exporting PDF');
       }
 
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `raport_${startDate}_${endDate}.pdf`;
+      a.download = `report_${startDate}_${endDate}.pdf`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
 
       // Show success message (simple alert for now)
-      alert('PDF został pobrany pomyślnie!');
+      alert('PDF downloaded successfully!');
     } catch (error) {
       console.error('Error exporting PDF:', error);
-      alert('Błąd podczas eksportu PDF');
+      alert('Error exporting PDF');
     } finally {
       setIsExportingPDF(false);
     }
@@ -99,12 +99,12 @@ export function ExportButtons({ startDate, endDate, token }: ExportButtonsProps)
         {isExportingCSV ? (
           <>
             <Loader2Icon className="h-4 w-4 animate-spin" />
-            <span>Generowanie CSV...</span>
+            <span>Generating CSV...</span>
           </>
         ) : (
           <>
             <FileTextIcon className="h-4 w-4" />
-            <span>Pobierz CSV</span>
+            <span>Download CSV</span>
           </>
         )}
       </button>
@@ -118,12 +118,12 @@ export function ExportButtons({ startDate, endDate, token }: ExportButtonsProps)
         {isExportingPDF ? (
           <>
             <Loader2Icon className="h-4 w-4 animate-spin" />
-            <span>Generowanie PDF...</span>
+            <span>Generating PDF...</span>
           </>
         ) : (
           <>
             <DownloadIcon className="h-4 w-4" />
-            <span>Pobierz PDF</span>
+            <span>Download PDF</span>
           </>
         )}
       </button>

@@ -33,7 +33,7 @@ export default function BudgetWidget({ budgets, isLoading }: BudgetWidgetProps) 
           href="/budgets"
           className="flex items-center gap-1 text-sm text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors"
         >
-          Zobacz wszystkie
+          See all
           <ArrowRight size={16} />
         </Link>
       </div>
@@ -55,8 +55,8 @@ function BudgetWidgetItem({ budget }: { budget: BudgetWithProgress }) {
   const { category, progress } = budget;
 
   // Format amounts
-  const spent = progress.spent.toFixed(0);
-  const limit = progress.limit.toFixed(0);
+  const spent = progress.spent;
+  const limit = progress.limit;
   const percentage = Math.round(progress.percentage);
 
   // Badge color based on percentage
@@ -78,12 +78,12 @@ function BudgetWidgetItem({ budget }: { budget: BudgetWithProgress }) {
             size={18} 
           />
           <span className="font-medium text-gray-900 dark:text-white text-sm">
-            {category?.name || 'Kategoria'}
+            {category?.name || 'Category'}
           </span>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-sm text-gray-600 dark:text-gray-300">
-            {spent} / {limit} zł
+            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(spent)} / {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(limit)}
           </span>
           <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${badgeColor}`}>
             {percentage}%

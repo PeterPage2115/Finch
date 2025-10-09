@@ -63,7 +63,7 @@ export function TrendsComparisonCards({ data }: TrendsComparisonCardsProps) {
 
   const cards = [
     {
-      title: 'Wydatki',
+      title: 'Expenses',
       current: data.currentPeriod.expenses,
       previous: data.previousPeriod.expenses,
       change: data.changes.expenses,
@@ -72,7 +72,7 @@ export function TrendsComparisonCards({ data }: TrendsComparisonCardsProps) {
       borderColor: 'border-red-200 dark:border-red-800',
     },
     {
-      title: 'Przychody',
+      title: 'Income',
       current: data.currentPeriod.income,
       previous: data.previousPeriod.income,
       change: data.changes.income,
@@ -81,7 +81,7 @@ export function TrendsComparisonCards({ data }: TrendsComparisonCardsProps) {
       borderColor: 'border-green-200 dark:border-green-800',
     },
     {
-      title: 'Bilans',
+      title: 'Balance',
       current: data.currentPeriod.balance,
       previous: data.previousPeriod.balance,
       change: data.changes.balance,
@@ -109,7 +109,7 @@ export function TrendsComparisonCards({ data }: TrendsComparisonCardsProps) {
 
           {/* Previous Amount */}
           <div className="text-xs text-gray-500 dark:text-gray-400 mb-3">
-            Poprzednio: {formatCurrency(card.previous)}
+            Previously: {formatCurrency(card.previous)}
           </div>
 
           {/* Change Indicator */}

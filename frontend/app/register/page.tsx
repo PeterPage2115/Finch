@@ -40,11 +40,11 @@ export default function RegisterPage() {
         { accessToken: response.accessToken }
       );
 
-      // Przekieruj na dashboard
+      // Redirect to dashboard
       router.push('/dashboard');
     } catch (err) {
       const error = err as Error;
-      setError(error.message || 'Wystąpił błąd podczas rejestracji');
+      setError(error.message || 'An error occurred during registration');
     } finally {
       setIsLoading(false);
     }
@@ -65,8 +65,8 @@ export default function RegisterPage() {
       <button
         onClick={toggleTheme}
         className="fixed top-4 right-4 p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all z-50"
-        title={theme === 'dark' ? 'Tryb jasny' : 'Tryb ciemny'}
-        aria-label="Przełącz tryb ciemny/jasny"
+        title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+        aria-label="Toggle dark/light mode"
       >
         {theme === 'dark' ? <Sun size={24} className="text-yellow-500" /> : <Moon size={24} className="text-indigo-600" />}
       </button>
@@ -78,7 +78,7 @@ export default function RegisterPage() {
             <div className="flex items-center justify-center gap-3 mb-2">
               <Wallet className="w-8 h-8 text-indigo-600 dark:text-indigo-400" />
               <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-                Tracker Kasy
+                Finch
               </h2>
             </div>
             <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
@@ -101,7 +101,7 @@ export default function RegisterPage() {
                 htmlFor="name"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               >
-                Imię i nazwisko
+                Name and Surname
               </label>
               <input
                 id="name"
@@ -122,7 +122,7 @@ export default function RegisterPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               >
-                Adres email
+                Email Address
               </label>
               <input
                 id="email"
@@ -144,7 +144,7 @@ export default function RegisterPage() {
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1"
               >
-                Hasło
+                Password
               </label>
               <input
                 id="password"
@@ -192,10 +192,10 @@ export default function RegisterPage() {
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                     ></path>
                   </svg>
-                  Tworzenie konta...
+                  Creating account...
                 </>
               ) : (
-                'Załóż konto'
+                'Create Account'
               )}
             </button>
           </form>
@@ -208,7 +208,7 @@ export default function RegisterPage() {
                 href="/login"
                 className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-500 dark:hover:text-indigo-300 transition"
               >
-                Zaloguj się
+                Sign in
               </Link>
             </p>
           </div>

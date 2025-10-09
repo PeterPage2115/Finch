@@ -36,20 +36,20 @@ export default function ForgotPasswordPage() {
           type: 'success',
           text:
             data.message ||
-            'Jeśli podany email istnieje, link do resetowania hasła został wysłany. Sprawdź konsolę (dev mode).',
+            'If the email exists, a password reset link has been sent. Check the console (dev mode).',
         });
         setEmail('');
       } else {
         setMessage({
           type: 'error',
-          text: data.message || 'Wystąpił błąd. Spróbuj ponownie.',
+          text: data.message || 'An error occurred. Please try again.',
         });
       }
     } catch (error) {
       console.error('Forgot password error:', error);
       setMessage({
         type: 'error',
-        text: 'Nie udało się połączyć z serwerem.',
+        text: 'Failed to connect to the server.',
       });
     } finally {
       setIsSubmitting(false);
@@ -63,10 +63,10 @@ export default function ForgotPasswordPage() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl font-bold text-white mb-2">
-              Zapomniałeś hasła?
+              Forgot your password?
             </h1>
             <p className="text-gray-400">
-              Podaj swój adres email, aby zresetować hasło
+              Enter your email address to reset your password
             </p>
           </div>
 
@@ -106,7 +106,7 @@ export default function ForgotPasswordPage() {
               disabled={isSubmitting}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? 'Wysyłanie...' : 'Wyślij link resetowania'}
+              {isSubmitting ? 'Sending...' : 'Send Reset Link'}
             </button>
           </form>
 
@@ -116,13 +116,13 @@ export default function ForgotPasswordPage() {
               href="/login"
               className="block text-sm text-gray-400 hover:text-white transition-colors"
             >
-              Powrót do logowania
+              Back to Login
             </Link>
             <Link
               href="/register"
               className="block text-sm text-gray-400 hover:text-white transition-colors"
             >
-              Nie masz konta? Zarejestruj się
+              Don&apos;t have an account? Sign up
             </Link>
           </div>
         </div>
@@ -130,8 +130,8 @@ export default function ForgotPasswordPage() {
         {/* Dev Mode Notice */}
         <div className="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
           <p className="text-yellow-400 text-sm text-center">
-            <strong>Tryb deweloperski:</strong> Link do resetowania hasła
-            zostanie wyświetlony w konsoli backendu (terminal Docker)
+            <strong>Developer Mode:</strong> Password reset link
+            will be displayed in the backend console (Docker terminal)
           </p>
         </div>
       </div>

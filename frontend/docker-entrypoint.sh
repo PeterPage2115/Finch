@@ -21,7 +21,7 @@ cat > /app/.env.local <<EOF
 BACKEND_API_URL="http://backend:3001"
 
 # Application Configuration
-NEXT_PUBLIC_APP_NAME="Tracker Kasy"
+NEXT_PUBLIC_APP_NAME="Finch"
 NEXT_PUBLIC_APP_VERSION="1.0.0"
 EOF
 

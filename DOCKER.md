@@ -1,6 +1,6 @@
 # 🐳 Docker - Dokumentacja
 
-Ten dokument zawiera szczegółowe informacje o konfiguracji Docker i orkiestracji aplikacji Tracker Kasy.
+Ten dokument zawiera szczegółowe informacje o konfiguracji Docker i orkiestracji aplikacji Finch.
 
 ## 📋 Spis Treści
 
@@ -18,7 +18,7 @@ Aplikacja składa się z trzech głównych kontenerów:
 ### 1. **db** - PostgreSQL Database
 - **Obraz:** `postgres:16-alpine`
 - **Port:** 5432
-- **Volume:** `tracker_kasy_pgdata`
+- **Volume:** `Finch_pgdata`
 - **Rola:** Przechowywanie wszystkich danych aplikacji
 
 ### 2. **backend** - NestJS API
@@ -39,14 +39,14 @@ Aplikacja składa się z trzech głównych kontenerów:
 
 #### Database (db)
 ```yaml
-POSTGRES_USER: tracker_user
-POSTGRES_PASSWORD: tracker_password
-POSTGRES_DB: tracker_kasy
+POSTGRES_USER: Finch_user_db
+POSTGRES_PASSWORD: Finch_password_db
+POSTGRES_DB: Finch_db
 ```
 
 #### Backend
 ```yaml
-DATABASE_URL: postgresql://tracker_user:tracker_password@db:5432/tracker_kasy?schema=public
+DATABASE_URL: postgresql://Finch_user_db:Finch_password_db@db:5432/Finch?schema=public
 JWT_SECRET: ${JWT_SECRET}  # Odczytywane z pliku .env
 JWT_EXPIRATION: 7d
 PORT: 3001
@@ -91,35 +91,35 @@ openssl rand -base64 32
 volumes:
   pgdata:
     driver: local
-    name: tracker_kasy_pgdata
+    name: Finch_pgdata
 ```
 
-Dane są przechowywane w Docker volume `tracker_kasy_pgdata`. Lokalizacja:
-- **Linux:** `/var/lib/docker/volumes/tracker_kasy_pgdata/_data`
-- **Windows:** `\\wsl$\docker-desktop-data\data\docker\volumes\tracker_kasy_pgdata\_data`
-- **macOS:** `~/Library/Containers/com.docker.docker/Data/vms/0/data/docker/volumes/tracker_kasy_pgdata/_data`
+Dane są przechowywane w Docker volume `Finch_pgdata`. Lokalizacja:
+- **Linux:** `/var/lib/docker/volumes/Finch_pgdata/_data`
+- **Windows:** `\\wsl$\docker-desktop-data\data\docker\volumes\Finch_pgdata\_data`
+- **macOS:** `~/Library/Containers/com.docker.docker/Data/vms/0/data/docker/volumes/Finch_pgdata/_data`
 
 ### Backup i Restore
 
 #### Backup bazy danych
 ```bash
 # Prosty backup
-docker-compose exec db pg_dump -U tracker_user tracker_kasy > backup.sql
+docker-compose exec db pg_dump -U Finch_user_db Finch > backup.sql
 
 # Backup z kompresją
-docker-compose exec db pg_dump -U tracker_user tracker_kasy | gzip > backup.sql.gz
+docker-compose exec db pg_dump -U Finch_user_db Finch | gzip > backup.sql.gz
 
 # Backup z timestampem
-docker-compose exec db pg_dump -U tracker_user tracker_kasy > "backup_$(date +%Y%m%d_%H%M%S).sql"
+docker-compose exec db pg_dump -U Finch_user_db Finch > "backup_$(date +%Y%m%d_%H%M%S).sql"
 ```
 
 #### Restore bazy danych
 ```bash
 # Restore z pliku
-docker-compose exec -T db psql -U tracker_user tracker_kasy < backup.sql
+docker-compose exec -T db psql -U Finch_user_db Finch < backup.sql
 
 # Restore z kompresją
-gunzip < backup.sql.gz | docker-compose exec -T db psql -U tracker_user tracker_kasy
+gunzip < backup.sql.gz | docker-compose exec -T db psql -U Finch_user_db Finch
 
 # Uwaga: Restore nadpisze istniejące dane!
 ```
@@ -127,10 +127,10 @@ gunzip < backup.sql.gz | docker-compose exec -T db psql -U tracker_user tracker_
 #### Pełny backup Docker volume
 ```bash
 # Backup całego volume
-docker run --rm -v tracker_kasy_pgdata:/data -v $(pwd):/backup alpine tar czf /backup/pgdata_full_backup.tar.gz -C /data .
+docker run --rm -v Finch_pgdata:/data -v $(pwd):/backup alpine tar czf /backup/pgdata_full_backup.tar.gz -C /data .
 
 # Restore volume
-docker run --rm -v tracker_kasy_pgdata:/data -v $(pwd):/backup alpine tar xzf /backup/pgdata_full_backup.tar.gz -C /data
+docker run --rm -v Finch_pgdata:/data -v $(pwd):/backup alpine tar xzf /backup/pgdata_full_backup.tar.gz -C /data
 ```
 
 ## Sieci
@@ -139,12 +139,12 @@ docker run --rm -v tracker_kasy_pgdata:/data -v $(pwd):/backup alpine tar xzf /b
 
 ```yaml
 networks:
-  tracker_network:
+  Finch_network:
     driver: bridge
-    name: tracker_kasy_network
+    name: Finch_network
 ```
 
-Wszystkie kontenery komunikują się w izolowanej sieci `tracker_kasy_network`:
+Wszystkie kontenery komunikują się w izolowanej sieci `Finch_network`:
 - **db** dostępny jako `db:5432` (wewnątrz sieci)
 - **backend** dostępny jako `backend:3001` (wewnątrz sieci)
 - **frontend** dostępny jako `frontend:3000` (wewnątrz sieci)
@@ -162,7 +162,7 @@ localhost:3000    localhost:3001    localhost:5432
 ### Database Health Check
 ```yaml
 healthcheck:
-  test: ["CMD-SHELL", "pg_isready -U tracker_user -d tracker_kasy"]
+  test: ["CMD-SHELL", "pg_isready -U Finch_user_db -d Finch"]
   interval: 10s
   timeout: 5s
   retries: 5
@@ -242,7 +242,7 @@ docker-compose logs backend
 docker-compose restart db
 
 # Sprawdź czy baza danych działa
-docker-compose exec db psql -U tracker_user -d tracker_kasy -c "SELECT 1;"
+docker-compose exec db psql -U Finch_user_db -d Finch -c "SELECT 1;"
 ```
 
 ### Problem: Frontend nie może połączyć się z backendem
@@ -266,10 +266,10 @@ Next.js Server → http://backend:3001 (Docker internal)
 **Rozwiązanie:**
 ```bash
 # Sprawdź czy backend odpowiada z wewnątrz kontenera frontend
-docker exec tracker_kasy_frontend wget -O- http://backend:3001/
+docker exec Finch_frontend wget -O- http://backend:3001/
 
 # Sprawdź logi API Routes
-docker logs tracker_kasy_frontend --tail 50
+docker logs Finch_frontend --tail 50
 
 # Zrestartuj frontend
 docker-compose restart frontend
@@ -346,7 +346,7 @@ docker stats
 docker-compose logs -f --tail=100
 
 # Sprawdzenie rozmiary obrazów
-docker images | grep tracker_kasy
+docker images | grep Finch
 ```
 
 ## Produkcja
@@ -386,7 +386,7 @@ docker images | grep tracker_kasy
 ## Wsparcie
 
 Jeśli napotkasz problemy:
-1. Sprawdź [Issues na GitHubie](https://github.com/[user]/Tracker_kasy/issues)
+1. Sprawdź [Issues na GitHubie](https://github.com/PeterPage2115/Finch/issues)
 2. Przeczytaj [FAQ](./FAQ.md)
 3. Stwórz nowy Issue z logami: `docker-compose logs > logs.txt`
 

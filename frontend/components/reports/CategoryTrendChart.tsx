@@ -56,9 +56,9 @@ export default function CategoryTrendChart({
   const chartData = useMemo(() => {
     return data.map((item) => ({
       date: item.date,
-      Przychody: item.income,
-      Wydatki: item.expense,
-      Ilość: item.count,
+      Income: item.income,
+      Expenses: item.expense,
+      Count: item.count,
     }));
   }, [data]);
 
@@ -73,7 +73,7 @@ export default function CategoryTrendChart({
   return (
     <div className="rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4">
       <h3 className="mb-4 text-lg font-semibold text-gray-900 dark:text-white">
-        Trend wydatków i przychodów
+        Expense and Income Trends
       </h3>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
@@ -106,13 +106,13 @@ export default function CategoryTrendChart({
             iconType="circle"
           />
           <Bar
-            dataKey="Przychody"
+            dataKey="Income"
             fill="#10b981"
             radius={[8, 8, 0, 0]}
             maxBarSize={60}
           />
           <Bar
-            dataKey="Wydatki"
+            dataKey="Expenses"
             fill="#ef4444"
             radius={[8, 8, 0, 0]}
             maxBarSize={60}

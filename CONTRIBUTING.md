@@ -1,6 +1,6 @@
-# Contributing to Tracker Kasy 💰
+# Contributing to Finch 💰
 
-Dziękujemy za zainteresowanie wkładem w projekt Tracker Kasy! 
+Dziękujemy za zainteresowanie wkładem w projekt Finch! 
 
 ## 📋 Spis Treści
 
@@ -48,8 +48,8 @@ Projekt jest open-source i mile widziany jest każdy konstruktywny wkład. Prosi
 
 ```bash
 # 1. Sklonuj repo
-git clone https://github.com/[username]/Tracker_kasy.git
-cd Tracker_kasy
+git clone https://github.com/PeterPage2115/Finch_kasy.git Finch
+cd Finch
 
 # 2. Skopiuj .env
 cp .env.example .env
@@ -241,4 +241,4 @@ Jeśli masz pytania:
 
 ---
 
-**Dziękujemy za wkład w Tracker Kasy! 🎉**
+**Dziękujemy za wkład w Finch! 🎉**

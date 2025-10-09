@@ -76,7 +76,7 @@ export default function CategoryDetailsModal({
 
         if (!response.ok) {
           // Try to get error message from backend
-          let errorMessage = 'Nie udało się pobrać szczegółów kategorii';
+          let errorMessage = 'Failed to fetch category details';
           try {
             const errorData = await response.json();
             console.error('Backend error:', errorData);
@@ -93,7 +93,7 @@ export default function CategoryDetailsModal({
         setData(result);
       } catch (err) {
         console.error('Error fetching category details:', err);
-        setError(err instanceof Error ? err.message : 'Wystąpił nieznany błąd');
+        setError(err instanceof Error ? err.message : 'An unknown error occurred');
       } finally {
         setIsLoading(false);
       }
@@ -104,17 +104,20 @@ export default function CategoryDetailsModal({
 
   if (!isOpen) return null;
 
+  const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
+  const currency = 'USD'; // Can be made configurable via props
+
   const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pl-PL', {
+    return new Intl.NumberFormat(locale, {
       style: 'currency',
-      currency: 'PLN',
+      currency: currency,
       minimumFractionDigits: 2,
     }).format(value);
   };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('pl-PL', {
+    return date.toLocaleDateString(locale, {
       day: '2-digit',
       month: 'short',
       year: 'numeric',
@@ -144,7 +147,7 @@ export default function CategoryDetailsModal({
             )}
             <div>
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                {data?.category.name || 'Kategoria'}
+                {data?.category.name || 'Category'}
               </h2>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 {data?.period.startDate} - {data?.period.endDate}
@@ -154,7 +157,7 @@ export default function CategoryDetailsModal({
           <button
             onClick={onClose}
             className="rounded-lg p-2 text-gray-400 dark:text-gray-500 transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-600 dark:hover:text-gray-300"
-            aria-label="Zamknij"
+            aria-label="Close"
           >
             <X className="h-5 w-5" />
           </button>
@@ -216,7 +219,7 @@ export default function CategoryDetailsModal({
                       >
                         <div className="flex-1">
                           <p className="font-medium text-gray-900 dark:text-white">
-                            {transaction.description || 'Bez opisu'}
+                            {transaction.description || 'No description'}
                           </p>
                           <p className="text-sm text-gray-500 dark:text-gray-400">
                             {formatDate(transaction.date)}

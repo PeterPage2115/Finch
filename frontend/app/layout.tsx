@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tracker Kasy - Manage Your Finances",
+  title: "Finch - Manage Your Finances",
   description: "Self-hosted finance tracking application",
 };
 
