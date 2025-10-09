@@ -102,7 +102,7 @@ describe('ReportsService', () => {
 
   const mockCategory1: Category = {
     id: 'category-food',
-    name: 'Jedzenie',
+    name: 'Food',
     icon: 'ShoppingCart',
     color: '#10B981',
     type: CategoryType.EXPENSE,
@@ -123,7 +123,7 @@ describe('ReportsService', () => {
 
   const mockIncomeCategory: Category = {
     id: 'category-salary',
-    name: 'Wynagrodzenie',
+    name: 'Salary',
     icon: 'DollarSign',
     color: '#10B981',
     type: CategoryType.INCOME,
@@ -387,10 +387,10 @@ describe('ReportsService', () => {
       expect(result.totalAmount).toBe(1000); // 500 + 300 + 200
       expect(result.categories).toHaveLength(2);
 
-      // Jedzenie (700) should be first (sorted DESC)
+      // Food (700) should be first (sorted DESC)
       expect(result.categories[0]).toEqual({
         categoryId: 'category-food',
-        categoryName: 'Jedzenie',
+        categoryName: 'Food',
         categoryIcon: 'ShoppingCart',
         categoryColor: '#10B981',
         total: 700,
@@ -459,7 +459,7 @@ describe('ReportsService', () => {
       // Assert
       expect(result.type).toBe('INCOME');
       expect(result.categories).toHaveLength(1);
-      expect(result.categories[0].categoryName).toBe('Wynagrodzenie');
+      expect(result.categories[0].categoryName).toBe('Salary');
       expect(result.totalAmount).toBe(5000);
     });
 
@@ -568,7 +568,7 @@ describe('ReportsService', () => {
       expect(result.categories[0].total).toBeGreaterThan(
         result.categories[1].total,
       );
-      expect(result.categories[0].categoryName).toBe('Jedzenie'); // 700
+      expect(result.categories[0].categoryName).toBe('Food'); // 700
       expect(result.categories[1].categoryName).toBe('Transport'); // 300
     });
 
@@ -648,7 +648,7 @@ describe('ReportsService', () => {
       // Assert
       expect(result).toBeDefined();
       expect(result.category.id).toBe(categoryId);
-      expect(result.category.name).toBe('Jedzenie');
+      expect(result.category.name).toBe('Food');
       expect(result.summary.totalAmount).toBe(800);
       expect(result.summary.transactionCount).toBe(2);
       expect(result.summary.averageAmount).toBe(400);

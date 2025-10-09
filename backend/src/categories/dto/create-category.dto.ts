@@ -19,7 +19,9 @@ export enum CategoryType {
 export class CreateCategoryDto {
   @IsNotEmpty({ message: 'Category name is required' })
   @IsString({ message: 'Category name must be a string' })
-  @Length(2, 50, { message: 'Category name must be between 2 and 50 characters' })
+  @Length(2, 50, {
+    message: 'Category name must be between 2 and 50 characters',
+  })
   name: string;
 
   @IsEnum(CategoryType, {

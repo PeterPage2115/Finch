@@ -224,52 +224,52 @@ export class AuthService {
   }
 
   /**
-   * Utworzenie domyślnych kategorii dla nowego użytkownika
+   * Creates default categories for new user
    */
   private async createDefaultCategories(userId: string) {
     const defaultCategories = [
-      // Kategorie wydatków
+      // Expense categories
       {
-        name: 'Jedzenie',
+        name: 'Food',
         type: 'EXPENSE' as const,
-        icon: '🍔',
+        icon: 'UtensilsCrossed',
         color: '#10B981',
       },
       {
         name: 'Transport',
         type: 'EXPENSE' as const,
-        icon: '🚗',
+        icon: 'Car',
         color: '#3B82F6',
       },
       {
-        name: 'Rozrywka',
+        name: 'Entertainment',
         type: 'EXPENSE' as const,
-        icon: '🎮',
+        icon: 'Gamepad2',
         color: '#8B5CF6',
       },
       {
-        name: 'Zdrowie',
+        name: 'Health',
         type: 'EXPENSE' as const,
-        icon: '⚕️',
+        icon: 'Heart',
         color: '#EF4444',
       },
       {
-        name: 'Rachunki',
+        name: 'Bills',
         type: 'EXPENSE' as const,
-        icon: '📄',
+        icon: 'FileText',
         color: '#F59E0B',
       },
-      // Kategorie przychodów
+      // Income categories
       {
-        name: 'Wynagrodzenie',
+        name: 'Salary',
         type: 'INCOME' as const,
-        icon: '💰',
+        icon: 'Wallet',
         color: '#10B981',
       },
       {
-        name: 'Inne przychody',
+        name: 'Other Income',
         type: 'INCOME' as const,
-        icon: '💵',
+        icon: 'DollarSign',
         color: '#06B6D4',
       },
     ];

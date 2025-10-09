@@ -18,10 +18,10 @@ describe('TransactionsService', () => {
 
   const mockCategory = {
     id: mockCategoryId,
-    name: 'Jedzenie',
+    name: 'Food',
     type: 'EXPENSE' as const,
     color: '#FF5733',
-    icon: '🍔',
+    icon: 'UtensilsCrossed',
     userId: mockUserId,
     createdAt: new Date(),
     updatedAt: new Date(),
