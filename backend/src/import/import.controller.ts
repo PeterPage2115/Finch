@@ -7,7 +7,6 @@ import {
   UploadedFile,
   ParseFilePipe,
   MaxFileSizeValidator,
-  FileTypeValidator,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -26,13 +25,17 @@ export class ImportController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }), // 5MB
-          new FileTypeValidator({ fileType: 'text/csv' }),
         ],
       }),
     )
     file: Express.Multer.File,
     @Req() req: { user: { id: string } },
   ): Promise<ImportResultDto> {
+    // Validate CSV file extension
+    if (!file.originalname.toLowerCase().endsWith('.csv')) {
+      throw new Error('Only CSV files are allowed');
+    }
+
     const userId: string = req.user.id;
     return this.importService.parseAndImportTransactions(file, userId);
   }
