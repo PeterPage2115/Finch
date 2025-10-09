@@ -95,3 +95,21 @@ export interface TransactionsListResponse {
 export interface DeleteTransactionResponse {
   message: string;
 }
+
+/**
+ * Failed row in CSV import
+ */
+export interface FailedRow {
+  rowNumber: number;
+  errors: string[];
+}
+
+/**
+ * Response from CSV import
+ */
+export interface ImportResultDto {
+  successCount: number;
+  failedCount: number;
+  autoCreatedCategories: string[];
+  failedRows: FailedRow[];
+}

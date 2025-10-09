@@ -12,6 +12,7 @@ import type {
   TransactionQueryParams,
   TransactionsListResponse,
   DeleteTransactionResponse,
+  ImportResultDto,
 } from '@/types/transaction';
 
 /**
@@ -124,5 +125,36 @@ export const transactionsApi = {
    */
   async delete(token: string, id: string): Promise<DeleteTransactionResponse> {
     return apiClient.delete<DeleteTransactionResponse>(`/transactions/${id}`, token);
+  },
+
+  /**
+   * Importuje transakcje z pliku CSV
+   * 
+   * @param token - JWT token
+   * @param file - CSV file to upload
+   * @returns Import result with success/failed counts and errors
+   * 
+   * @example
+   * const result = await transactionsApi.importCsv(token, file);
+   * console.log(`Imported ${result.successCount}, failed ${result.failedCount}`);
+   */
+  async importCsv(token: string, file: File): Promise<ImportResultDto> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetch('/api/import/transactions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Upload failed' }));
+      throw new Error(error.message || 'Failed to import CSV');
+    }
+
+    return response.json();
   },
 };

@@ -10,9 +10,11 @@ import { categoriesApi, type Category } from '@/lib/api/categoriesClient';
 import { fetchBudgets, fetchBudgetById } from '@/lib/api/budgetsClient';
 import TransactionList from '@/components/transactions/TransactionList';
 import TransactionForm from '@/components/transactions/TransactionForm';
+import ImportTransactionsButton from '@/components/transactions/ImportTransactionsButton';
+import ImportResultsModal from '@/components/transactions/ImportResultsModal';
 import AppNavbar from '@/components/layout/AppNavbar';
 import BudgetWidget from '@/components/budgets/BudgetWidget';
-import type { Transaction, CreateTransactionDto } from '@/types/transaction';
+import type { Transaction, CreateTransactionDto, ImportResultDto } from '@/types/transaction';
 import type { BudgetWithProgress } from '@/types';
 import { motion } from 'framer-motion';
 import { formatCurrency } from '@/lib/utils';
@@ -39,6 +41,10 @@ export default function DashboardPage() {
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
+  
+  // CSV Import state
+  const [importResult, setImportResult] = useState<ImportResultDto | null>(null);
+  const [showImportResults, setShowImportResults] = useState(false);
   
   // Budget widget state
   const [budgets, setBudgets] = useState<BudgetWithProgress[]>([]);
@@ -209,6 +215,27 @@ export default function DashboardPage() {
     }
   };
 
+  const handleImportComplete = useCallback(async (result: ImportResultDto) => {
+    setImportResult(result);
+    setShowImportResults(true);
+
+    // Refetch transactions and budgets after successful import
+    if (result.successCount > 0 && token) {
+      try {
+        const response = await transactionsApi.getAll(token);
+        setTransactions(response);
+        await refetchBudgets();
+      } catch (err) {
+        console.error('Error refetching data after import:', err);
+      }
+    }
+  }, [token, setTransactions, refetchBudgets]);
+
+  const handleCloseImportResults = useCallback(() => {
+    setShowImportResults(false);
+    setImportResult(null);
+  }, []);
+
   const handleDelete = useCallback(async (id: string) => {
     if (!token) {
   addNotification('Missing authentication token', 'error');
@@ -365,7 +392,7 @@ export default function DashboardPage() {
         )}
 
         {/* Add New Button */}
-        <div className="mb-6">
+        <div className="mb-6 flex gap-3">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -374,6 +401,8 @@ export default function DashboardPage() {
           >
             + Add transaction
           </motion.button>
+
+          <ImportTransactionsButton onImportComplete={handleImportComplete} />
         </div>
 
         {/* Transaction Form */}
@@ -404,6 +433,13 @@ export default function DashboardPage() {
             {meta.totalPages > 1 && ` (page ${meta.page} of ${meta.totalPages})`}
           </div>
         )}
+
+        {/* Import Results Modal */}
+        <ImportResultsModal
+          isOpen={showImportResults}
+          result={importResult}
+          onClose={handleCloseImportResults}
+        />
       </main>
     </div>
   );
