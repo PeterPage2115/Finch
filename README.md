@@ -1,3 +1,4 @@
+[WIP]
 # Finch - Personal Finance Tracker 🐦
 
 **Open-source, self-hosted web application for personal finance management**
