@@ -68,19 +68,19 @@ For detailed instructions, see the [📖 Wiki](https://github.com/PeterPage2115/
 <div align="center">
   
 ### Landing Page
-<img src="screenshots/homepage.png" alt="Homepage" width="800"/>
+<img src="screenshots/Homepage.png" alt="Homepage" width="800"/>
 
 ### Dashboard
-<img src="screenshots/dashboard.png" alt="Dashboard" width="800"/>
+<img src="screenshots/Dashboard.png" alt="Dashboard" width="800"/>
 
 ### Categories Management
-<img src="screenshots/categories.png" alt="Categories" width="800"/>
+<img src="screenshots/Categories.png" alt="Categories" width="800"/>
 
 ### Budget Tracking
-<img src="screenshots/budgets.png" alt="Budgets" width="800"/>
+<img src="screenshots/Budgets.png" alt="Budgets" width="800"/>
 
 ### Financial Reports
-<img src="screenshots/reports.png" alt="Reports" width="800"/>
+<img src="screenshots/Reports.png" alt="Reports" width="800"/>
 
 </div>
 
