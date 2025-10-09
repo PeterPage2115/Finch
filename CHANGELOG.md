@@ -29,6 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Optimized README with collapsible sections
 - Updated screenshots with proper test user authentication
 
+### Fixed
+- 🐛 **CSV Import Field Name** - Corrected field name from `categoryName` to `category` in CsvRowDto to match documented CSV format
+  - Updated ImportService to use `row.category` instead of `row.categoryName`
+  - Fixed all test files to use correct field name
+  - Resolves validation errors where all rows failed with "Category name is required"
+  - Manual testing: 5/5 transactions imported successfully
+
 ### Removed
 - 100+ test artifacts (screenshots, coverage reports)
 - Outdated documentation and session reports (26 files)
