@@ -49,6 +49,11 @@ lerna-debug.log*
 Thumbs.db
 .DS_Store
 
+# Local development files
+memory.json
+ROADMAP_*.md
+*_LOCAL.md
+
 # Temporary files
 *.tmp
 *.temp
