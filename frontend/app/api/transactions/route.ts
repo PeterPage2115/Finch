@@ -9,6 +9,16 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const BACKEND_URL = process.env.BACKEND_API_URL;
 
+/**
+ * Sanitizes user-controlled values before logging to prevent log injection.
+ * Removes control characters (CR/LF, etc.) and limits overall length.
+ * Reference: OWASP Logging guidance on neutralizing untrusted input.
+ */
+const sanitizeForLog = (value: string, maxLength = 200): string =>
+  value
+    .replace(/[\u0000-\u001F\u007F]+/g, '')
+    .slice(0, maxLength);
+
 if (!BACKEND_URL) {
   console.error('❌ BACKEND_API_URL is not defined in environment variables');
 }
@@ -41,7 +51,7 @@ export async function GET(request: NextRequest) {
     const queryString = searchParams.toString();
     const endpoint = queryString ? `/transactions?${queryString}` : '/transactions';
 
-    console.log('🔄 [API Route] Proxying GET to backend:', endpoint);
+    console.log('🔄 [API Route] Proxying GET to backend:', sanitizeForLog(endpoint));
 
     // Forward request do backendu
     const backendResponse = await fetch(`${BACKEND_URL}${endpoint}`, {
