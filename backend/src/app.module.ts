@@ -8,6 +8,7 @@ import { TransactionsModule } from './transactions/transactions.module';
 import { CategoriesModule } from './categories/categories.module';
 import { BudgetsModule } from './budgets/budgets.module';
 import { ReportsModule } from './reports/reports.module';
+import { ImportModule } from './import/import.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { ReportsModule } from './reports/reports.module';
     CategoriesModule,
     BudgetsModule,
     ReportsModule,
+    ImportModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
