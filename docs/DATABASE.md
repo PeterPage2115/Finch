@@ -256,7 +256,7 @@ main()
 **Locally:**
 ```bash
 cd backend
-DATABASE_URL="postgresql://Finch_user_db:Finch_password_db@localhost:5432/finance_Finch?schema=public" npx prisma db seed
+DATABASE_URL="postgresql://Finch_user_db:Finch_password_db@localhost:5432/Finch_db?schema=public" npx prisma db seed
 ```
 
 **In Docker:**

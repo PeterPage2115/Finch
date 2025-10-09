@@ -28,7 +28,7 @@ services:
     container_name: Finch_backend
     restart: unless-stopped
     environment:
-      DATABASE_URL: "postgresql://Finch_user_db:Finch_password_db@db:5432/Finch?schema=public"
+      DATABASE_URL: "postgresql://Finch_user_db:Finch_password_db@db:5432/Finch_db?schema=public"
       JWT_SECRET: "${JWT_SECRET:-change-this-to-a-secure-random-string-in-production}"
       JWT_EXPIRATION: "7d"
       PORT: 3001

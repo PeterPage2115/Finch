@@ -155,7 +155,7 @@ export class EmailService implements OnModuleInit {
     `;
 
     const info: SentMessageInfo = await this.transporter.sendMail({
-      from: '"Finch" <noreply@Finchkasy.com>',
+      from: '"Finch" <noreply@Finch.com>',
       to: email,
       subject: 'Reset hasła - Finch',
       html: htmlTemplate,

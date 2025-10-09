@@ -48,7 +48,7 @@ Projekt jest open-source i mile widziany jest każdy konstruktywny wkład. Prosi
 
 ```bash
 # 1. Sklonuj repo
-git clone https://github.com/PeterPage2115/Finch_kasy.git Finch
+git clone https://github.com/PeterPage2115/Finch.git
 cd Finch
 
 # 2. Skopiuj .env

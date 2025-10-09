@@ -20,7 +20,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/yourusername/Finch_kasy.git Finch
+git clone https://github.com/yourusername/Finch.git
 cd Finch
 ```
 
@@ -30,7 +30,7 @@ Create `.env` file in project root:
 
 ```bash
 # Backend
-DATABASE_URL="postgresql://postgres:password@db:5432/finch?schema=public"
+DATABASE_URL="postgresql://Finch_user_db:Finch_password_db@db:5432/Finch_db?schema=public"
 JWT_SECRET="your-super-secret-jwt-key-change-in-production"
 JWT_EXPIRES_IN="7d"
 
@@ -120,12 +120,12 @@ sudo apt install postgresql-17
 
 **Create Database:**
 ```bash
-createdb finch
+createdb Finch_db
 ```
 
 **Update .env:**
 ```bash
-DATABASE_URL="postgresql://localhost:5432/finch?schema=public"
+DATABASE_URL="postgresql://localhost:5432/Finch_db?schema=public"
 ```
 
 ---

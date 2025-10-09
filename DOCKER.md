@@ -46,7 +46,7 @@ POSTGRES_DB: Finch_db
 
 #### Backend
 ```yaml
-DATABASE_URL: postgresql://Finch_user_db:Finch_password_db@db:5432/Finch?schema=public
+DATABASE_URL: postgresql://Finch_user_db:Finch_password_db@db:5432/Finch_db?schema=public
 JWT_SECRET: ${JWT_SECRET}  # Odczytywane z pliku .env
 JWT_EXPIRATION: 7d
 PORT: 3001
