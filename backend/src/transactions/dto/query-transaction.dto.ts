@@ -3,17 +3,17 @@ import { Type } from 'class-transformer';
 import { TransactionType } from '@prisma/client';
 
 /**
- * DTO dla query parameters w GET /transactions
+ * DTO for query parameters in GET /transactions
  *
- * Umożliwia:
- * - Filtrowanie po typie, kategorii, zakresie dat
- * - Paginację (page, limit)
+ * Enables:
+ * - Filtering by type, category, date range
+ * - Pagination (page, limit)
  *
- * Wszystkie pola są opcjonalne
+ * All fields are optional
  */
 export class QueryTransactionDto {
   /**
-   * Filtr po typie transakcji
+   * Filter by transaction type
    * @example "EXPENSE"
    */
   @IsOptional()
@@ -21,7 +21,7 @@ export class QueryTransactionDto {
   type?: TransactionType;
 
   /**
-   * Filtr po kategorii (UUID)
+   * Filter by category (UUID)
    * @example "550e8400-e29b-41d4-a716-446655440000"
    */
   @IsOptional()

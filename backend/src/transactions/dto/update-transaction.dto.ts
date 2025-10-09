@@ -2,9 +2,9 @@ import { PartialType } from '@nestjs/mapped-types';
 import { CreateTransactionDto } from './create-transaction.dto';
 
 /**
- * DTO dla aktualizacji transakcji
+ * DTO for updating a transaction
  *
- * Dziedziczy wszystkie pola z CreateTransactionDto jako opcjonalne
- * Pozwala na częściową aktualizację (PATCH semantics)
+ * Inherits all fields from CreateTransactionDto as optional
+ * Allows partial updates (PATCH semantics)
  */
 export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {}

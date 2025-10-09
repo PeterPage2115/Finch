@@ -19,17 +19,17 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 
 /**
- * Controller obsługujący REST API dla transakcji
+ * Controller handling REST API for transactions
  *
- * Wszystkie endpointy wymagają autentykacji JWT
- * Każdy użytkownik ma dostęp tylko do swoich transakcji
+ * All endpoints require JWT authentication
+ * Each user has access only to their own transactions
  *
- * Endpointy:
- * - POST /transactions - tworzy nową transakcję
- * - GET /transactions - pobiera listę transakcji z filtrami
- * - GET /transactions/:id - pobiera szczegóły transakcji
- * - PATCH /transactions/:id - aktualizuje transakcję
- * - DELETE /transactions/:id - usuwa transakcję
+ * Endpoints:
+ * - POST /transactions - creates a new transaction
+ * - GET /transactions - retrieves list of transactions with filters
+ * - GET /transactions/:id - retrieves transaction details
+ * - PATCH /transactions/:id - updates a transaction
+ * - DELETE /transactions/:id - deletes a transaction
  */
 @Controller('transactions')
 @UseGuards(JwtAuthGuard)
@@ -37,17 +37,17 @@ export class TransactionsController {
   constructor(private readonly transactionsService: TransactionsService) {}
 
   /**
-   * Tworzy nową transakcję
+   * Creates a new transaction
    *
-   * @param user - zalogowany użytkownik (z JWT)
-   * @param createTransactionDto - dane transakcji
-   * @returns utworzona transakcja z kategorią
+   * @param user - logged-in user (from JWT)
+   * @param createTransactionDto - transaction data
+   * @returns created transaction with category
    *
    * @example
    * POST /transactions
    * {
    *   "amount": 1234.56,
-   *   "description": "Zakupy spożywcze",
+   *   "description": "Grocery shopping",
    *   "date": "2025-10-01T12:00:00.000Z",
    *   "type": "EXPENSE",
    *   "categoryId": "550e8400-e29b-41d4-a716-446655440000"
@@ -63,11 +63,11 @@ export class TransactionsController {
   }
 
   /**
-   * Pobiera listę transakcji z filtrami i paginacją
+   * Retrieves list of transactions with filters and pagination
    *
-   * @param user - zalogowany użytkownik (z JWT)
-   * @param query - parametry filtrowania i paginacji
-   * @returns paginowana lista transakcji
+   * @param user - logged-in user (from JWT)
+   * @param query - filtering and pagination parameters
+   * @returns paginated list of transactions
    *
    * @example
    * GET /transactions?type=EXPENSE&startDate=2025-01-01&endDate=2025-12-31&page=1&limit=10
@@ -81,11 +81,11 @@ export class TransactionsController {
   }
 
   /**
-   * Pobiera szczegóły pojedynczej transakcji
+   * Retrieves details of a single transaction
    *
-   * @param user - zalogowany użytkownik (z JWT)
-   * @param id - UUID transakcji
-   * @returns transakcja z kategorią
+   * @param user - logged-in user (from JWT)
+   * @param id - transaction UUID
+   * @returns transaction with category
    *
    * @example
    * GET /transactions/550e8400-e29b-41d4-a716-446655440000
@@ -96,18 +96,18 @@ export class TransactionsController {
   }
 
   /**
-   * Aktualizuje transakcję (częściowa aktualizacja)
+   * Updates a transaction (partial update)
    *
-   * @param user - zalogowany użytkownik (z JWT)
-   * @param id - UUID transakcji
-   * @param updateTransactionDto - dane do aktualizacji (wszystkie pola opcjonalne)
-   * @returns zaktualizowana transakcja
+   * @param user - logged-in user (from JWT)
+   * @param id - transaction UUID
+   * @param updateTransactionDto - data to update (all fields optional)
+   * @returns updated transaction
    *
    * @example
    * PATCH /transactions/550e8400-e29b-41d4-a716-446655440000
    * {
    *   "amount": 2000.00,
-   *   "description": "Zaktualizowany opis"
+   *   "description": "Updated description"
    * }
    */
   @Patch(':id')
@@ -120,11 +120,11 @@ export class TransactionsController {
   }
 
   /**
-   * Usuwa transakcję
+   * Deletes a transaction
    *
-   * @param user - zalogowany użytkownik (z JWT)
-   * @param id - UUID transakcji
-   * @returns potwierdzenie usunięcia
+   * @param user - logged-in user (from JWT)
+   * @param id - transaction UUID
+   * @returns deletion confirmation
    *
    * @example
    * DELETE /transactions/550e8400-e29b-41d4-a716-446655440000

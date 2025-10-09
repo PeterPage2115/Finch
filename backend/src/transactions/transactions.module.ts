@@ -4,12 +4,12 @@ import { TransactionsController } from './transactions.controller';
 import { PrismaService } from '../prisma.service';
 
 /**
- * Moduł transakcji
+ * Transactions module
  *
- * Zawiera:
+ * Contains:
  * - TransactionsController: REST API endpoints
- * - TransactionsService: logika biznesowa
- * - PrismaService: dostęp do bazy danych
+ * - TransactionsService: business logic
+ * - PrismaService: database access
  */
 @Module({
   controllers: [TransactionsController],

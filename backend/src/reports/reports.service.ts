@@ -530,22 +530,22 @@ export class ReportsService {
     });
 
     // CSV headers
-    const headers = ['Data', 'Kategoria', 'Opis', 'Kwota', 'Typ'];
+    const headers = ['Date', 'Category', 'Description', 'Amount', 'Type'];
     const csvRows = [headers.join(',')];
 
     // Format each transaction
     transactions.forEach((t) => {
       const row = [
         t.date.toISOString().split('T')[0],
-        t.category?.name || 'Brak kategorii',
+        t.category?.name || 'No category',
         `"${(t.description || '').replace(/"/g, '""')}"`, // Escape quotes
         t.amount.toString(),
-        t.type === 'INCOME' ? 'Przychód' : 'Wydatek',
+        t.type === 'INCOME' ? 'Income' : 'Expense',
       ];
       csvRows.push(row.join(','));
     });
 
-    // Add UTF-8 BOM for proper Excel encoding of Polish characters
+    // Add UTF-8 BOM for proper Excel encoding
     const BOM = '\uFEFF';
     return BOM + csvRows.join('\n');
   }
@@ -587,33 +587,33 @@ export class ReportsService {
         doc.on('error', reject);
 
         // Title
-        doc.fontSize(20).text('Raport Finansowy', { align: 'center' });
+        doc.fontSize(20).text('Financial Report', { align: 'center' });
         doc.moveDown(0.5);
 
         // Date range
         doc
           .fontSize(12)
           .text(
-            `Okres: ${startDate.toLocaleDateString('pl-PL')} - ${endDate.toLocaleDateString('pl-PL')}`,
+            `Period: ${startDate.toLocaleDateString('en-US')} - ${endDate.toLocaleDateString('en-US')}`,
             { align: 'center' },
           );
         doc.moveDown(1.5);
 
         // Summary section
-        doc.fontSize(14).text('Podsumowanie');
+        doc.fontSize(14).text('Summary');
         doc.moveDown(0.5);
 
         doc.fontSize(10);
-        doc.text(`Przychody: ${this.formatCurrency(summary.totalIncome)}`);
-        doc.text(`Wydatki: ${this.formatCurrency(summary.totalExpenses)}`);
-        doc.text(`Bilans: ${this.formatCurrency(summary.balance)}`);
+        doc.text(`Income: ${this.formatCurrency(summary.totalIncome)}`);
+        doc.text(`Expenses: ${this.formatCurrency(summary.totalExpenses)}`);
+        doc.text(`Balance: ${this.formatCurrency(summary.balance)}`);
         doc.text(
-          `Liczba transakcji: ${summary.transactionCount.income + summary.transactionCount.expenses}`,
+          `Number of transactions: ${summary.transactionCount.income + summary.transactionCount.expenses}`,
         );
         doc.moveDown(1.5);
 
         // Transactions section
-        doc.fontSize(14).text('Lista Transakcji');
+        doc.fontSize(14).text('Transaction List');
         doc.moveDown(0.5);
 
         // Table headers
@@ -628,14 +628,14 @@ export class ReportsService {
         };
         let currentY = tableTop;
 
-        doc.text('Data', 50, currentY, { width: colWidths.date });
-        doc.text('Kategoria', 120, currentY, { width: colWidths.category });
-        doc.text('Opis', 220, currentY, { width: colWidths.desc });
-        doc.text('Kwota', 370, currentY, {
+        doc.text('Date', 50, currentY, { width: colWidths.date });
+        doc.text('Category', 120, currentY, { width: colWidths.category });
+        doc.text('Description', 220, currentY, { width: colWidths.desc });
+        doc.text('Amount', 370, currentY, {
           width: colWidths.amount,
           align: 'right',
         });
-        doc.text('Typ', 450, currentY, { width: colWidths.type });
+        doc.text('Type', 450, currentY, { width: colWidths.type });
 
         doc.moveDown(0.3);
         doc.moveTo(50, doc.y).lineTo(520, doc.y).stroke();
@@ -652,15 +652,15 @@ export class ReportsService {
           }
 
           currentY = doc.y;
-          const date = t.date.toLocaleDateString('pl-PL', {
+          const date = t.date.toLocaleDateString('en-US', {
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
           });
-          const category = t.category?.name || 'Brak';
+          const category = t.category?.name || 'None';
           const desc = (t.description || '').substring(0, 40);
           const amount = this.formatCurrency(Number(t.amount));
-          const type = t.type === 'INCOME' ? 'Przychód' : 'Wydatek';
+          const type = t.type === 'INCOME' ? 'Income' : 'Expense';
 
           doc.text(date, 50, currentY, { width: colWidths.date });
           doc.text(category, 120, currentY, { width: colWidths.category });

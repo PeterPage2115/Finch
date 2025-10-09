@@ -6,26 +6,26 @@ import { QueryTransactionDto } from './dto/query-transaction.dto';
 import { Prisma } from '@prisma/client';
 
 /**
- * Service obsługujący logikę biznesową dla transakcji
+ * Service handling business logic for transactions
  *
- * Funkcjonalności:
- * - CRUD operations z user-scoped access
- * - Filtrowanie po typie, kategorii, zakresie dat
- * - Paginacja wyników
+ * Features:
+ * - CRUD operations with user-scoped access
+ * - Filtering by type, category, date range
+ * - Result pagination
  */
 @Injectable()
 export class TransactionsService {
   constructor(private prisma: PrismaService) {}
 
   /**
-   * Tworzy nową transakcję dla użytkownika
+   * Creates a new transaction for the user
    *
-   * @param userId - ID zalogowanego użytkownika
-   * @param createTransactionDto - dane transakcji
-   * @returns utworzona transakcja
+   * @param userId - ID of the logged-in user
+   * @param createTransactionDto - transaction data
+   * @returns created transaction
    */
   async create(userId: string, createTransactionDto: CreateTransactionDto) {
-    // Weryfikujemy czy kategoria istnieje i należy do użytkownika
+    // Verify that the category exists and belongs to the user
     const category = await this.prisma.category.findFirst({
       where: {
         id: createTransactionDto.categoryId,
@@ -56,11 +56,11 @@ export class TransactionsService {
   }
 
   /**
-   * Pobiera wszystkie transakcje użytkownika z filtrami i paginacją
+   * Retrieves all user transactions with filters and pagination
    *
-   * @param userId - ID zalogowanego użytkownika
-   * @param query - parametry filtrowania i paginacji
-   * @returns paginowana lista transakcji z metadanymi
+   * @param userId - ID of the logged-in user
+   * @param query - filtering and pagination parameters
+   * @returns paginated list of transactions with metadata
    */
   async findAll(userId: string, query: QueryTransactionDto) {
     const {
@@ -117,12 +117,12 @@ export class TransactionsService {
   }
 
   /**
-   * Pobiera pojedynczą transakcję po ID
+   * Retrieves a single transaction by ID
    *
-   * @param id - ID transakcji
-   * @param userId - ID zalogowanego użytkownika
-   * @returns transakcja z kategorią
-   * @throws NotFoundException jeśli transakcja nie istnieje lub nie należy do użytkownika
+   * @param id - transaction ID
+   * @param userId - ID of the logged-in user
+   * @returns transaction with category
+   * @throws NotFoundException if transaction doesn't exist or doesn't belong to user
    */
   async findOne(id: string, userId: string) {
     const transaction = await this.prisma.transaction.findFirst({
@@ -142,24 +142,24 @@ export class TransactionsService {
   }
 
   /**
-   * Aktualizuje transakcję
+   * Updates a transaction
    *
-   * @param id - ID transakcji
-   * @param userId - ID zalogowanego użytkownika
-   * @param updateTransactionDto - dane do aktualizacji
-   * @returns zaktualizowana transakcja
-   * @throws NotFoundException jeśli transakcja nie istnieje
-   * @throws ForbiddenException jeśli transakcja nie należy do użytkownika
+   * @param id - transaction ID
+   * @param userId - ID of the logged-in user
+   * @param updateTransactionDto - data to update
+   * @returns updated transaction
+   * @throws NotFoundException if transaction doesn't exist
+   * @throws ForbiddenException if transaction doesn't belong to user
    */
   async update(
     id: string,
     userId: string,
     updateTransactionDto: UpdateTransactionDto,
   ) {
-    // Sprawdzamy czy transakcja istnieje i należy do użytkownika
+    // Check if transaction exists and belongs to user
     await this.findOne(id, userId);
 
-    // Jeśli zmieniamy categoryId, weryfikujemy czy nowa kategoria istnieje
+    // If changing categoryId, verify that new category exists
     if (updateTransactionDto.categoryId) {
       const category = await this.prisma.category.findFirst({
         where: {
@@ -200,18 +200,18 @@ export class TransactionsService {
   }
 
   /**
-   * Usuwa transakcję
+   * Deletes a transaction
    *
-   * @param id - ID transakcji
-   * @param userId - ID zalogowanego użytkownika
-   * @throws NotFoundException jeśli transakcja nie istnieje
-   * @throws ForbiddenException jeśli transakcja nie należy do użytkownika
+   * @param id - transaction ID
+   * @param userId - ID of the logged-in user
+   * @throws NotFoundException if transaction doesn't exist
+   * @throws ForbiddenException if transaction doesn't belong to user
    */
   async remove(id: string, userId: string) {
-    // Sprawdzamy czy transakcja istnieje i należy do użytkownika
+    // Check if transaction exists and belongs to user
     await this.findOne(id, userId);
 
-    // Usuwamy transakcję
+    // Delete transaction
     await this.prisma.transaction.delete({
       where: { id },
     });

@@ -11,18 +11,18 @@ import { Type } from 'class-transformer';
 import { TransactionType } from '@prisma/client';
 
 /**
- * DTO dla tworzenia nowej transakcji
+ * DTO for creating a new transaction
  *
- * Walidacja:
- * - amount: dodatnia liczba (Decimal w Prisma)
- * - description: opcjonalny string
+ * Validation:
+ * - amount: positive number (Decimal in Prisma)
+ * - description: optional string
  * - date: ISO 8601 date string
- * - type: INCOME lub EXPENSE
- * - categoryId: UUID kategorii
+ * - type: INCOME or EXPENSE
+ * - categoryId: category UUID
  */
 export class CreateTransactionDto {
   /**
-   * Kwota transakcji (max 12 cyfr, 2 po przecinku)
+   * Transaction amount (max 12 digits, 2 decimal places)
    * @example 1234.56
    */
   @IsNumber({ maxDecimalPlaces: 2 })
@@ -31,22 +31,22 @@ export class CreateTransactionDto {
   amount: number;
 
   /**
-   * Opcjonalny opis transakcji
-   * @example "Zakupy spożywcze w Biedronka"
+   * Optional transaction description
+   * @example "Grocery shopping"
    */
   @IsOptional()
   @IsString()
   description?: string;
 
   /**
-   * Data transakcji w formacie ISO 8601
+   * Transaction date in ISO 8601 format
    * @example "2025-10-01T12:00:00.000Z"
    */
   @IsISO8601()
   date: string;
 
   /**
-   * Typ transakcji: przychód lub wydatek
+   * Transaction type: income or expense
    * @example "EXPENSE"
    */
   @IsEnum(TransactionType, {
@@ -55,7 +55,7 @@ export class CreateTransactionDto {
   type: TransactionType;
 
   /**
-   * UUID kategorii
+   * Category UUID
    * @example "550e8400-e29b-41d4-a716-446655440000"
    */
   @IsUUID('4', { message: 'Category ID must be a valid UUID' })
